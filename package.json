@@ -41,5 +41,8 @@
         "webpack-merge": "^5.8.0",
         "webpack-shell-plugin-next": "^2.2.2",
         "yaml": "^1.10.2"
+    },
+    "dependencies": {
+        "acorn": "^8.5.0"
     }
 }

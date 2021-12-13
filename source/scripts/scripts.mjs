@@ -1,7 +1,7 @@
 
-// window.addEventListener('DOMContentLoaded', (event) => {
-$(function () {
+// // window.addEventListener('DOMContentLoaded', (event) => {
+// $(function () {
 
-  console.log("<<m03p>>");
+//   console.log('m03p');
 
-});
+// });

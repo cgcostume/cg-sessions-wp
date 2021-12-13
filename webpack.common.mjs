@@ -7,7 +7,7 @@ import webpack from 'webpack';
 import yaml from 'yaml';
 
 const parseYAMLThenStringifySync = (filename) => {
-    const data = fs.readFileSync(`./source/data/${filename}`, 'utf8');
+    const data = fs.readFileSync(`./source/${filename}`, 'utf8');
     return JSON.stringify(yaml.parse(data));
 }
 
@@ -29,12 +29,12 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import imagemin from 'imagemin';
 import webp from 'imagemin-webp';
 
-imagemin(['source/images/*.{jpg,png}'], {
-    destination: 'source/images',
-    plugins: [
-        webp({ quality: 88 })
-    ]
-})
+// imagemin(['source/resources/*.{jpg,png}'], {
+//     destination: 'source/images',
+//     plugins: [
+//         webp({ quality: 88 })
+//     ]
+// })
 
 // const { imageminSvgo } = require('imagemin-svgo');
 //
@@ -80,7 +80,7 @@ export default function (env, __dirname) {
             ...templates,
             new CopyWebpackPlugin({
                 patterns: [
-                    { from: 'images/**/*.webp', to: '[path]/[name][ext]', force: false },
+                    // { from: 'resources/**/*.webp', to: '[path]/[name][ext]', force: false },
                     /* third party scripts */
                     { from: '../node_modules/jquery/dist/jquery.min.js', to: '[name][ext]' },
                 ]

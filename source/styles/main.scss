@@ -31,8 +31,8 @@
 // variables override
 
 $body-color: #343a40 !default;
-$primary: #0dcaf0 !default;
-$secondary: #d63384 !default;
+$primary: #d62ea7 !default;
+$secondary: #0ceedb !default;
 // $primary: #6cbb23 !default;
 // $primary: #4e8aad !default;
 
@@ -125,13 +125,11 @@ header {
 
 h1 {
   @extend .display-4;
-  @extend .text-uppercase;
   @extend .my-4;
 }
 
 h2 {
   font-size: $font-size-base * 2.5;
-  @extend .text-uppercase;
   @extend .my-5;
 }
 
@@ -147,42 +145,6 @@ h3 {
   @extend .mb-3;
 }
 
-// .navbar {
-
-//   background-color: $body-bg;
-
-//   #lang-select {
-
-//     margin-left: 1rem;
-
-//     > li.nav-item + .nav-item {
-//       margin-left: 0.25rem;
-//     }
-//   }
-
-//   .navbar-toggler {
-//     border: none;
-//     margin-bottom: -1rem;
-//     cursor: pointer;
-//   }
-
-//   .dropdown-menu {
-//     border: none;
-//   }
-
-//   .dropdown-item {
-//     color: $navbar-light-color;
-
-//     @include hover-focus {
-//       color: $navbar-light-hover-color;
-//       background: none;
-//     }
-//   }
-//   .dropdown-item.active {
-//     color: $navbar-light-active-color;
-//     background: none;
-//   }
-// }
 
 .text-justify {
   text-align: justify;
@@ -205,57 +167,25 @@ footer {
    margin-bottom: 2rem;
 }
 
-.flickr {
-
-  .badge {
-    font-weight: $font-weight-normal;
-    text-align: right;
-  }
-
-  .badge.top-left {
-    position: absolute;
-    border-radius: $border-radius 0;
-  }
+pre {
+  font-size: 75%;
+  margin-bottom: 0;
+  // white-space: pre-wrap;
+  // word-break: keep-all
 }
 
-.project {
-  padding-bottom: 1rem; }
-
-.blueimp-gallery-controls {
-
-  > .prev, > .next {
-    background: transparent;
-    border: none;
-  }
-}
-
-.badge.animate {
-  -webkit-animation: sk-scaleout 0.66s infinite ease-in-out;
-  animation: sk-scaleout 0.66s infinite ease-in-out;
-}
-
-.bibtex {
-
-  @extend .card;
-  background-color: $card-cap-bg;
-  border-radius: $border-radius-sm;
-
-  pre {
-    font-size: 75%;
-    margin-bottom: 0;
-    // white-space: pre-wrap;
-    // word-break: keep-all
+#lectures {
+  counter-reset: ex; 
+  
+  ul {
+    list-style: none;
   }
 
-  .btn {
-    color: #818a91;
-    font-size: 75%;
-    cursor: pointer;
-    background-color: transparent;
-    padding: .25rem .5rem;
+  li:before {
+    counter-increment: ex;
+    content: counter(ex, decimal-leading-zero);
   }
 }
-
 
 @-webkit-keyframes sk-scaleout {
     0% { opacity: 1.00; }
