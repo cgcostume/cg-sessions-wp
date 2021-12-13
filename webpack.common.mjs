@@ -54,7 +54,7 @@ import webp from 'imagemin-webp';
 
 export default function (env, __dirname) {
 
-    const pugFiles = glob.sync(path.join(__dirname, 'source', '/*.pug'));
+    const pugFiles = glob.sync(path.join(__dirname, 'source', '{/,/units/}*.pug'));
     console.log(`pug entries in "${__dirname}":`, pugFiles);
 
     const templates = [];

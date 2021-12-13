@@ -11,8 +11,9 @@ html(lang = 'en')
 
     section#lectures
       .row.text-center
-        .col-12
-          h1 Overview of all #[strong Lectures]
+        .offset-2.col-8
+          h1 Übersicht über alle #[strong Vorlesungen]
+          hr.mb-0
 
       each lecture in lectures
         .row(id =`${lecture.key}`)
@@ -22,7 +23,7 @@ html(lang = 'en')
 
             ul.list-group.list-group-flush
               each unit, index in lecture.units
-                li.list-group-item &ensp;&mdash;&ensp;#[a(href = `${unit.key}.html`) #{unit.title.de}]
+                li.list-group-item &ensp;&mdash;&ensp;#[a(href = `/units/${unit.key}.html`) #{unit.title.de}]
 
 
     section#footer.container

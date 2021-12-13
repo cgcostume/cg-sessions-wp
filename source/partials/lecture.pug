@@ -1,0 +1,22 @@
+
+doctype html
+html(lang = 'en')
+
+  include head
+
+  body#page-top(data-spy = 'scroll')
+
+    block vars
+
+    section#lecture
+      .row.text-center
+        .offset-2.col-8
+          h2 #[strong #{title}]
+          a(href = `/index.html`) Zurück zu #[strong Vorlesungsübersicht]
+
+    block content
+
+    section#footer.container
+    include footer
+
+  include scripts
