@@ -1,0 +1,36 @@
+
+doctype html
+html(lang = 'en')
+
+  //- block vars
+
+  include partials/head
+
+  body#page-top(data-spy = 'scroll')
+
+    -
+      let lectures = data.lectures.lectures;
+
+      //- // sort by data
+      //- publications = publications.sort((a, b) => {
+      //-   const aDate = Date.parse(a.date);
+      //-   const bDate = Date.parse(b.date);
+      //-   return aDate < bDate ? +1 : aDate > bDate ? -1 : 0; });
+
+
+    .row.text-center
+      .col-12
+        h2 Overview of all #[strong Lectures]
+
+    each lecture in lectures
+      .row(id =`${lecture.key}`)
+
+      .col-lg-10.col-sm-9
+        h3 #{lecture['full-identifier-de']}
+        p Moep
+
+
+    section#footer.container
+      include partials/footer
+
+  include partials/scripts
