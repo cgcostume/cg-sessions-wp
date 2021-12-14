@@ -2,25 +2,100 @@
 extends ../partials/lecture.pug
 
 block vars
-  - title = 'Virtuelle Kameras in der Echtzeit-Computergrafik';
+  - title = '<strong>Virtuelle Kameras</strong> in der Echtzeit-Computergrafik';
   - lead = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.';
+  - teaser = require('./virtual-camera/psychonauts2-teaser.png?as=webp');
 
 block content
 
   //- Bootstrap Grid System
   //- https://getbootstrap.com/docs/5.1/layout/grid/
 
-  container
+  .container
     .row
-      .offset-2.col-8
-        h3 Abschnitt 2
-        p Test require
+      .offset-1.col-10
 
-        !=require("./virtual-camera/math.md")
+        .alert.alert-primary
+          p In dieser Einheit wird gezeigt, wie virtuelle Kameras in der Theorie und in der praktischen Umsetzung funktionieren und wie effizient 3D Szenen aus wohldefinierten Blickwinkeln dargestellt werden können.
+          hr
+          h4 Nach dieser Einheit solltest Du&hellip;
+          ul.list-unstyled
+            li &hellip;die Eigenschaften/Attribute einer virtuellen Kamera kennen,
+            li &hellip;die einzelnen Schritte der Kameratransformation beschreiben können,
+            li &hellip;typische Koordinatenräume kennen und zuordnen können und
+            li &hellip;die Rolle homogener Koordinaten für perspektivische Verzerrung nachvollziehen können.
 
-  container
     .row
-      .offset-2.col-8
-        h3 Abschnitt 2
-        p Test 
+      .offset-1.col-10
 
+        .alert.alert-secondary
+          h4 Vorwissen
+          p Zum besseren Verständnis von virtuellen Kameras in der Computer Grafik, speziell der Echtzeit Computergrafik, empfehlen wir die folgenden Inhalte vorab zu sichten und zumindest grundlegend durchzuarbeiten:
+          ol
+            li Unsere Vorlesungen zu den Themen:
+              ol
+                li #[a(href = 'https://youtu.be/oEpQUoCig18') Vektorrechnung &amp; Basistransformationen] (YouTube)
+                li #[a(href = 'https://youtu.be/YDDQE45PZLs') Komposition von Transformationen] (YouTube)
+            li Optional aber empfehlenswert zur Vertiefung: #[br]
+              | Die sehr anschauliche und interaktive Einführung zu den physikalischen Grundlagen von Kameras und Linsen von Bartosz Ciechanowski: #[a(href = 'https://ciechanow.ski/cameras-and-lenses/') https://ciechanow.ski/cameras-and-lenses/].
+
+
+  section.container
+    .row
+      .offset-1.col-10
+        !=require("./virtual-camera/sec-motivation.md")
+
+        textarea.notes(rows = '8' placeholder = 'Mach Dir ein paar Notizen wenn du magst.')
+
+  section.container
+    .row
+      .offset-1.col-10
+
+        h3 Modell einer virtuellen Kamera
+
+        p Folgende Parameter nehmen Einfluss auf die Aufnahme einer virtuellen Kamera:
+    
+        dl.row
+          dt.col-sm-3 Kamerastandpunkt
+          dd.col-sm-9 
+            | Dieser bestimmt, von welcher Position aus die Szene gerendert wird. 
+            | Bei einer First-Person-Ansicht wäre das z.B. die Position des gespielten Charakters, bei einer Vogelperspektive ein Punkt über dem Geschehen
+          
+          dt.col-sm-3 Kamerablickrichtung
+          dd.col-sm-9 
+            | In welche Richtung ist die Kamera gedreht, bzw. wo liegt der Mittelpunkt des durch die Kamera erzeugten Bildes?
+          
+          dt.col-sm-3 Aufwärtsrichtung
+          dd.col-sm-9 
+            | Wo ist "oben"?
+
+          dt.col-sm-3 Sichtwinkel
+          dd.col-sm-9 
+            | Beschreibt die Größe des Sichtfeldes in vertikaler und horizontaler Richtung
+
+          dt.col-sm-3 Seitenverhältnis 
+            //- aspect ratio Infobox Zuordnung verschiedener Aspect Ratios 
+          dd.col-sm-9 
+            | Beschreibt das Verhältnis von Breite zu Höhe des durch die Kamera erzeugten Bildes
+
+          dt.col-sm-3 Clipping Planes
+            //- Bsp. aus Spielen? bereits grob motivation andeuten und auf später verweisen
+          dd.col-sm-9 
+            | Die Near und Far Clipping Planes beschreiben, ab und bis zu welcher Tiefe (=Abstand von der Kamera) Objekte gerendert werden.
+            | Das kann unter anderem dazu verwendet werden, Objekte außerhalb dieses Intervalls früh im Renderingprozess zu verwerfen und dadurch den nötigen Aufwand deutlich zu verringern.
+
+
+  section.container
+    .row
+      .offset-1.col-10
+        !=require("./virtual-camera/sec-implementation.md")
+
+  section.container
+    .row
+      .offset-1.col-10
+        !=require("./virtual-camera/sec-view-transform.md")
+
+  section.container
+    .row
+      .offset-1.col-10
+        !=require("./virtual-camera/sec-projection-transform.md")

@@ -39,10 +39,7 @@ $secondary: #0ceedb !default;
 
 $enable-flex: true;
 // $enable-rounded: false !default;
-$enable-rounded: true !default;
-
-// In honor of Microsoft Windows 11
-$border-radius: 8pt;
+$enable-rounded: false !default;
 
 $font-family-sans-serif: 'Roboto';
 $font-family-monospace: 'Roboto Mono';
@@ -50,13 +47,11 @@ $font-family-monospace: 'Roboto Mono';
 $headings-font-weight: 300;
 $font-weight-bold: 700;
 
-// $jumbotron-bg: transparent;
-// $jumbotron-padding: 0rem;
-
-$link-decoration: none;
-
-
+// $link-decoration: none;
 $enable-negative-margins: true;
+
+$figure-caption-font-size: 75% !default;
+$figure-caption-color: $primary !default;
 
 $aspect-ratios: (
   "1x1": 100%,
@@ -82,7 +77,7 @@ $aspect-ratios: (
 @import "bootstrap/scss/containers";
 @import "bootstrap/scss/grid";
 // @import "bootstrap/scss/tables";
-// @import "bootstrap/scss/forms";
+@import "bootstrap/scss/forms";
 @import "bootstrap/scss/buttons";
 @import "bootstrap/scss/transitions";
 @import "bootstrap/scss/dropdown";
@@ -93,7 +88,7 @@ $aspect-ratios: (
 // @import "bootstrap/scss/breadcrumb";
 // @import "bootstrap/scss/pagination";
 @import "bootstrap/scss/badge";
-// @import "bootstrap/scss/alert";
+@import "bootstrap/scss/alert";
 // @import "bootstrap/scss/progress";
 @import "bootstrap/scss/list-group";
 @import "bootstrap/scss/close";
@@ -111,9 +106,12 @@ $aspect-ratios: (
 @import "bootstrap/scss/utilities/api";
 // scss-docs-end import-stack
 
-@import "katex/dist/katex.min.css";
 
 // common
+
+.container {
+  max-width: 60rem;
+}
 
 p {
   hyphens: auto;
@@ -126,12 +124,15 @@ header {
 
 h1 {
   @extend .display-4;
-  @extend .my-4;
+  @extend .my-5;
 }
 
 h2 {
-  font-size: $font-size-base * 2.5;
-  @extend .my-5;
+  @extend .mt-5;
+}
+
+h3 {
+  @extend .mb-4;
 }
 
 h1, h2 {
@@ -140,12 +141,24 @@ h1, h2 {
   }
 }
 
-h3 {
-  font-size: $font-size-base * 1.0;
-  font-weight: bold;
-  @extend .mb-3;
-}
+#lecture {
+  
+  @extend .mb-5;
 
+  .title {
+    @extend .ratio;
+    @extend .ratio-21x9;
+    @extend .overflow-hidden;
+    @extend .mb-2;
+  }
+
+  h2 {
+    background-color: $body-bg;
+    height: auto !important;
+    width: auto !important;
+    padding: 0.25rem 1.0rem;
+  }
+}
 
 .text-justify {
   text-align: justify;
@@ -156,19 +169,16 @@ h3 {
 }
 
 
-section, footer {
+section {
+  padding: 8rem 0 0;
+}
+
+footer {
   padding: 4rem 0 0;
 }
 
 footer {
    margin-bottom: 2rem;
-}
-
-pre {
-  font-size: 75%;
-  margin-bottom: 0;
-  // white-space: pre-wrap;
-  // word-break: keep-all
 }
 
 #lectures {
@@ -205,3 +215,45 @@ pre {
    50% { opacity: 0.66; }
   100% { opacity: 1.00; }
 }
+
+
+$border-width: 4pt;
+
+pre {
+  @extend .ps-4;
+  border-left: $border-width $secondary solid !important;
+
+  font-size: 80%;
+  margin-bottom: 0;
+}
+
+textarea.notes {
+  border: none;
+  @extend .form-control;
+  @extend .w-100;
+  @extend pre;
+}
+
+.alert-primary {
+  border-color: $primary;
+}
+.alert-secondary {
+  border-color: $secondary;
+}
+.alert {
+  border-width: $border-width;
+  background-color: whitesmoke;
+  color: $body-color;
+  h4 {
+    font-weight: $font-weight-bold;  
+  }
+}
+
+dt {
+  @extend .text-end;
+  @extend .text-primary;
+  font-weight: $font-weight-base;
+}
+
+@import "katex/dist/katex.min.css";
+@import "highlight.js/styles/ascetic.css";

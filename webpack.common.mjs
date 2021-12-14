@@ -28,31 +28,6 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import md from 'markdown-it-texmath';
 import mdv from 'markdown-it-video';
 
-// import imagemin from 'imagemin';
-// import webp from 'imagemin-webp';
-
-// const images = await imagemin(['source/**/**/*.{jpg,png}'], {
-//     destination: 'source/webp-generated/',
-//     plugins: [
-//         webp({ quality: '88-96' })
-//     ]
-// });
-
-// const { imageminSvgo } = require('imagemin-svgo');
-//
-// imagemin(['source/images/*.{svg}'], {
-//     destination: 'source/images',
-//     plugins: [
-//         imageminSvgo({
-//             plugins: [{
-//                 name: 'removeViewBox',
-//                 active: false
-//             }]
-//         })
-//     ]
-// })
-// const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
-
 import ImageMinimizerPlugin from 'image-minimizer-webpack-plugin';
 
 
@@ -89,18 +64,6 @@ export default function (env, __dirname) {
                     { from: '../node_modules/jquery/dist/jquery.min.js', to: '[name][ext]' },
                 ]
             }),
-            // new ImageMinimizerPlugin({
-            //     test: /\.(jpe?g|png)$/i,
-            //     deleteOriginalAssets: true,
-            //     filename: '[path][name].webp',
-            //     minimizerOptions: {
-            //         encodeOptions: {
-            //             webp: { /* how to change quality? */
-            //             },
-            //         },
-            //         plugins: ['imagemin-webp'],
-            //     },
-            // }),
             new webpack.DefinePlugin({
                 data: data,
             }),
@@ -118,11 +81,6 @@ export default function (env, __dirname) {
         module: {
             rules: [
                 {
-                    test: /\.(jpe?g|png)$/i,
-                    type: 'asset/resource',
-                    generator: { filename: 'webp-generated/[name]_[hash:4][ext]' }
-                },
-                {
                     test: /\.pug$/,
                     include: /source/,
                     exclude: /(node_modules)/,
@@ -139,9 +97,18 @@ export default function (env, __dirname) {
                         },
                         {
                             loader: 'markdown-it-loader',
-                            options: { use: [ md, mdv ] }
+                            options: { 
+                                use: [ md, mdv ], 
+                                html: true, 
+                                breaks: true 
+                            }
                         },
                     ],
+                },
+                {
+                    test: /\.(jpe?g|png)$/i,
+                    type: 'asset/resource',
+                    generator: { filename: 'webp-generated/[name]_[hash:4][ext]' }
                 },
                 {
                     test: /\.s[ac]ss$/i,

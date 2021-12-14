@@ -8,15 +8,18 @@ html(lang = 'en')
 
     block vars
 
-    section#lecture
+    section.container#lecture
       .row.text-center
-        .offset-2.col-8
-          h2 #[strong #{title}]
+        .col-12
+
+          .title
+            img.img-fluid(src =teaser)
+            h2 !{title}
+
           a(href = `/index.html`) Zurück zu #[strong Vorlesungsübersicht]
 
     block content
 
-    section#footer.container
     include footer
 
   include scripts

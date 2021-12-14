@@ -9,17 +9,17 @@ html(lang = 'en')
 
   body#page-top(data-spy = 'scroll')
 
-    section#lectures
-      .row.text-center
-        .offset-2.col-8
-          h1 Übersicht über alle #[strong Vorlesungen]
-          hr.mb-0
+    section.container#lectures
+      .row
+        .col-12
+          .bg-primary.py-1
+            h1.text-white.my-4.ps-4 &emsp;#[strong Vorlesungen &amp; Units]
 
       each lecture in lectures
         .row(id =`${lecture.key}`)
-          .offset-2.col-8
+          .offset-1.col-10
             h2 #{lecture.title.de}
-            p.lead #{lecture.lead.de} 
+            p #{lecture.lead.de} 
 
             ul.list-group.list-group-flush
               each unit, index in lecture.units
