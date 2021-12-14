@@ -17,5 +17,11 @@ export default function (env) {
             // output: {
             //     filename: 'styles.css',
             // },
+            devServer: {
+                hot: false
+            },
+            optimization: {
+                minimize: true,
+            },
         });
 }

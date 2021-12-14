@@ -25,16 +25,18 @@ import CopyWebpackPlugin from 'copy-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
+import md from 'markdown-it-texmath';
+import mdv from 'markdown-it-video';
 
-import imagemin from 'imagemin';
-import webp from 'imagemin-webp';
+// import imagemin from 'imagemin';
+// import webp from 'imagemin-webp';
 
-// imagemin(['source/resources/*.{jpg,png}'], {
-//     destination: 'source/images',
+// const images = await imagemin(['source/**/**/*.{jpg,png}'], {
+//     destination: 'source/webp-generated/',
 //     plugins: [
-//         webp({ quality: 88 })
+//         webp({ quality: '88-96' })
 //     ]
-// })
+// });
 
 // const { imageminSvgo } = require('imagemin-svgo');
 //
@@ -50,6 +52,8 @@ import webp from 'imagemin-webp';
 //     ]
 // })
 // const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
+
+import ImageMinimizerPlugin from 'image-minimizer-webpack-plugin';
 
 
 export default function (env, __dirname) {
@@ -80,7 +84,7 @@ export default function (env, __dirname) {
             ...templates,
             new CopyWebpackPlugin({
                 patterns: [
-                    // { from: 'resources/**/*.webp', to: '[path]/[name][ext]', force: false },
+                    //{ from: 'webp-generated/**/*.webp', to: '[path]/[name][ext]', force: false },
                     /* third party scripts */
                     { from: '../node_modules/jquery/dist/jquery.min.js', to: '[name][ext]' },
                 ]
@@ -114,8 +118,9 @@ export default function (env, __dirname) {
         module: {
             rules: [
                 {
-                    test: /\.(png)$/,
-                    type: 'asset',
+                    test: /\.(jpe?g|png)$/i,
+                    type: 'asset/resource',
+                    generator: { filename: 'webp-generated/[name]_[hash:4][ext]' }
                 },
                 {
                     test: /\.pug$/,
@@ -124,6 +129,19 @@ export default function (env, __dirname) {
                     use: [{
                         loader: 'pug-loader',
                     }],
+                },
+                {
+                    test: /\.md$/,
+                    use: [
+                        {
+                            loader: 'html-loader',
+                            options: { esModule: false }
+                        },
+                        {
+                            loader: 'markdown-it-loader',
+                            options: { use: [ md, mdv ] }
+                        },
+                    ],
                 },
                 {
                     test: /\.s[ac]ss$/i,
@@ -135,5 +153,27 @@ export default function (env, __dirname) {
                 },
             ]
         },
+
+        optimization: {
+            minimizer: [
+                '...',
+                new ImageMinimizerPlugin({
+                    minimizer: {
+                        implementation: ImageMinimizerPlugin.imageminMinify,
+                        options: {
+                            plugins: ['imagemin-mozjpeg', 'imagemin-pngquant' ]
+                        }
+                      },
+                      generator: [
+                            { // use `?as=webp`
+                                preset: 'webp',
+                                implementation: ImageMinimizerPlugin.imageminGenerate,
+                                options: { 
+                                    plugins: [ [ 'imagemin-webp', { quality: [ 88, 96 ] } ] ],
+                                },
+                        }]
+                })
+            ]
+        }
     };
 }

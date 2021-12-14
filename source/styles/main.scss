@@ -111,6 +111,7 @@ $aspect-ratios: (
 @import "bootstrap/scss/utilities/api";
 // scss-docs-end import-stack
 
+@import "katex/dist/katex.min.css";
 
 // common
 
@@ -154,10 +155,6 @@ h3 {
   margin-top: 2rem;
 }
 
-@media (min-width: 75em) {
-.container {
-    max-width: 60rem;
-}}
 
 section, footer {
   padding: 4rem 0 0;
@@ -175,9 +172,9 @@ pre {
 }
 
 #lectures {
-  counter-reset: ex; 
   
   ul {
+    counter-reset: ex; 
     list-style: none;
   }
 
@@ -186,6 +183,16 @@ pre {
     content: counter(ex, decimal-leading-zero);
   }
 }
+
+// customize vimeo and youtube iframes generated from markdown
+.embed-responsive {
+  @extend .img-fluid;
+  .embed-responsive-item {
+    @extend .ratio;
+    @extend .ratio-16x9;
+  }
+}
+
 
 @-webkit-keyframes sk-scaleout {
     0% { opacity: 1.00; }
