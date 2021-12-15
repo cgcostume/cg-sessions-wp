@@ -26,7 +26,9 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
 import md from 'markdown-it-texmath';
-import mdv from 'markdown-it-video';
+import mdVideo from 'markdown-it-video';
+import mdEmoji from 'markdown-it-emoji';
+import mdDeflist from 'markdown-it-deflist';
 
 import ImageMinimizerPlugin from 'image-minimizer-webpack-plugin';
 
@@ -98,9 +100,9 @@ export default function (env, __dirname) {
                         {
                             loader: 'markdown-it-loader',
                             options: { 
-                                use: [ md, mdv ], 
+                                use: [ md, mdVideo, mdEmoji, mdDeflist ], 
                                 html: true, 
-                                breaks: true 
+                                breaks: false 
                             }
                         },
                     ],

@@ -50,40 +50,7 @@ block content
   section.container
     .row
       .offset-1.col-10
-
-        h3 Modell einer virtuellen Kamera
-
-        p Folgende Parameter nehmen Einfluss auf die Aufnahme einer virtuellen Kamera:
-    
-        dl.row
-          dt.col-sm-3 Kamerastandpunkt
-          dd.col-sm-9 
-            | Dieser bestimmt, von welcher Position aus die Szene gerendert wird. 
-            | Bei einer First-Person-Ansicht wäre das z.B. die Position des gespielten Charakters, bei einer Vogelperspektive ein Punkt über dem Geschehen
-          
-          dt.col-sm-3 Kamerablickrichtung
-          dd.col-sm-9 
-            | In welche Richtung ist die Kamera gedreht, bzw. wo liegt der Mittelpunkt des durch die Kamera erzeugten Bildes?
-          
-          dt.col-sm-3 Aufwärtsrichtung
-          dd.col-sm-9 
-            | Wo ist "oben"?
-
-          dt.col-sm-3 Sichtwinkel
-          dd.col-sm-9 
-            | Beschreibt die Größe des Sichtfeldes in vertikaler und horizontaler Richtung
-
-          dt.col-sm-3 Seitenverhältnis 
-            //- aspect ratio Infobox Zuordnung verschiedener Aspect Ratios 
-          dd.col-sm-9 
-            | Beschreibt das Verhältnis von Breite zu Höhe des durch die Kamera erzeugten Bildes
-
-          dt.col-sm-3 Clipping Planes
-            //- Bsp. aus Spielen? bereits grob motivation andeuten und auf später verweisen
-          dd.col-sm-9 
-            | Die Near und Far Clipping Planes beschreiben, ab und bis zu welcher Tiefe (=Abstand von der Kamera) Objekte gerendert werden.
-            | Das kann unter anderem dazu verwendet werden, Objekte außerhalb dieses Intervalls früh im Renderingprozess zu verwerfen und dadurch den nötigen Aufwand deutlich zu verringern.
-
+        !=require("./virtual-camera/sec-camera-model.md")
 
   section.container
     .row

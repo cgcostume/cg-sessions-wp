@@ -221,17 +221,22 @@ $border-width: 4pt;
 
 pre {
   @extend .ps-4;
+  @extend .mb-4;
   border-left: $border-width $secondary solid !important;
 
   font-size: 80%;
   margin-bottom: 0;
 }
 
+.form-control:focus {
+  box-shadow: inset (-$border-width) 0 0 $secondary;
+}
 textarea.notes {
   border: none;
   @extend .form-control;
   @extend .w-100;
   @extend pre;
+  
 }
 
 .alert-primary {
@@ -249,10 +254,36 @@ textarea.notes {
   }
 }
 
+dl {
+  @extend .row;
+  @extend .mt-2;
+}
 dt {
   @extend .text-end;
   @extend .text-primary;
+  @extend .col-sm-3;
   font-weight: $font-weight-base;
+}
+dd {
+  @extend .col-sm-8;
+}
+
+table {
+  @extend .w-100;
+  @extend .mb-4;
+  @extend small;
+  @extend .text-muted;
+  img {
+    @extend .img-fluid;
+    @extend .w-100;
+    @extend .mb-2;
+  }
+}
+
+blockquote {
+  @extend .blockquote;
+  @extend .text-primary;
+  @extend .my-3;
 }
 
 @import "katex/dist/katex.min.css";
