@@ -4,7 +4,7 @@
 **Ziel:** Die virtuelle Kamera soll genutzt werden, um die Weltkoordinaten der Szenegeometrie derart zu transformieren, dass im Viewport alle von der Kamera sichtbaren Geometrien abgebildet und (im Falle einer Perspektivischen Projektion) perspektivisch verzerrt sind.
 Die Fragmentprozessierung während des Renderings soll dabei nur auf Fragmenten rasterisierter Szeneobjekten erfolgen, die auch tatsächlich im gerenderten Bild auftauchen &ndash; also Objekte verwerfen, die über oder hinter der Kamera liegen, oder zu weit weg sind.
 
-| ![camera-model](../ph-secondary.png?as=webp) |
+| ![camera-model](./coordinates_sketch.png?as=webp) |
 | :--------------: |
 | :jigsaw: Rendering Pipeline WebGL2 |
 

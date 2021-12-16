@@ -3,7 +3,7 @@ Wir betrachten zunächst nur die obere Hälfte des Sichtvolumens, das wird uns s
 
 Angenommen, wir kennen also den Abstand der Projektionsebene von der Kamera. Wie ermitteln wir, wie groß ein Objekt mit Abstand $z_o$ auf der Projektionsebene erscheint? Gegeben sind dabei die Objektgröße o, der Abstand des Objekts $z$ und der Abstand der Projektionsebene $z_p$.
 
-| ![camera-model](./strahlensatz1.jpg?as=webp) |
+| ![camera-model](./strahlensatz1.png?as=webp) |
 | :--------------: |
 | :jigsaw: Illustration Strahlensatz |
 
@@ -21,7 +21,7 @@ $$
 \frac{o}{h_o}=\frac{proj}{h_p}
 $$
 
-| ![camera-model](./strahlensatz2.jpg?as=webp) |
+| ![camera-model](./strahlensatz2.png?as=webp) |
 | :--------------: |
 | :jigsaw: Illustration Strahlensatz |
 
@@ -69,7 +69,7 @@ Diese Transformation bewirkt, dass der Sichtwinkel auf 90° transformiert wird. 
 
 #### **II**&ensp;Skalierung des Sichtvolumens
 
-Bevor wir uns mit der Umsetzung der tatsächlichen perspektivischen Verzerrung beschäftigen, müssen wir noch einen weiteren Aspekt berücksichtigen. Denn wie bereits zuvor erwähnt, sollen die Objekte der Szene nicht nur relativ zueinander korrekt skaliert sein, nach der Transformation sollen auch alle Koordinaten im Bereich [-1, 1] liegen. Wir wollen also die gesamte Szene so skalieren, dass die far plane bei 1 liegt.
+Bevor wir uns mit der Umsetzung der tatsächlichen perspektivischen Verzerrung beschäftigen, müssen wir noch einen weiteren Aspekt berücksichtigen. Denn wie bereits zuvor erwähnt, sollen die Objekte der Szene nicht nur relativ zueinander korrekt skaliert sein, nach der Transformation sollen auch alle Koordinaten im Bereich $[-1, +1]$ liegen. Wir wollen also die gesamte Szene so skalieren, dass die far plane bei 1 liegt.
 
 Die Proportionen sollen dabei erhalten bleiben. Das realisieren wir durch folgende Matrix:$$
                     P_{II}=\begin{pmatrix}
@@ -95,11 +95,13 @@ Die Begründung, warum wir homogene Koordinaten benötigen, lässt sich gut ansc
 
 Diese müssen für alle $\lambda\in \mathbb{R},a\in \mathbb{R}^3$ die Eigenschaft $f\left(\lambda a\right)=\lambda f\left(a\right)$ erfüllen. Sehen wir uns den folgenden Vektor an, der zu einer Kante des Frustums verläuft.
 
-![camera-model](./homogenous1.jpg?as=webp){.w-75}{.text-middle}
+|![camera-model](./homogenous1.png?as=webp){.w-75}{.text-middle}|
+| :--------------: |
+
 
 Durch die Anwendung der perspektivischen Projektion wird das pyramidenförmige Frustum zu einem Quader verzerrt. Das Ergebnis sieht folgendermaßen aus:
 
-| ![camera-model](./homogenous2.jpg?as=webp) |
+| ![camera-model](./homogenous2.png?as=webp){.w-75}{.text-middle} |
 | :--------------: |
 
 Offensichtlich gilt dabei $f\left(2a\right)\neq2f\left(a\right)$, damit ist die perspektivische Verzerrung keine lineare Abbildung für den $\mathbb{R}^3$.
