@@ -22,7 +22,7 @@ $$
     \end{pmatrix}
 $$
 
-Statt über eine Transformationsmatrix direkt die gewünschte Verzerrung zu erreichen, sollen alle Koordinaten nach der Umwandlung in den $\mathbb{R}^{3}$-Raum korrekt verzerrt sein.
+Statt über eine Transformationsmatrix direkt die gewünschte Verzerrung zu erreichen, wollen wir die Koordinaten so transformieren, dass sie nach der Umwandlung in den $\mathbb{R}^{3}$-Raum korrekt verzerrt sind.
 Dabei werden x- und y-Koordinate durch die Division korrekt in den NDC-Raum transformiert. 
 Wir müssen uns zudem aber noch ansehen, wie die z-Koordinate transformiert werden soll.
 
@@ -36,23 +36,32 @@ Nach unserer Transformation soll jedoch $z=0$ bei der Near-Plane und $z=1$ bei d
 Dies wird erreicht durch eine Verschiebung der z-Werte, sodass die Near-Plane im Ursprung liegt:
 
 $$
-    z'=z+k
+    z'=z-k
 $$
 
 Freilich, skalieren wir die z-Koordinate so, dass Near- und Far-Plane exakt eine Einheit voneinander entfernt sind.
 Die Division der z-Koordinate durch die bisherige Differenz von Near- und Far-Plane-Position liefert:
 
 $$
-    z''=(z+k)/(k-1)
+    z''=(z-k)/(1-k)
 $$
 
 Diese Transformation kann durch folgende Matrix dargestellt werden:
 
 $$
+    P_{III}=\begin{pmatrix}
+        1 & 0 & 0 & 0 \\
+        0 & 1 & 0 & 0 \\
+        0 & 0 & \frac{1}{1-k} & \frac{-k}{1-k} \\
+        0 & 0 & -1 & 0 \\
+    \end{pmatrix}
+$$
+Dadurch ergibt sich bei der Transformation der Koordinaten
+$$
     \begin{pmatrix}
         1 & 0 & 0 & 0 \\
         0 & 1 & 0 & 0 \\
-        0 & 0 & \frac{1}{k-1} & \frac{k}{k-1} \\
+        0 & 0 & \frac{1}{1-k} & \frac{-k}{1-k} \\
         0 & 0 & -1 & 0 \\
     \end{pmatrix}
     \begin{pmatrix}
@@ -65,7 +74,39 @@ $$
     \begin{pmatrix}
         x \\
         y \\
-        \frac{z+k}{k-1} \\
+        \frac{z-k}{1-k} \\
         -z \\
+    \end{pmatrix}.
+$$
+
+**Transformationsmatrix Projection Transform**
+
+Durch Komposition der Teiltransformation ergibt sich die folgende Transformation für die Projektion
+
+$$
+    T_{V\rightarrow C}=P_{III}P_{II}P_{I}=\begin{pmatrix}
+        1 & 0 & 0 & 0 \\
+        0 & 1 & 0 & 0 \\
+        0 & 0 & \frac{1}{1-k} & \frac{-k}{1-k} \\
+        0 & 0 & -1 & 0 \\
+    \end{pmatrix}
+    \begin{pmatrix}
+        \frac{1}{far} & 0 & 0 & 0 \\
+        0 & \frac{1}{far} & 0 & 0 \\
+        0 & 0 & \frac{1}{far} & 0 \\
+        0 & 0 & 0 & 1 \\
+    \end{pmatrix}
+    \begin{pmatrix}
+        \cot(\theta_x/2) & 0 & 0 & 0 \\
+        0 & \cot(\theta_y/2) & 0 & 0 \\
+        0 & 0 & 1 & 0 \\
+        0 & 0 & 0 & 1 \\
     \end{pmatrix}
 $$
+
+Zusammengefasst werden die folgenden Transformationen angewandt, um vom Weltkoordinatensystem ins Clip-Koordinatensystem umzuwandeln
+1. Translation der Kameraposition in den Ursprung
+2. Rotation, sodass der up-Vektor die y-Achse und die Blickrichtung die z-Achse beschreiben
+3. Skalierung des Blickwinkels
+4. Uniforme Skalierung, um die Far-Clipping-Plane nach z=1 zu verschieben
+5. Verschieben des z-Wertebereichs und Kopieren von z in die homogene Koordinate

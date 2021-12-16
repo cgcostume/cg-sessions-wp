@@ -1,7 +1,7 @@
 
 ### Projection Transform
 
-Kamerakoordinaten 🡪 Clip-Koordinaten
+**Kamerakoordinaten 🡪 Clip-Koordinaten**
 
 Mit diesem Transformationsschritt wollen wir Perspektivische Projektion unter Beachtung von Blickwinkeln sowie near und far clipping plane realisieren.
 Dafür müssen wir uns zunächst überlegen, wie sich perspektivische Verzerrung auf das Bild auswirkt und wie wir den Effekt mathematisch beschreiben können. Unsere Intuition sagt uns bereits, dass nähere Objekte größer erscheinen als weit entfernte Objekte.
@@ -43,21 +43,23 @@ $$ und damit $$
 $$
 
 Wir haben damit also eine Formel, um die Größe eines Objektes in Relation zum Gesamtbild zu beschreiben. Die Skalierung ist dabei abhängig von dem Winkel der beiden Strahlen und von der Entfernung des Objektes. In x-Richtung, also für ein von oben betrachtetes Frustum, funktioniert die Herleitung analog mit $\theta_x$ statt $\theta_y$.
+
 Wie können wir daraus nun eine geometrische Transformation ableiten?
 Da wir die Objektgröße, die ja durch x- und y-Koordinate bestimmt ist, durch einen Wert teilen, liegt es nahe, eine Skalierung in x- und y-Richtung durchzuführen. Mit $\tan{(\theta_x}/2)$ bzw. $\tan{(\theta_y}/2)$ ist das ohne weiteres möglich, da diese Terme nicht von den skalierten Koordinaten abhängen. Ein erster Schritt unserer Transformation ist also die
 
 **I Winkeländerung des Sichtvolumens (xy-Skalierung)**
+
 Dafür müssen wir lediglich die eben berechneten Terme in die Transformationsmatrix eintragen und erhalten $$
                     P_I =
                     \begin{pmatrix}
-                        \frac{1}{\tan(\theta_x)} & 0 & 0 & 0 \\
-                        0 & \frac{1}{\tan(\theta_y)} & 0 & 0 \\
+                        \frac{1}{\tan(\theta_x/2)} & 0 & 0 & 0 \\
+                        0 & \frac{1}{\tan(\theta_y/2)} & 0 & 0 \\
                         0 & 0 & 1 & 0 \\
                         0 & 0 & 0 & 1 \\
                     \end{pmatrix}=
                     \begin{pmatrix}
-                        \cot(\theta_x) & 0 & 0 & 0 \\
-                        0 & \cot(\theta_y) & 0 & 0 \\
+                        \cot(\theta_x/2) & 0 & 0 & 0 \\
+                        0 & \cot(\theta_y/2) & 0 & 0 \\
                         0 & 0 & 1 & 0 \\
                         0 & 0 & 0 & 1 \\
                     \end{pmatrix}.
@@ -91,7 +93,7 @@ Wenn du dich sicher mit der Mathematik fühlst, kannst du versuchen, selbst herz
 
 Die Begründung, warum wir homogene Koordinaten benötigen, lässt sich gut anschaulich darstellen. Ohne homogene Koordinaten können wir nur lineare Abbildungen vom $\mathbb{R}^3$ zum $\mathbb{R}^3$-Raum realisieren.
 
-Diese müssen für alle $\lambda\in R,a\in \mathbb{R}^3$ die Eigenschaft $f\left(\lambda a\right)=\lambda f\left(a\right)$ erfüllen. Sehen wir uns den folgenden Vektor an, der zu einer Kante des Frustums verläuft.
+Diese müssen für alle $\lambda\in \mathbb{R},a\in \mathbb{R}^3$ die Eigenschaft $f\left(\lambda a\right)=\lambda f\left(a\right)$ erfüllen. Sehen wir uns den folgenden Vektor an, der zu einer Kante des Frustums verläuft.
 
 | ![camera-model](./homogenous1.jpg?as=webp) |
 | :--------------: |
