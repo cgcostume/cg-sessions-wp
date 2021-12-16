@@ -1,11 +1,11 @@
 - const lectures = data.lectures.lectures;
+- const isroot = true;
 
 doctype html
 html(lang = 'en')
 
-  //- block vars
-
   include partials/head
+  block head
 
   body#page-top(data-spy = 'scroll')
 
@@ -23,10 +23,11 @@ html(lang = 'en')
 
             ul.list-group.list-group-flush
               each unit, index in lecture.units
-                li.list-group-item &ensp;&mdash;&ensp;#[a(href = `/units/${unit.key}.html`) #{unit.title.de}]
+                li.list-group-item &ensp;&mdash;&ensp;#[a(href = `units/${unit.key}.html`) #{unit.title.de}]
 
 
     section#footer.container
       include partials/footer
 
   include partials/scripts
+  block scripts
