@@ -64,3 +64,20 @@ block content
     .row
       .offset-1.col-10
         !=require("./virtual-camera/sec-projection-transform.md")
+
+  .container
+    .row
+      .offset-1.col-10
+
+        .alert.alert-secondary
+          h4 Einschub – Projektionsebene
+          p Was heißt denn nun, dass wir eine Projektionsebene verwenden? Normalerweise projiziert eine Kamera doch nichts?
+          p Dazu können wir uns die vereinfachte Funktionsweise einer simplen Lochkamera ansehen: 
+          p Dabei entsteht das umgedrehte Bild auf der Rückwand der Lochkamera, nachdem das Licht durch das Loch „gebündelt“* wird.
+          p Die Rückwand der Kamera ist also die Projektionsebene, auf der das Bild entsteht. 
+          p Wir wollen jedoch nicht physikalisch Lichtstrahlen erfassen, sondern nur berechnen, wie groß die Gegenstände in Relation zueinander sind.
+          p Wir können die Projektionsebene also beliebig – auch vor der Kamera – platzieren und mit dem Strahlensatz bestimmen, wie groß Objekte auf dieser Ebene erscheinen.
+          p Für unsere Anwendung ist die Projektionsebene also eine <em>Referenzebene</em>, um zu steuern, wie andere Objekte skaliert werden.
+          p HIER NOCH EIN BILD EINFÜGEN
+          
+
