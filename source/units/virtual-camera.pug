@@ -58,6 +58,17 @@ block content
   section.container
     .row
       .offset-1.col-10
+        .alert.alert-secondary
+          h4 Einschub &ndash; Sichtvolumen (#[i View Frustum]) einer Kamera
+          p 
+            | Das Sichtvolumen ist der Bereich einer Szene, in dem Objekte von der virtuellen Kamera erfasst werden.
+            | In unserer Modellierung einer (perspektivischen) Kamera ist dieses Sichtvolumen ein Pyramidenstumpf.
+
+          img.img-fluid(src =require('./ph-secondary.png?as=webp'))
+
+  section.container
+    .row
+      .offset-1.col-10
         !=require("./virtual-camera/sec-view-transform.md")
 
   section.container
