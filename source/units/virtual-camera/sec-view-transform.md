@@ -14,7 +14,7 @@ Wir wollen die Transformation aus zwei Teiltransformationen zusammensetzen:
 
 (2) der Rotation in das Kamerakoordinatensystem.
 
-| ![camera-model](../ph-secondary.png?as=webp) |
+| ![camera-model](./view-transform.png?as=webp) |
 | :--------------: |
 | :jigsaw: Illustration der View Transform |
 
