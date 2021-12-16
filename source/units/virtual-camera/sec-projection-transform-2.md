@@ -3,7 +3,7 @@ Wir betrachten zunächst nur die obere Hälfte des Sichtvolumens, das wird uns s
 
 Angenommen, wir kennen also den Abstand der Projektionsebene von der Kamera. Wie ermitteln wir, wie groß ein Objekt mit Abstand $z_o$ auf der Projektionsebene erscheint? Gegeben sind dabei die Objektgröße o, der Abstand des Objekts $z$ und der Abstand der Projektionsebene $z_p$.
 
-| ![camera-model](./strahlensatz1.png?as=webp) |
+| ![camera-model](./strahlensatz1.png?as=webp){.w-75}{.text-middle}  |
 | :--------------: |
 | :jigsaw: Illustration Strahlensatz |
 
@@ -21,7 +21,7 @@ $$
 \frac{o}{h_o}=\frac{proj}{h_p}
 $$
 
-| ![camera-model](./strahlensatz2.png?as=webp) |
+| ![camera-model](./strahlensatz2.png?as=webp){.w-75}{.text-middle}  |
 | :--------------: |
 | :jigsaw: Illustration Strahlensatz |
 
