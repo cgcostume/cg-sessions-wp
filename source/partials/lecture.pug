@@ -1,3 +1,4 @@
+- const path = '../';
 
 include placeholder
 
@@ -19,7 +20,7 @@ html(lang = 'en')
             img.img-fluid(src =teaser)
             h2 !{title}
 
-          a(href = `/index.html`) Zurück zu #[strong Vorlesungsübersicht]
+          a(href = `${path}index.html`) Zurück zu #[strong Vorlesungsübersicht]
 
     block content
 
@@ -27,4 +28,3 @@ html(lang = 'en')
 
   include scripts
   block scripts
-  
