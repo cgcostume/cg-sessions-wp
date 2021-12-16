@@ -24,3 +24,11 @@ Alle drei Werte werden in normalisierten Gerätekoordinaten erwartet (**Normaliz
 
 Unser Ziel ist demnach die Transformation der Koordinaten aller Objekte vom Weltkoordinatensystem in Normalized Device Coordinates über mehrere Zwischenschritte.
 Über folgende Transformationen wollen wir unser Endergebnis erreichen:
+
+$$ R(u,v,n)^{-1} = \begin{pmatrix}
+    u_x & u_y & u_z & 0 \\
+    v_x & v_y & v_z & 0 \\
+    n_x & n_y & n_z & 0 \\
+    0 & 0 & 0 & 1 \\
+\end{pmatrix}^T
+$$

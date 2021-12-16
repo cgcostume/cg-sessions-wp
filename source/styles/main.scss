@@ -311,4 +311,14 @@ blockquote {
 }
 
 @import "katex/dist/katex.min.css";
+
+.katex {
+  font-size: 1.105rem;
+}
+
+section section {
+  @extend .my-0;
+  @extend .py-0;
+}
+
 @import "highlight.js/styles/ascetic.css";
