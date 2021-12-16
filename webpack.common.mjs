@@ -29,6 +29,7 @@ import md from 'markdown-it-texmath';
 import mdVideo from 'markdown-it-video';
 import mdEmoji from 'markdown-it-emoji';
 import mdDeflist from 'markdown-it-deflist';
+import mdAttrs from 'markdown-it-attrs';
 
 import ImageMinimizerPlugin from 'image-minimizer-webpack-plugin';
 
@@ -100,7 +101,7 @@ export default function (env, __dirname) {
                         {
                             loader: 'markdown-it-loader',
                             options: { 
-                                use: [ md, mdVideo, mdEmoji, mdDeflist ], 
+                                use: [ md, mdVideo, mdEmoji, mdDeflist, mdAttrs ], 
                                 html: true, 
                                 breaks: false 
                             }

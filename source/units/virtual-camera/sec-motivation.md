@@ -22,9 +22,11 @@ Dazu wollen wir uns ein paar Aufnahmen einer Szene aus dem Spiel Portal 2 ansehe
 
 > :brain: Welche Eigenschaften einer virtuellen Kamera kannst du aus den Bildern ableiten?
 
-
-| ![third-person](../ph-primary.png?as=webp) | ![first-person](../ph-secondary.png?as=webp) |
-| :--------------: | :--------------: |
-| :jigsaw: Ansicht aus der dritten Person (*Third-Person*). | :jigsaw: Ansicht aus der ersten Person (*First-Person*). |
+![third-person](portal-camera-thirdp.png?as=webp){.w-50}{.pe-1}{.mb-2}![first-person](portal-camera-firstp.png?as=webp){.w-50}{.ps-1}{.mb-2}
+![third-person](portal-camera-bird.png?as=webp){.w-50}{.pe-1}![first-person](portal-camera-static.png?as=webp){.w-50}{.ps-1}
+<!-- Ansicht aus der dritten Person (*Third-Person*) und eine Ansicht aus der ersten Person (*First-Person*). -->
+<!-- Personenfokusierte Ansicht von Oben und eine schwenkbare Ansicht an einer festen Position. -->
 
 Bevor du weiterscrollst,  überlege vorerst selbst, in welchen Eigenschaften sich die Kameras der gegebenen Ansichten unterscheiden. Du kannst dazu das folgende Notizfeld verwenden:
+
+<textarea class = 'notes' rows = '8' placeholder = 'Mach Dir ein paar Notizen wenn du magst.'></textarea>

@@ -12,6 +12,14 @@
 );
 
 @include Roboto.fontFaceCustom(
+  $weight: 400,
+  $display: normal,
+  $woffPath:  "~@fontsource/roboto/files/roboto-latin-400-normal.woff",
+  $woff2Path: "~@fontsource/roboto/files/roboto-latin-400-normal.woff2",
+  $unicodeRange: false
+);
+
+@include Roboto.fontFaceCustom(
   $weight: 700,
   $display: normal,
   $woffPath:  "~@fontsource/roboto/files/roboto-latin-700-normal.woff",
@@ -44,7 +52,10 @@ $enable-rounded: false !default;
 $font-family-sans-serif: 'Roboto';
 $font-family-monospace: 'Roboto Mono';
 
+$code-font-size: 1rem;
+
 $headings-font-weight: 300;
+$font-weight-base: 300;
 $font-weight-bold: 700;
 
 // $link-decoration: none;
@@ -116,6 +127,11 @@ $aspect-ratios: (
 p {
   hyphens: auto;
   // @hyphenation-resource
+
+  strong {
+    font-weight: $font-weight-base;
+    color: $primary;
+  }
 }
 
 header {
@@ -231,12 +247,12 @@ pre {
 .form-control:focus {
   box-shadow: inset (-$border-width) 0 0 $secondary;
 }
+
 textarea.notes {
   border: none;
   @extend .form-control;
   @extend .w-100;
   @extend pre;
-  
 }
 
 .alert-primary {
@@ -273,10 +289,18 @@ table {
   @extend .mb-4;
   @extend small;
   @extend .text-muted;
+
+  tr {
+    @extend .my-2;
+  }
+
+  td {
+    display: block;
+  }
+
   img {
     @extend .img-fluid;
     @extend .w-100;
-    @extend .mb-2;
   }
 }
 
