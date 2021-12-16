@@ -32,32 +32,42 @@ $$ und damit $$
 $$
 
 Wir haben damit also eine Formel, um die Größe eines Objektes in Relation zum Gesamtbild zu beschreiben. Die Skalierung ist dabei abhängig von dem Winkel der beiden Strahlen und von der Entfernung des Objektes. In x-Richtung, also für ein von oben betrachtetes Frustum, funktioniert die Herleitung analog mit $\theta_x$ statt $\theta_y$.
+
 Wie können wir daraus nun eine geometrische Transformation ableiten?
 Da wir die Objektgröße, die ja durch x- und y-Koordinate bestimmt ist, durch einen Wert teilen, liegt es nahe, eine Skalierung in x- und y-Richtung durchzuführen. Mit $\tan{(\theta_x}/2)$ bzw. $\tan{(\theta_y}/2)$ ist das ohne weiteres möglich, da diese Terme nicht von den skalierten Koordinaten abhängen. Ein erster Schritt unserer Transformation ist also die
 
-**I Winkeländerung des Sichtvolumens (xy-Skalierung)**
-Dafür müssen wir lediglich die eben berechneten Terme in die Transformationsmatrix eintragen und erhalten $$
-                    P_I =
-                    \begin{pmatrix}
-                        \frac{1}{\tan(\theta_x)} & 0 & 0 & 0 \\
-                        0 & \frac{1}{\tan(\theta_y)} & 0 & 0 \\
-                        0 & 0 & 1 & 0 \\
-                        0 & 0 & 0 & 1 \\
-                    \end{pmatrix}=
-                    \begin{pmatrix}
-                        \cot(\theta_x) & 0 & 0 & 0 \\
-                        0 & \cot(\theta_y) & 0 & 0 \\
-                        0 & 0 & 1 & 0 \\
-                        0 & 0 & 0 & 1 \\
-                    \end{pmatrix}.
+
+
+
+#### **I**&ensp;Winkeländerung des Sichtvolumens (xy-Skalierung)
+
+Durch Eintragen der zuvor berechneten Terme in die Transformationsmatrix erhalten wir
 $$
+    P_I =
+    \begin{pmatrix}
+        \frac{1}{\tan(\theta_x/2)} & 0 & 0 & 0 \\
+        0 & \frac{1}{\tan(\theta_y/2)} & 0 & 0 \\
+        0 & 0 & 1 & 0 \\
+        0 & 0 & 0 & 1 \\
+    \end{pmatrix}=
+    \begin{pmatrix}
+        \cot(\theta_x/2) & 0 & 0 & 0 \\
+        0 & \cot(\theta_y/2) & 0 & 0 \\
+        0 & 0 & 1 & 0 \\
+        0 & 0 & 0 & 1 \\
+    \end{pmatrix}.
+$$
+
 Diese Transformation bewirkt, dass der Sichtwinkel auf 90° transformiert wird. Die Tiefe wird dabei nicht verändert.
 
 | ![camera-model](./fov_scaling.png?as=webp) |
 | :--------------: |
 | :jigsaw: Visualisierung der Skalierung des Sichtvolumens |
 
-**II Skalierung des Sichtvolumens**
+
+
+
+#### **II**&ensp;Skalierung des Sichtvolumens
 
 Bevor wir uns mit der Umsetzung der tatsächlichen perspektivischen Verzerrung beschäftigen, müssen wir noch einen weiteren Aspekt berücksichtigen. Denn wie bereits zuvor erwähnt, sollen die Objekte der Szene nicht nur relativ zueinander korrekt skaliert sein, nach der Transformation sollen auch alle Koordinaten im Bereich [-1, 1] liegen. Wir wollen also die gesamte Szene so skalieren, dass die far plane bei 1 liegt.
 
@@ -70,7 +80,10 @@ Die Proportionen sollen dabei erhalten bleiben. Das realisieren wir durch folgen
                     \end{pmatrix}
 $$
 
-**III Perspektivische Transformation**
+
+
+
+#### **III**&ensp;Perspektivische Transformation
 
 Mit dieser Vorbereitung können wir endlich die tatsächliche perspektivische Verzerrung umsetzen.
 Dafür müssen wir – wenn wir eine Transformationsmatrix verwenden wollen – homogene Koordinaten verwenden.
@@ -80,7 +93,7 @@ Wenn du dich sicher mit der Mathematik fühlst, kannst du versuchen, selbst herz
 
 Die Begründung, warum wir homogene Koordinaten benötigen, lässt sich gut anschaulich darstellen. Ohne homogene Koordinaten können wir nur lineare Abbildungen vom $\mathbb{R}^3$ zum $\mathbb{R}^3$-Raum realisieren.
 
-Diese müssen für alle $\lambda\in R,a\in \mathbb{R}^3$ die Eigenschaft $f\left(\lambda a\right)=\lambda f\left(a\right)$ erfüllen. Sehen wir uns den folgenden Vektor an, der zu einer Kante des Frustums verläuft.
+Diese müssen für alle $\lambda\in \mathbb{R},a\in \mathbb{R}^3$ die Eigenschaft $f\left(\lambda a\right)=\lambda f\left(a\right)$ erfüllen. Sehen wir uns den folgenden Vektor an, der zu einer Kante des Frustums verläuft.
 
 ![camera-model](./homogenous1.jpg?as=webp){.w-75}{.text-middle}
 
