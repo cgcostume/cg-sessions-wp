@@ -52,6 +52,7 @@ $enable-rounded: false !default;
 $font-family-sans-serif: 'Roboto';
 $font-family-monospace: 'Roboto Mono';
 
+$font-size-base: 1.12rem;
 $code-font-size: 1rem;
 
 $headings-font-weight: 300;
@@ -313,7 +314,7 @@ blockquote {
 @import "katex/dist/katex.min.css";
 
 .katex {
-  font-size: 1.105rem;
+  font-size: 1.105 * $font-size-base;
 }
 
 section section {

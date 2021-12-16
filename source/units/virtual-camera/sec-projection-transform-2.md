@@ -1,15 +1,4 @@
 
-### Projection Transform
-
-Kamerakoordinaten 🡪 Clip-Koordinaten
-
-Mit diesem Transformationsschritt wollen wir Perspektivische Projektion unter Beachtung von Blickwinkeln sowie near und far clipping plane realisieren.
-Dafür müssen wir uns zunächst überlegen, wie sich perspektivische Verzerrung auf das Bild auswirkt und wie wir den Effekt mathematisch beschreiben können. Unsere Intuition sagt uns bereits, dass nähere Objekte größer erscheinen als weit entfernte Objekte.
-
-Mit dem Strahlensatz können wir beschreiben, wie groß genau ein Objekt auf einer Projektionsebene erscheint.
-
-**EINSCHUB PROJEKTIONSEBENE**
-
 Wir betrachten zunächst nur die obere Hälfte des Sichtvolumens, das wird uns später Rechnungen vereinfachen.
 
 Angenommen, wir kennen also den Abstand der Projektionsebene von der Kamera. Wie ermitteln wir, wie groß ein Objekt mit Abstand $z_o$ auf der Projektionsebene erscheint? Gegeben sind dabei die Objektgröße o, der Abstand des Objekts $z$ und der Abstand der Projektionsebene $z_p$.
@@ -93,8 +82,7 @@ Die Begründung, warum wir homogene Koordinaten benötigen, lässt sich gut ansc
 
 Diese müssen für alle $\lambda\in R,a\in \mathbb{R}^3$ die Eigenschaft $f\left(\lambda a\right)=\lambda f\left(a\right)$ erfüllen. Sehen wir uns den folgenden Vektor an, der zu einer Kante des Frustums verläuft.
 
-| ![camera-model](./homogenous1.jpg?as=webp) |
-| :--------------: |
+![camera-model](./homogenous1.jpg?as=webp){.w-75}{.text-middle}
 
 Durch die Anwendung der perspektivischen Projektion wird das pyramidenförmige Frustum zu einem Quader verzerrt. Das Ergebnis sieht folgendermaßen aus:
 

@@ -36,6 +36,7 @@ block content
               ul
                 li #[a(href = 'https://youtu.be/oEpQUoCig18') Vektorrechnung &amp; Basistransformationen] (YouTube)
                 li #[a(href = 'https://youtu.be/YDDQE45PZLs') Komposition von Transformationen] (YouTube)
+            li Für Quereinsteiger oder  empfehlen wir folgenden Grundlageneinführung 
             li Optional aber empfehlenswert zur Vertiefung: #[br]
               | Die sehr anschauliche und interaktive Einführung zu den physikalischen Grundlagen von Kameras und Linsen von Bartosz Ciechanowski: #[a(href = 'https://ciechanow.ski/cameras-and-lenses/') https://ciechanow.ski/cameras-and-lenses/].
 
@@ -74,9 +75,9 @@ block content
   section.container
     .row
       .offset-1.col-10
-        !=require("./virtual-camera/sec-projection-transform.md")
+        !=require("./virtual-camera/sec-projection-transform-1.md")
 
-  .container
+  section.container
     .row
       .offset-1.col-10
 
@@ -91,7 +92,12 @@ block content
           p Für unsere Anwendung ist die Projektionsebene also eine <em>Referenzebene</em>, um zu steuern, wie andere Objekte skaliert werden.
           
           img.img-fluid(src =require('./virtual-camera/pinhole-cam.jpg?as=webp'))
-          
+
+  section.container
+    .row
+      .offset-1.col-10
+        !=require("./virtual-camera/sec-projection-transform-2.md")
+
 
   section.container
     .row
