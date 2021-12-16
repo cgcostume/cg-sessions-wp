@@ -20,9 +20,9 @@ void main() {
 ```
 
 Die $x$ und $y$ Koordinaten beschreiben die zweidimensionale Position in einem sogenannten **Clip Space**, die $z$-Koordinate die Tiefe.
-Im Fragment-Shader liegen die Koordinaten danach als **nicht-homogene**, **normalisierte Gerätekoordinaten** vor (**Normalized Device Coordinates**, kurz **NDC**), die Fragmente hingegen sind über `gl_FragCoord` in Fensterkoordinaten (**Screen Space**)  in Pixel verfügbar.
+Im Fragment-Shader liegen die Koordinaten danach als **nicht-homogene**, **normalisierte Gerätekoordinaten** vor (**Normalized Device Coordinates**, kurz **NDC**), die Fragmente sind über `gl_FragCoord` in Fensterkoordinaten (**Screen Space**)  in Pixel verfügbar.
 
-Wie lassen sich nun Weltkoordinaten mithilfe der virtuellen Kamera in **Clip Space**, **NDC** und **Screen Space** überführen? Und wie kann man diese Transformationen definieren und schließlich in WebGL implementieren?
+Wie lassen sich Weltkoordinaten mithilfe der virtuellen Kamera in **Clip Space**, **NDC** und **Screen Space** überführen? Und wie kann man diese Transformationen definieren und implementieren?
 
 
 > :brain: Schauen wir uns dazu die üblichen Koordinatenräume an!
@@ -55,4 +55,4 @@ $T_{\textit{NDC}\rightarrow{}S}$<br><small>von norm. Gerätekoord.<br>zu Bildsch
 : Abschließende Abbildung in das Bildkoordinatensystem, definiert durch Position, Breite und Höhe eines Sichtfensters in Pixeln (`gl.viewport`).
 
 Diese Transformationen können jeweils mithilfe [linearer Abbildungen](https://www.youtube.com/watch?v=YDDQE45PZLs) ausgedrückt werden.
-Nach einem Einschub zum *Sichtvolumen* wollen wir die Transformationen $T_{W\rightarrow{}V}$, $T_{V\rightarrow{}C}$ und $T_{C\rightarrow{}\textit{NDC}}$ herleiten.
+Im folgenden wollen wir die Transformationen $T_{W\rightarrow{}V}$, $T_{V\rightarrow{}C}$ und $T_{C\rightarrow{}\textit{NDC}}$ herleiten.

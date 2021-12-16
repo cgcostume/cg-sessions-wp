@@ -152,6 +152,13 @@ h3 {
   @extend .mb-4;
 }
 
+h4 {
+  @extend .mt-5;
+  @extend .mb-4;
+  @extend .text-primary;
+  font-size: $h5-font-size;
+}
+
 h1, h2 {
   strong {
     font-weight: $font-weight-bold;

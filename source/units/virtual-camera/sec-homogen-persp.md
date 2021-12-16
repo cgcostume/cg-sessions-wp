@@ -1,5 +1,5 @@
 
-### Homogene Koordinaten für Perspektivische Verzerrung
+> Homogene Koordinaten für Perspektivische Verzerrung
 
 Für die Projektion homogener Koordinaten zurück in den $\mathbb{R}^{3}$-Raum werden alle Koordinaten durch $w$ geteilt und die $w$-Koordinate anschließend vernachlässigt.
 D.h., hier wird bereits eine Division durchgeführt, die wir womöglich nutzen könnten um eine tiefenbasierte Verzerrung der Geometrie zu erreichen...
@@ -79,34 +79,39 @@ $$
     \end{pmatrix}.
 $$
 
-**Transformationsmatrix Projection Transform**
 
-Durch Komposition der Teiltransformation ergibt sich die folgende Transformation für die Projektion
+
+#### Transformationsmatrix der gesamten Projektion
+
+Durch Komposition der Teiltransformation ergibt sich folgende Transformation für die Projektion:
 
 $$
-    T_{V\rightarrow C}=P_{III}P_{II}P_{I}=\begin{pmatrix}
-        1 & 0 & 0 & 0 \\
-        0 & 1 & 0 & 0 \\
-        0 & 0 & \frac{1}{1-k} & \frac{-k}{1-k} \\
-        0 & 0 & -1 & 0 \\
-    \end{pmatrix}
-    \begin{pmatrix}
-        \frac{1}{far} & 0 & 0 & 0 \\
-        0 & \frac{1}{far} & 0 & 0 \\
-        0 & 0 & \frac{1}{far} & 0 \\
-        0 & 0 & 0 & 1 \\
-    \end{pmatrix}
-    \begin{pmatrix}
-        \cot(\theta_x/2) & 0 & 0 & 0 \\
-        0 & \cot(\theta_y/2) & 0 & 0 \\
-        0 & 0 & 1 & 0 \\
-        0 & 0 & 0 & 1 \\
-    \end{pmatrix}
+    \begin{align}
+        T_{V\rightarrow C}&=P_{III}P_{II}P_{I}\\
+        &=\begin{pmatrix}
+            1 & 0 & 0 & 0 \\
+            0 & 1 & 0 & 0 \\
+            0 & 0 & \frac{1}{1-k} & \frac{-k}{1-k} \\
+            0 & 0 & -1 & 0 \\
+        \end{pmatrix}
+        \begin{pmatrix}
+            \frac{1}{far} & 0 & 0 & 0 \\
+            0 & \frac{1}{far} & 0 & 0 \\
+            0 & 0 & \frac{1}{far} & 0 \\
+            0 & 0 & 0 & 1 \\
+        \end{pmatrix}
+        \begin{pmatrix}
+            \cot(\theta_x/2) & 0 & 0 & 0 \\
+            0 & \cot(\theta_y/2) & 0 & 0 \\
+            0 & 0 & 1 & 0 \\
+            0 & 0 & 0 & 1 \\
+        \end{pmatrix}
+    \end{align}
 $$
 
-Zusammengefasst werden die folgenden Transformationen angewandt, um vom Weltkoordinatensystem ins Clip-Koordinatensystem umzuwandeln
+Zusammengefasst werden die folgenden Transformationen angewandt, um vom Weltkoordinatensystem ins Clip-Koordinatensystem umzuwandeln:
 1. Translation der Kameraposition in den Ursprung
 2. Rotation, sodass der up-Vektor die y-Achse und die Blickrichtung die z-Achse beschreiben
 3. Skalierung des Blickwinkels
-4. Uniforme Skalierung, um die Far-Clipping-Plane nach z=1 zu verschieben
-5. Verschieben des z-Wertebereichs und Kopieren von z in die homogene Koordinate
+4. Uniforme Skalierung, um die Far-Clipping-Plane nach $z=1$ zu verschieben
+5. Verschieben des z-Wertebereichs und Kopieren von $z$ in die homogene Koordinate

@@ -1,13 +1,13 @@
 
 ### Modell einer virtuellen Kamera
 
-Folgende Parameter haben einen maßgeblichen Einfluss auf die resultierende Aufnahme einer Kamera:
+Folgende Parameter haben einen maßgeblichen Einfluss auf die Aufnahme einer Kamera:
 
 Kamerastandpunkt<br><small class = 'text-muted'>View Position</small>
 : Der Standpunkt der Kamera bestimmt die genaue Position, von der aus die Szene abgebildet wird. Bei einer First-Person-Ansicht wäre das z.&thinsp;B. die Kopfmitte des gesteuerten Charakters, bei einer Vogelperspektive ein Punkt über dem Geschehen.
 
 Kamerablickrichtung<br><small class = 'text-muted'>View Direction</small>
-: Die Blickrichtung der Kamera left fest, in welche Richtung die Kamera gedreht ist. Sie legt den Mittelpunkt des erzeugten Bildes fest.
+: Die Blickrichtung der Kamera legt fest, in welche Richtung die Kamera gedreht ist. Sie legt den Mittelpunkt der Aufnahme fest.
           
 Sichtwinkel<br><small class = 'text-muted'>Field of View</small>
 : Der Sichtwinkel beschreibt die Größe des Sichtfeldes in vertikaler und horizontaler Richtung. Er wird meist als vertikaler Öffnungswinkel angegeben. Der horizontale Öffnungswinkel wird nicht explizit spezifiziert, sondern mithilfe des Seitenverhältnisses ermittelt.
@@ -16,9 +16,9 @@ Seitenverhältnis<br><small class = 'text-muted'>Aspect Ratio</small>
 : Das Seitenverhältnis beschreibt das Verhältnis von Breite zu Höhe des durch die Kamera erzeugten, rechteckigen Bildes.
 
 Aufwärtsrichtung<br><small class = 'text-muted'>Up Direction</small>
-: Die Aufwärtsrichtung beschreibt, wo aus Sicht der Kamera  &bdquo;oben&rdquo; ist?
+: Die Aufwärtsrichtung beschreibt, in welcher Richtung aus Sicht der Kamera  &bdquo;oben&rdquo; ist?
 
-Die Kamerablickrichtung kann auch implizit durch ein Sichtzentrum festgelegt werden. Dabei wird eine Position beschrieben, zu der vom Kamerastandpunkt aus geschaut werden soll. Aus einem Kamerstandpunkt (*eye*) und einem Sichtzentrum (*center*) lässt sich die Kamerablickrichtung einfach ermitteln. 
+Die Kamerablickrichtung kann auch implizit durch ein Sichtzentrum festgelegt werden. Dabei wird eine Position beschrieben, zu der vom Kamerastandpunkt aus geschaut werden soll. Aus einem Kamerastandpunkt (**eye**) und einem Sichtzentrum (**center**) lässt sich die Kamerablickrichtung einfach ermitteln. 
 
 Neben diesen Eigenschaften, gibt es noch zwei weitere Parameter, die sich nicht ohne weiteres in den Abbildungen erkennen lassen:
 

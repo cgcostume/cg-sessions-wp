@@ -20,7 +20,7 @@ Bevor wir uns jedoch genauer mit der Umsetzung dieser Metapher beschäftigen, ü
 Welche Form der Parameterisierung ist geeignet, welche Effekte gilt es zu berücksichtigen und welche können oder müssen wir an dieser Stelle vorerst vernachlässigen.
 Dazu wollen wir uns ein paar Aufnahmen einer Szene aus dem Spiel Portal 2 ansehen. 
 
-> :brain: Welche Eigenschaften einer virtuellen Kamera kannst du aus den Bildern ableiten?
+> :brain: Welche Eigenschaften einer Kamera würdest du aus den Bildern ableiten?
 
 ![third-person](portal-camera-thirdp.png?as=webp){.w-50}{.pe-1}{.mb-2}![first-person](portal-camera-firstp.png?as=webp){.w-50}{.ps-1}{.mb-2}
 ![third-person](portal-camera-bird.png?as=webp){.w-50}{.pe-1}![first-person](portal-camera-static.png?as=webp){.w-50}{.ps-1}
