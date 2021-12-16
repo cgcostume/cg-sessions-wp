@@ -29,7 +29,7 @@ Wir müssen uns zudem aber noch ansehen, wie die z-Koordinate transformiert werd
 Bisher liegt weiterhin $z=0$ bei der Kameraposition, $z=-k$ bei der Near-Plane und $z=-1$ bei der Far-Plane. 
 Nach unserer Transformation soll jedoch $z=0$ bei der Near-Plane und $z=1$ bei der Far-Plane liegen.
 
-| ![camera-model](../ph-secondary.png?as=webp) |
+| ![camera-model](./z-transformation.png?as=webp) |
 | :--------------: |
 | :jigsaw: Near und Far Clipping Plane |
 
