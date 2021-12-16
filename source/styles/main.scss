@@ -265,15 +265,28 @@ textarea.notes {
 
 .alert-primary {
   border-color: $primary;
+  hr {
+    color: $primary;
+  }
 }
 .alert-secondary {
   border-color: $secondary;
+  hr {
+    color: $secondary;
+  }
 }
 .alert {
+  @extend .p-4;
   border-width: $border-width;
   background-color: whitesmoke;
   color: $body-color;
+  hr {
+    opacity: 1.0;
+    height: $border-width;
+  }
   h4 {
+    @extend .my-2;
+    color: $body-color !important;
     font-weight: $font-weight-bold;  
   }
 }
