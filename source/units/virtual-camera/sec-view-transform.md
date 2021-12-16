@@ -1,7 +1,7 @@
 
 ### View Transform 
 
-Weltkoordinaten 🡪 Kamerakoordinaten
+Weltkoordinaten $\rightarrow$ Kamerakoordinaten
 
 Mit dieser Transformation soll die Szene so transformiert werden, dass sich die Kamera im Ursprung befindet und die z-Achse der Blickrichtung (look-to) entspricht, um damit die Szene aus Sicht der Kamera zu beschreiben. 
 
@@ -28,7 +28,7 @@ Wie erhalten wir also eine solche Matrix? Versuche, sie dir herzuleiten. Bekannt
 
 Die erste Spalte der Matrix gibt an, worauf $\left(1,0,0,0\right)$ abgebildet wird, die zweite worauf $\left(0,1,0,0\right)$ abgebildet wird etc. Wir können unsere gegebenen Beziehungen also einfach einsetzen und erhalten unsere gesuchte Matrix. 
 
-Seien $n=look-to$, $v=up$ und $u=n\times v$. Damit erhalten wir für $R^{-1}$.
+Seien $n=look-to$, $v=up$ und $u=n\times v$. Damit erhalten wir für $R^{-1}$:
 $$
                     R^{-1} =
                     \begin{pmatrix}
@@ -38,7 +38,7 @@ $$
                         0 & 0 & 0 & 1 \\
                     \end{pmatrix} = R^T
                 $$
-Transponieren wir diese Matrix, erhalten wir also unsere gewünschte Rotationsmatrix.
+Transponieren wir diese Matrix, erhalten wir also unsere gewünschte Rotationsmatrix:
 $$
                     R =
                     \begin{pmatrix}
