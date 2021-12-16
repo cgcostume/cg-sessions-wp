@@ -22,9 +22,6 @@ jobs:
         with:
           ref: deploy
           path: deploy
-      - name: Clean up output
-        run: git rm -rf *
-        working-directory: deploy
       - name: Set up dependencies
         run: npm install
         working-directory: src
