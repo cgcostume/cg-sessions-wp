@@ -56,9 +56,7 @@ $$
 
 Diese Transformation bewirkt, dass der Sichtwinkel auf 90° transformiert wird. Die Tiefe wird dabei nicht verändert.
 
-| ![camera-model](./fov_scaling.png?as=webp) |
-| :--------------: |
-| :jigsaw: Visualisierung der Skalierung des Sichtvolumens |
+![camera-model](./fov_scaling.png?as=webp){.w-75}
 
 
 
