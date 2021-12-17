@@ -24,7 +24,7 @@ $$
 Könnten wir also $h_o$ mit bekannten Größen beschreiben, hätten wir das gesuchte Verhältnis gefunden. Dabei können wir uns zunutze machen, dass über die Kameraparameter der Winkel $\alpha$ ebenfalls bekannt ist. Dieser entspricht der Hälfte des Sichtwinkels $\theta_y$ in y-Richtung. Damit können wir Beziehungen am rechtwinkligen Dreieck nutzen und erhalten$$
 \tan{\alpha}=\tan{(\theta_y}/2)=\frac{h_o}{z_p}
 $$ und damit $$
-\frac{o}{h_o}=\frac{o}{\tan{(\theta_y}/2)\cdot a}.
+\frac{o}{h_o}=\frac{o}{\tan{(\theta_y}/2)\cdot z_p}.
 $$
 
 Wir haben damit also eine Formel, um die Größe eines Objektes in Relation zum Gesamtbild zu beschreiben. Die Skalierung ist dabei abhängig von dem Winkel der beiden Strahlen und von der Entfernung des Objektes. In x-Richtung, also für ein von oben betrachtetes Frustum, funktioniert die Herleitung analog mit $\theta_x$ statt $\theta_y$.
