@@ -27,9 +27,9 @@ Clippingebenen<br><small class = 'text-muted'>Clipping Planes</small>
 : Die Clipping Planes, *Near Plane* und *Far Plane*, beschreiben ab bzw. bis zu welcher Tiefe (dem Abstand zur Kamera) Objekte gerendert werden. Das kann unter anderem dazu verwendet werden, Objekte außerhalb dieses Intervalls früh im Renderingprozess zu verwerfen und dadurch den nötigen Aufwand deutlich zu verringern.
 
 
-| ![camera-model](../ph-secondary.png?as=webp) |
+| ![camera-model](./cameramodel.PNG?as=webp) |
 | :--------------: |
-| :jigsaw: Interaktive Illustration des Kameramodells in 3D |
+| :jigsaw: Illustration des Kameramodells|
 
 Unser Modell der virtuellen Kamera soll also eine 3D-Szene aus einer bestimmten Perspektive darstellen und die dafür nötigen geometrischen Transformationen beinhalten.
 
