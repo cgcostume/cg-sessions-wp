@@ -14,9 +14,7 @@ Wir wollen die Transformation aus zwei Teiltransformationen zusammensetzen:
 
 (2) der Rotation in das Kamerakoordinatensystem.
 
-| ![camera-model](./view-transform.png?as=webp) |
-| :--------------: |
-| :jigsaw: Illustration der View Transform |
+![camera-model](./view-transform-trimmed.png?as=webp){.w-75}
 
 Den Parameter für die Translation haben wir mit $-eye$ gegeben. Damit wird der Punkt $eye$ in den Koordinatenursprung verschoben.
 

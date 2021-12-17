@@ -125,6 +125,10 @@ $aspect-ratios: (
   max-width: 60rem;
 }
 
+strong {
+  font-weight: $font-weight-bold;
+}
+
 p {
   hyphens: auto;
   // @hyphenation-resource
@@ -241,6 +245,15 @@ footer {
   100% { opacity: 1.00; }
 }
 
+p img {
+  @extend .img-fluid;
+}
+
+p img.w-75 {
+  @extend .position-relative;
+  @extend .start-50;
+  @extend .translate-middle-x;
+}
 
 $border-width: 4pt;
 
