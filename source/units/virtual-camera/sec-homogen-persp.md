@@ -73,7 +73,7 @@ $$
         x \\
         y \\
         \frac{z-k}{1-k} \\
-        -z \\
+        z \\
     \end{pmatrix}.
 $$
 
