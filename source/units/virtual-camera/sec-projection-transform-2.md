@@ -3,27 +3,23 @@ Wir betrachten zunächst nur die obere Hälfte des Sichtvolumens, das wird uns s
 
 Angenommen, wir kennen also den Abstand der Projektionsebene von der Kamera. Wie ermitteln wir, wie groß ein Objekt mit Abstand $z_o$ auf der Projektionsebene erscheint? Gegeben sind dabei die Objektgröße o, der Abstand des Objekts $z$ und der Abstand der Projektionsebene $z_p$.
 
-| ![camera-model](./strahlensatz1.png?as=webp){.w-75}{.text-middle}  |
-| :--------------: |
-| :jigsaw: Illustration Strahlensatz |
-
+![camera-model](./strahlensatz1.png?as=webp){.w-75}
 
 <textarea class = 'notes' rows = '8' placeholder = 'Mach Dir ein paar Notizen wenn du magst.'></textarea> 
 
-Wir wissen, dass die Objektgröße $o$ im Verhältnis zu $h_o$ genauso groß ist wie die projizierte Größe $proj$ im Verhältnis zu $d$.
-
-Demnach gilt $$
-proj=\frac{o\cdot z_p}{z_o}.$$
-
-Relevant für uns ist nun aber weniger die absolute Größe der Projektion als die Größe der Projektion in Relation zur Projektionsfläche, deren Größe wir mit $d$ bezeichnet haben.
-Wie zuvor schon festgestellt, ist das Verhältnis von $o$ zu $b$ genauso wie das Verhältnis von $proj$ zu $d$ und genau das Verhältnis, das wir suchen.
+Wir wissen, dass die Objektgröße $o$ im Verhältnis zu $h_o$ genauso groß ist wie die projizierte Größe $\textit{proj}$ im Verhältnis zu $d$.
+Demnach gilt 
 $$
-\frac{o}{h_o}=\frac{proj}{h_p}
+    \textit{proj}=\frac{o\cdot z_p}{z_o}.
 $$
 
-| ![camera-model](./strahlensatz2.png?as=webp){.w-75}{.text-middle}  |
-| :--------------: |
-| :jigsaw: Illustration Strahlensatz |
+Relevant für uns ist weniger die absolute Größe der Projektion als die Größe der Projektion in Relation zur Projektionsfläche, deren Größe wir mit $d$ bezeichnet haben.
+Wie zuvor festgestellt, entspricht das Verhältnis von $o$ zu $b$ dem Verhältnis von $\textit{proj}$ zu $d$, dem gesuchten Verhältnis:
+$$
+\frac{o}{h_o}=\frac{\textit{proj}}{h_p}
+$$
+
+![camera-model](./strahlensatz2.png?as=webp){.w-75}
 
 Könnten wir also $h_o$ mit bekannten Größen beschreiben, hätten wir das gesuchte Verhältnis gefunden. Dabei können wir uns zunutze machen, dass über die Kameraparameter der Winkel $\alpha$ ebenfalls bekannt ist. Dieser entspricht der Hälfte des Sichtwinkels $\theta_y$ in y-Richtung. Damit können wir Beziehungen am rechtwinkligen Dreieck nutzen und erhalten$$
 \tan{\alpha}=\tan{(\theta_y}/2)=\frac{h_o}{z_p}

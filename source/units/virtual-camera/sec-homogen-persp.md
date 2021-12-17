@@ -112,8 +112,8 @@ $$
 
 **Welkoordinaten $\rightarrow$ Clip-Koordinaten**
 Zusammengefasst werden die folgenden Transformationen angewandt, um vom Weltkoordinatensystem ins Clip-Koordinatensystem umzuwandeln:
-1. **Translation** der Kameraposition in den Ursprung
-2. **Rotation**, sodass der up-Vektor die y-Achse und die Blickrichtung die z-Achse beschreiben
-3. **Skalierung** des Blickwinkels
-4. **Uniforme Skalierung**, um die Far-Clipping-Plane nach $z=1$ zu verschieben
-5. Verschieben des z-Wertebereichs und Kopieren von $z$ in die **homogene Koordinate**
+1. **Translation** der Kameraposition in den Ursprung.
+2. **Rotation**, sodass der up-Vektor die y-Achse und die Blickrichtung die z-Achse beschreiben.
+3. **Skalierung** des Blickwinkels.
+4. **Uniforme Skalierung**, um die Far-Clipping-Plane nach $z=1$ zu verschieben.
+5. **Verschiebung** des z-Wertebereichs und Kopieren von $z$ in die **homogene Koordinate**.
