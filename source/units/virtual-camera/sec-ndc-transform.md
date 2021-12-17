@@ -1,4 +1,4 @@
 
-### ToDo? :speak_no_evil:
+### Perspective Division Transform
 
-**$T_{C\rightarrow{}\textit{NDC}}$&ensp;|&ensp;Clip-Koordinaten $\rightarrow$ normalisierte Gerätekoordinaten**
+Um vom Clip-Koordinatensystem in NDC zu transformieren, muss lediglich in nicht-homogene Koordinaten umgewandelt werden, also durch w geteilt werden.
