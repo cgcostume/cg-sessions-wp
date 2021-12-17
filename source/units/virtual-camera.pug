@@ -88,14 +88,15 @@ block content
           h4 Einschub – Projektionsebene
           hr
           p Was heißt denn nun, dass wir eine Projektionsebene verwenden? Normalerweise projiziert eine Kamera doch nichts?
-          p Dazu können wir uns die vereinfachte Funktionsweise einer simplen Lochkamera ansehen: 
-          p Dabei entsteht das umgedrehte Bild auf der Rückwand der Lochkamera, nachdem das Licht durch das Loch „gebündelt“* wird.
-          p Die Rückwand der Kamera ist also die Projektionsebene, auf der das Bild entsteht. 
-          p Wir wollen jedoch nicht physikalisch Lichtstrahlen erfassen, sondern nur berechnen, wie groß die Gegenstände in Relation zueinander sind.
-          p Wir können die Projektionsebene also beliebig – auch vor der Kamera – platzieren und mit dem Strahlensatz bestimmen, wie groß Objekte auf dieser Ebene erscheinen.
-          p Für unsere Anwendung ist die Projektionsebene also eine <em>Referenzebene</em>, um zu steuern, wie andere Objekte skaliert werden.
+          p Schauen wir uns die vereinfachte Funktionsweise einer Lochkamera (graue Box) an: 
+          img.img-fluid(src =require('./virtual-camera/pinhole-cam-alpha.png?as=webp'))
+          p 
+            | Dabei entsteht das umgedrehte Bild auf der Rückwand der Lochkamera, nachdem das Licht durch das Loch &bdquo;gebündelt&rdquo; wird.
+            | Die Rückwand der Kamera ist die Projektionsebene, auf der das Bild entsteht. 
+            | Wir wollen derzeit jedoch nicht physikalisch Lichtstrahlen erfassen, sondern nur berechnen, wie groß die Gegenstände in Relation zueinander sind.
+            | Wir können die Projektionsebene beliebig -- auch vor der Kamera -- platzieren und mit dem Strahlensatz bestimmen, wie groß Objekte auf dieser Ebene erscheinen.
+            | Für unsere Anwendung ist die Projektionsebene also eine <em>Referenzebene</em>, um zu steuern, wie andere Objekte skaliert werden.
           
-          img.img-fluid(src =require('./virtual-camera/pinhole-cam.jpg?as=webp'))
 
   section.container
     .row

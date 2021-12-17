@@ -31,6 +31,9 @@ jobs:
       - name: Build website
         run: npm run build -- --output-path=../deploy
         working-directory: src
+      - name: Create CNAME
+        run: echo "cgmath.cc" > CNAME
+        working-directory: deploy
       - name: Commit result
         run: |
           git config user.email "${{ github.event.pusher.email }}"
