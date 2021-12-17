@@ -2,7 +2,7 @@
 > Homogene Koordinaten für Perspektivische Verzerrung
 
 Für die Projektion homogener Koordinaten zurück in den $\mathbb{R}^{3}$-Raum werden alle Koordinaten durch $w$ geteilt und die $w$-Koordinate anschließend vernachlässigt.
-D.h., hier wird bereits eine Division durchgeführt, die wir womöglich nutzen könnten um eine tiefenbasierte Verzerrung der Geometrie zu erreichen...
+D.&thinsp;h., hier wird bereits eine Division durchgeführt, die wir womöglich nutzen könnten um eine tiefenbasierte Verzerrung der Geometrie zu erreichen...
 
 Zur Erinnerung: 
 
@@ -51,7 +51,7 @@ $$
         1 & 0 & 0 & 0 \\
         0 & 1 & 0 & 0 \\
         0 & 0 & \frac{1}{1-k} & \frac{-k}{1-k} \\
-        0 & 0 & -1 & 0 \\
+        0 & 0 & 1 & 0 \\
     \end{pmatrix}
 $$
 Dadurch ergibt sich bei der Transformation der Koordinaten
@@ -60,7 +60,7 @@ $$
         1 & 0 & 0 & 0 \\
         0 & 1 & 0 & 0 \\
         0 & 0 & \frac{1}{1-k} & \frac{-k}{1-k} \\
-        0 & 0 & -1 & 0 \\
+        0 & 0 & 1 & 0 \\
     \end{pmatrix}
     \begin{pmatrix}
         x \\
@@ -90,7 +90,7 @@ $$
             1 & 0 & 0 & 0 \\
             0 & 1 & 0 & 0 \\
             0 & 0 & \frac{1}{1-k} & \frac{-k}{1-k} \\
-            0 & 0 & -1 & 0 \\
+            0 & 0 & 1 & 0 \\
         \end{pmatrix}
         \begin{pmatrix}
             \frac{1}{far} & 0 & 0 & 0 \\
