@@ -37,7 +37,7 @@ Unser Modell der virtuellen Kamera soll also eine 3D-Szene aus einer bestimmten 
 
 Bei &bdquo;realen&rdquo;, physischen Kameras gibt weitere Parameter die vorrangig durch die Wahl des Objektivs bestimmt werden und beispielsweise die Beleuchtung oder Schärfe einer Aufnahme bedingen. Derartige Parameter sind vorerst nicht Teil unserer virtuellen Kamera. Wir schließen dazu u.&thinsp;A. folgende Parameter vorerst aus:
 
-- Brenweite einer Linse (z.&thinsp;B. um Tiefenunschärfe zu erzeugen)
+- Brennweite einer Linse (z.&thinsp;B. um Tiefenunschärfe zu erzeugen)
 - Krümmungen einer Linse, also Verzerrung die durch die Linsenform entstehen
 - Chromatische und Sphärische Aberrationen
 - Vignettierungen
