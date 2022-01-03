@@ -45,7 +45,10 @@ export default function (env, __dirname) {
         templates.push(new HtmlWebpackPlugin({
             filename: filename.replace('.pug', '.html'),
             template: filename,
-            inject: false
+            inject: false,
+            minify: {
+                conservativeCollapse: false
+            }
         }));
     });
 
