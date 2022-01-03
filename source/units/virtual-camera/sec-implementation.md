@@ -6,7 +6,7 @@ Die Fragmentprozessierung während des Renderings soll dabei nur auf Fragmenten 
 
 ![camera-model](./coordinates-sketch-trimmed.png?as=webp){.img-fluid}
 
-Koordinatenräume und entsprechende Transforms für ein Rendering mit virtueller Kamera.{.text-center}{.text-small}
+<small>Koordinatenräume und entsprechende Transforms für ein Rendering mit virtueller Kamera.</small>{.text-center}
 
 Rasterisiert und anschließend mittels Fragment-Shader prozessiert werden nur Dreiecke, bei denen mindestens ein Vertex nach den vorherigen Renderingstufen (z.&thinsp;B. Vertexprozessierung mittels Vertex-Shader) im Intervall $[-1,+1]$ liegt. 
 Zur Erinnerung, die Positionierung der Vertices erfolgt im Normalfall über die Zuweisung einer **homogenen** Koordinate auf `gl_Position` im Vertex-Shader:
