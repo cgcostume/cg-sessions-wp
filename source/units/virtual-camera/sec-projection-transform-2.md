@@ -7,14 +7,14 @@ Angenommen, wir kennen also den Abstand der Projektionsebene von der Kamera. Wie
 
 <textarea class = 'notes' rows = '8' placeholder = 'Mach Dir ein paar Notizen wenn du magst.'></textarea> 
 
-Wir wissen, dass die Objektgröße $o$ im Verhältnis zu $h_o$ genauso groß ist wie die projizierte Größe $\textit{proj}$ im Verhältnis zu $d$.
+Wir wissen, dass die Objektgröße $o$ im Verhältnis zu $h_o$ genauso groß ist wie die projizierte Größe $\textit{proj}$ im Verhältnis zu $h_p$.
 Demnach gilt 
 $$
     \textit{proj}=\frac{o\cdot z_p}{z_o}.
 $$
 
-Relevant für uns ist weniger die absolute Größe der Projektion als die Größe der Projektion in Relation zur Projektionsfläche, deren Größe wir mit $d$ bezeichnet haben.
-Wie zuvor festgestellt, entspricht das Verhältnis von $o$ zu $b$ dem Verhältnis von $\textit{proj}$ zu $d$, dem gesuchten Verhältnis:
+Relevant für uns ist weniger die absolute Größe der Projektion als die Größe der Projektion in Relation zur Projektionsfläche, deren Größe wir mit $h_p$ bezeichnet haben.
+Wie zuvor festgestellt, entspricht das Verhältnis von $o$ zu $h_o$ dem Verhältnis von $\textit{proj}$ zu $h_p$, dem gesuchten Verhältnis:
 $$
 \frac{o}{h_o}=\frac{\textit{proj}}{h_p}
 $$
