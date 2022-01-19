@@ -26,7 +26,7 @@ Statt über eine Transformationsmatrix direkt die gewünschte Verzerrung zu erre
 Dabei werden x- und y-Koordinate durch die Division korrekt in den NDC-Raum transformiert. 
 Wir müssen uns zudem aber noch ansehen, wie die z-Koordinate transformiert werden soll.
 
-Bisher liegt weiterhin $z=0$ bei der Kameraposition, $z=-k$ bei der Near-Plane und $z=-1$ bei der Far-Plane. 
+Bisher liegt weiterhin $z=0$ bei der Kameraposition, $z=k$ bei der Near-Plane und $z=1$ bei der Far-Plane. 
 Nach unserer Transformation soll jedoch $z=0$ bei der Near-Plane und $z=1$ bei der Far-Plane liegen.
 
 ![camera-model](./z-transformation.png?as=webp){.w-75}
