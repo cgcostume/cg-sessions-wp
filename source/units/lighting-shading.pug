@@ -1,0 +1,56 @@
+
+extends ../partials/lecture.pug
+
+block vars
+  - title = '<strong>Beleuchtung</strong> und <strong>Schattierung</strong>';
+  - lead = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.';
+  - teaser = require('./virtual-camera/psychonauts2-teaser.png?as=webp');
+
+block content
+
+  //- Bootstrap Grid System
+  //- https://getbootstrap.com/docs/5.1/layout/grid/
+
+  .container
+    .row
+      .offset-1.col-10
+
+        .alert.alert-primary
+          p In dieser Einheit wird gezeigt, wie virtuelle Kameras in der Theorie und in der praktischen Umsetzung funktionieren und wie effizient 3D Szenen aus wohldefinierten Blickwinkeln dargestellt werden können.
+          hr
+          h4 Nach dieser Lehreinheit solltest Du&hellip;
+          ul.list-unstyled
+            li &hellip;die Bedeutung von Beleuchtung für die Computergrafik kennen,
+            li &hellip;die Unterschiede zwischen lokalen und globalen Beleuchtungsmodellen erklären können, (shading und shadowing),
+            li &hellip;verschiedene Lichtquellen-Modelle und deren Unterschiede sowie Anwendungszwecke zuordnen können
+            li &hellip;die Bestandteile des phong-Beleuchtungsmodells kennen.
+            li &hellip;Schattierungsverfahren kennen.
+
+    .row
+      .offset-1.col-10
+
+        .alert.alert-secondary
+          h4 Vorwissen
+          hr
+          p Zum besseren Verständnis von virtuellen Kameras in der Echtzeitcomputergrafik, empfehlen wir die folgenden Inhalte vorab zu sichten und zumindest grundlegend durchzuarbeiten:
+          ol
+            li Unsere Vorlesungen zu den Themen:
+              ul
+                li #[a(href = 'https://youtu.be/oEpQUoCig18') Vektorrechnung &amp; Basistransformationen] (YouTube)
+                li #[a(href = 'https://youtu.be/YDDQE45PZLs') Komposition von Transformationen] (YouTube)
+            li Für Quereinsteiger mit wenig Zeit empfehlen wir folgenden Grundlageneinführung:#[br]
+              | #[a(href = 'https://webglfundamentals.org/webgl/lessons/webgl-fundamentals.html') https://webglfundamentals.org/webgl/lessons/webgl-fundamentals.html].
+            li Optional aber empfehlenswert ist die sehr anschauliche und interaktive Einführung zu den physikalischen Grundlagen von Kameras und Linsen von Bartosz Ciechanowski:#[br]
+              | #[a(href = 'https://ciechanow.ski/cameras-and-lenses/') https://ciechanow.ski/cameras-and-lenses/].
+
+
+  section.container
+    .row
+      .offset-1.col-10
+        !=require("./lighting-shading/sec-motivation.md")
+
+  section.container
+    .row
+      .offset-1.col-10
+        !=require("./lighting-shading/physical-principles.md")
+

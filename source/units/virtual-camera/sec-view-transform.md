@@ -72,3 +72,6 @@ $$
         0 & 0 & 0 & 1 \\
     \end{pmatrix}
 $$
+
+**Achtung!** Es kann in der Praxis vorkommen, dass der $up$-Vektor und die $look\text{-}to$-Richtung noch nicht senkrecht zueinander stehen. Das muss jedoch vor dieser Rechnung erst sichergestellt werden. In dem Fall können $n$, $v$ und $u$ z.B. durch mehrmaliges Bilden des Kreuzprodukts ermittelt werden:
+Dabei sind dann $n=look\text{-}to$, $u=up\times n$ und $v= n\times u$.
