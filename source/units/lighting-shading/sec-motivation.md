@@ -7,7 +7,7 @@ Bevor wir uns jedoch genauer mit der Umsetzung beschäftigen, müssen wir uns zu
 
 Wir wollen uns dafür ein paar Aufnahmen aus verschiedenen Spielen ansehen. Welche Eigenschaften, die ein Beleuchtungsmodell charakterisieren, kannst du daraus ableiten? 
 
-| ![camera-model](../ph-secondary.png?as=webp) |
+| ![camera-model](./fire-life-is-strange.jpg?as=webp) |
 | :--------------: |
 | :jigsaw: Beispielscreenshots |
 
