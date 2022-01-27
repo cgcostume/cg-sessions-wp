@@ -13,7 +13,7 @@ Wir wollen uns dafür ein paar Aufnahmen aus verschiedenen Spielen ansehen. Welc
 
 <textarea class = 'notes' rows = '8' placeholder = 'Mach Dir ein paar Notizen wenn du magst.'></textarea>
 
-Allgemein Beleuchtung zentrales Ausdrucksmittel und für 3D-Wahrnehmung wichtig -> vermittelt Informationen über Oberflächenbeschaffenheit und Form von Objekten
+Wie auch auf den Screenshots zu erkennen, ist Beleuchtung ein zentrales Ausdrucksmittel und für 3D-Wahrnehmung wichtig. Sie vermittelt Informationen über Oberflächenbeschaffenheit und Form von Objekten.
 Effekte
 -	Richtungsabhängig
 -	Materialabhängig - spiegelnd oder nicht
