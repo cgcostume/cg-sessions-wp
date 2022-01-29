@@ -13,7 +13,13 @@ Wir wollen uns dafür ein paar Aufnahmen aus verschiedenen Spielen ansehen. Welc
 
 <textarea class = 'notes' rows = '8' placeholder = 'Mach Dir ein paar Notizen wenn du magst.'></textarea>
 
-Wie auch auf den Screenshots zu erkennen, ist Beleuchtung ein zentrales Ausdrucksmittel und für 3D-Wahrnehmung wichtig. Sie vermittelt Informationen über Oberflächenbeschaffenheit und Form von Objekten.
+Wie auch auf den Screenshots zu erkennen, ist Beleuchtung ein zentrales Ausdrucksmittel und für 3D-Wahrnehmung wichtig. Sie vermittelt Betrachter*innen Informationen über Oberflächenbeschaffenheit und Form von Objekten und trägt dadurch signifikant dazu bei, einen räumlichen Eindruck zu erzeugen.
+
+Um diese Informationen zu vermitteln, muss die Belechtung der Szene also in irgendeiner Form von der Oberfläche, also insbesondere ihrer **Ausrichtung** sowie ihrem **Material und Struktur**. So würde z.B. ein Ball aus Gummi bei gleicher Beleuchtung anders aussehen als eine Kugel aus Metall.
+
+Dabei sind verschiedene Beleuchtungseffekte zu beobachten: Zum einen sind Flächen stärker erleuchtet, je mehr sie dem Licht zugewandt sind. Dieser Bestandteil der Beleuchtung nennt sich **diffuse** Beleuchtung. Zum anderen sind auch
+
+
 Effekte
 -	Richtungsabhängig
 -	Materialabhängig - spiegelnd oder nicht
