@@ -124,6 +124,14 @@ $aspect-ratios: (
 .container {
   max-width: 60rem;
 }
+section.no-padding {
+  padding: 2rem 0 8rem;
+}
+.container-dark {
+  width: 100%;
+  background-color: black;
+  color: white;
+}
 
 strong {
   font-weight: $font-weight-bold;

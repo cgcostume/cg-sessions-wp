@@ -36,9 +36,13 @@ block content
     .row
       .offset-1.col-10
         !=require("./lighting-shading/sec-motivation.md")
+  
+  section
+    img.img-fluid(src = require("./lighting-shading/transition.png?as=webp"))
 
-  section.container
-    .row
-      .offset-1.col-10
-        !=require("./lighting-shading/physical-principles.md")
+  div.container-dark
+    section.container.no-padding
+      .row
+        .offset-1.col-10
+          !=require("./lighting-shading/physical-principles.md")
 
