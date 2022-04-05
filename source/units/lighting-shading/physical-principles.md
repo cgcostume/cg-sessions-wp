@@ -4,14 +4,18 @@
 
 *Für eine detailliertere Einführung in die physikalischen Grundlagen des Lichts empfehlen wir die Seite von Bartosz Ciechanowski **\<insert link\>**. Für diese Einheit werden wir jedoch ein einfaches **Strahlenmodell** annehmen.*
 
-Wir nehmen die Welt um uns darüber wahr, wie Licht mit ihr interagiert. Wir können Objekte nur sehen, wenn sie mit Licht in Kontakt kommen und dieses entweder in Richtung Betrachter*in zurückwerfen (**Reflexion**), durchlassen (**Transmission**) oder verschlucken (**Absorption**). Diese Erscheinungen nehmen Einfluss darauf wie hell oder dunkel ein Objekt wahrgenommen wird und bewirken dadurch Schattierung und Schattenwurf.
+Wir nehmen die Welt um uns darüber wahr, wie Licht mit ihr interagiert. Wir können Objekte nur sehen, wenn sie mit Licht in Kontakt kommen und dieses entweder in Richtung Betrachter*in zurückwerfen (**Reflexion**), durchlassen (**Transmission**) oder verschlucken (**Absorption**). Diese Erscheinungen nehmen Einfluss darauf wie hell oder dunkel ein Objekt wahrgenommen wird und bewirken dadurch Schattierung und Schattenwurf. Damit bilden sie auch die Grundlage für unser Beleuchtungsmodell.
 
 | ![camera-model](./ray_types.png?as=webp) |
 | :--------------: |
 | Strahlentypen |
 
 
-Weitere Phänomene, die bei der Interaktion von Licht mit Objekten einer Szene auftreten können, sind z.B. Lichtbeugung und -brechung sowie Interferenzerscheinungen. Unser grundlegendes Beleuchtungsmodell wird jedoch hauptsächlich durch **Reflexion** (im Zusammenspiel mit Absorption) bestimmt.
+Weitere Phänomene, die bei der Interaktion von Licht mit Objekten einer Szene auftreten können, sind z.B. Lichtbeugung und -brechung sowie Interferenzerscheinungen, diese spielen jedoch in den Lichtausbreitungsmodellen der Computergrafik in der Regel eine untergeordnete Rolle. Den Hauptfaktor bildet die **Reflexion**.
+
+//Der Hauptfaktor für Lichtausbreitungsmodelle in der Computergrafik ist jedoch die **Reflexion**
+
+//Unser grundlegendes Beleuchtungsmodell wird jedoch hauptsächlich durch **Reflexion** (im Zusammenspiel mit Absorption) bestimmt.
 
 ### Reflexion
 
@@ -19,13 +23,24 @@ Wie bereits erwähnt unterscheiden wir zwischen **diffuser** und **spekularer** 
 Welche physikalischen Grundlagen bzw. welche Modellannahmen stecken dahinter?
 
 #### Diffuse Reflexion
-* gleichmäßige Reflexion in alle Richtungen
-* basiert auf geringen Unebenheiten in der Oberfläche
-* Lambertsches Gesetz
+Als diffuse Reflexion wird der Effekt bezeichnet, dass Flächen heller wirken, je mehr sie dem Licht zugewandt sind.
+Sie ist vollständig unabhängig vom Betrachtungswinkel und nur von Oberflächenausrichtung und Lichtposition bzw. Lichtrichtung abhängig.
+
+Es steht die Modellannahme dahinter, dass das auf die Oberfläche auftreffende Licht gleichmäßig in alle Richtungen reflektiert wird. Dieses Phänomen ist stärker, je rauer die Oberfläche ist. 
 
 | ![camera-model](./diffuse.png?as=webp) |
 | :--------------: |
-| Diffuse Reflexion |
+| Diffuse Reflexion - modelliertes Verhalten |
+
+Physikalisch lässt sich dieses Phänomen damit begründen, dass raue Flächen viele kleine Unebenheiten beinhalten. Treffen dicht nebeneinanderliegende Lichtstrahlen **(erklären, dass auch wenig Licht aus mehreren Strahlen besteht)** auf die Fläche, werden sie in praktisch zufällige Richtungen reflektiert. Durch dieses Verhalten der einzelnen Lichtstrahlen wird das Licht insgesamt annähernd gleichmäßig in alle verschiedenen Richtungen reflektiert.
+
+| ![camera-model](./diffuse_zoom.png?as=webp) |
+| :--------------: |
+| Reflexion an Unebenheiten in der Oberfläche |
+
+Wie viel Licht genau in Abhängigkeit vom Lichteinfallswinkel reflektiert wird, lässt sich mithilfe des **Lambertschen Gesetzes** bestimmen.
+Dieses besagt, dass die reflektierte Lichtmenge proportional zum Kosinus des Winkels zwischen der Einfallsrichtung des Lichtes und der Flächennormale ist.
+
 
 #### Spekulare Reflexion
 * Reflexion hauptsächlich in eine Richtung
