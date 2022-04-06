@@ -13,10 +13,6 @@ Wir nehmen die Welt um uns darüber wahr, wie Licht mit ihr interagiert. Wir kö
 
 Weitere Phänomene, die bei der Interaktion von Licht mit Objekten einer Szene auftreten können, sind z.B. Lichtbeugung und -brechung sowie Interferenzerscheinungen, diese spielen jedoch in den Lichtausbreitungsmodellen der Computergrafik in der Regel eine untergeordnete Rolle. Den Hauptfaktor bildet die **Reflexion**.
 
-//Der Hauptfaktor für Lichtausbreitungsmodelle in der Computergrafik ist jedoch die **Reflexion**
-
-//Unser grundlegendes Beleuchtungsmodell wird jedoch hauptsächlich durch **Reflexion** (im Zusammenspiel mit Absorption) bestimmt.
-
 ### Reflexion
 
 Wie bereits erwähnt unterscheiden wir zwischen **diffuser** und **spekularer** Reflexion, die zusammen unser (sehr simples) Beleuchtungsmodell bilden.
@@ -51,8 +47,6 @@ Dieses besagt, dass die reflektierte Lichtmenge proportional zum Kosinus des Win
 | :--------------: |
 | Spekulare Reflexion |
 
-**Scattering etc Teilmenge Reflexion?? (vgl. Folie 4)**
-* (Strahlenmodell und seine Grenzen)
 * why Reflexion is so important (wahrscheinlich kein extra abschnitt)
     * Materialabhängigkeit
     * wie bekommen wir daraus Farben?
