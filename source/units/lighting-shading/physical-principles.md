@@ -34,9 +34,20 @@ Physikalisch lässt sich dieses Phänomen damit begründen, dass raue Flächen v
 | :--------------: |
 | Reflexion an Unebenheiten in der Oberfläche |
 
-Wie viel Licht genau in Abhängigkeit vom Lichteinfallswinkel reflektiert wird, lässt sich mithilfe des **Lambertschen Gesetzes** bestimmen.
-Dieses besagt, dass die reflektierte Lichtmenge proportional zum Kosinus des Winkels zwischen der Einfallsrichtung des Lichtes und der Flächennormale ist.
+Wie viel Licht genau in Abhängigkeit vom Lichteinfallswinkel reflektiert wird, lässt sich mithilfe des **Lambertschen Gesetzes** berechnen.
+Dieses besagt, dass die reflektierte Lichtmenge, also die Lichtintensität $I$, proportional zum Kosinus des Winkels zwischen der **(invertierten)** Einfallsrichtung des Lichtes und der Flächennormale ist.
 
+| ![camera-model](./lambert.png?as=webp)|
+| :--------------: |
+| Lambertsches Gesetz |
+
+<div align="center">
+    <canvas class="zdog-canvas" width="760" height="340"></canvas>
+</div>
+
+<div align="center">
+    <img alt="Nach links und rechts ziehen, um Winkel zu ändern" src="./drag.png" height="50"/>
+</div>
 
 #### Spekulare Reflexion
 * Reflexion hauptsächlich in eine Richtung

@@ -364,4 +364,9 @@ section section {
   @extend .py-0;
 }
 
+.zdog-canvas {
+  background: #000000;
+  cursor: move;
+}
+
 @import "highlight.js/styles/ascetic.css";
