@@ -14,42 +14,42 @@ let illo = new Zdog.Illustration({
   let rgbToString = function(r, g, b) {
     return "rgb("+r.toString() +","+g.toString()+","+b.toString()+")";
   }
+  let hslaToString = function(r, g, b, a) {
+    return "hsla("+r.toString() +","+g.toString()+"%,"+b.toString()+"%,"+a+")";
+  }
 
   const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
   
   let alpha0 = 70.0 * Math.PI / 180.0;
   let alpha = alpha0;
-  let a = 100;
-  let b = 500;
+  let a = 100; // distance between light rays
+  let b = 500; // height of light rays
   let c = b / Math.tan(alpha);
   let h = a / Math.sin(alpha);
 
-  //hsl(185,89,50)
-  let gColor0 = [14, 223, 241];
+  // rgb [14, 223, 241];
+  let gColor0 = [185, 89, 50];
   let gColor = gColor0;
   let lambert = Math.cos(Math.PI / 2.0 - alpha);
-  gColor = [gColor0[0] * lambert, gColor0[1] * lambert, gColor0[1] * lambert];
   
   let leftBorder = -520;
   let rightBorder = 520;
   let ground  = new Zdog.Shape({
     addTo: illo,
     path: [
+      { x: leftBorder, y: 300, z:1}, // start at 1st point
       { x: leftBorder, y: 200, z:1}, // start at 1st point
       { x:  rightBorder, y: 200, z:1 }, // line to 2nd point
       { x:  rightBorder, y: 300, z:1 }, // line to 2nd point
-      { x: leftBorder, y: 300, z:1}, // start at 1st point
     ],
     stroke: 10,
-    color: rgbToString(gColor[0],gColor[1],gColor[2]),
-    //fill: true
+    closed: false,
+    color: hslaToString(gColor[0],gColor[1],gColor[2]*lambert, 1.0),
   });
-
-  /*
-  ground.copy({
-    stroke: 20,
-    fill:false,
-    color: "hsla(185,89%,50%,0.3)",})*/
+  
+  let ground2 = ground.copy({
+    fill:true,
+    color: "hsla(185,89%,50%,0.08)",});
   
   let startX = -0;
   let startY = -300;
@@ -64,48 +64,61 @@ let illo = new Zdog.Illustration({
       { x:  startX, y: startY + b }, // line to 2nd point
     ],
     stroke: 5,
-    color: "rgb(100,100,100)",//'#ff0fb5',
     translate:{z:1},
     visible: false
   }));
-  
-  for(let i = -9; i <9; i++) {
+
+  let fadeFormula = function(h, i) {
+    let left = startX + h * i - leftBorder;
+    let right = rightBorder - (startX  + h * i);
+    let leftClamped = clamp(left, 0, fadeRange) * (1 / fadeRange);
+    let rightClamped =  clamp(right, 0, fadeRange) * (1 / fadeRange);
+    return leftClamped * rightClamped;
+  }
+  let lineColorFromI = (i) => [255, 15, i * 20 + 200];
+
+  for(let i = -9; i < 9; i++) {
     
-    lines.push(lines[0].copy({visible:true, addTo: illo, translate: {x:h * i}}));
-        lines[i+10].color = "rgb(255,15,"+ (i*20+400).toString() +")";
-    let baseColor = [255, 15, i*20+200];
-  
-          let factor = clamp((startX + h*i - leftBorder),0, fadeRange) * (1/fadeRange) * clamp(rightBorder - (startX  + h*i),0, fadeRange) * (1/fadeRange);
-            lines[i+10].color = rgbToString(baseColor[0]*factor, baseColor[1]*factor, baseColor[2]*factor);
-       // }
+    lines.push(
+        lines[0].copy(
+            {
+                visible:true,
+                addTo: illo,
+                translate: {x:h * i}
+            }
+        )
+    );
+
+    let baseColor = lineColorFromI(i);
+    let factor = fadeFormula(h, i);
+    lines[i+10].color = rgbToString(baseColor[0] * factor, baseColor[1] * factor, baseColor[2] * factor);
 
   }
   
   new Zdog.Dragger({
     startElement:illo.element,
     onDragStart:function(){},
-    onDragMove:function(pointer, moveX, moveY){
+    onDragMove:function(pointer, moveX, moveY) {
       alpha =  alpha0 + moveX/300.0;
-      alpha = Math.max(alpha, 0.2);
-      alpha = Math.min(alpha, Math.PI-0.2);
+      alpha = clamp(alpha, 0.2, Math.PI-0.2);
       c = b / Math.tan(alpha); 
       h = a / Math.sin(alpha);
+
       for(let i = -9; i <9; i++) {
           lines[i+10].path = [
-            {x: startX-c, y: startY},
+            {x: startX - c, y: startY},
             {x:  startX, y: startY + b}
           ];
-        lines[i+10].translate = {x:h * i};
+        lines[i+10].translate = {x: h * i};
         lines[i+10].updatePath();
-        lines[i+10].color = "rgb(255,15,"+ (i*20+200).toString() +")";
 
-    let baseColor = [255, 15, i*20+200];
-    let factor = clamp((startX + h*i - leftBorder),0, fadeRange) * (1/fadeRange) * clamp(rightBorder - (startX  + h*i),0, fadeRange) * (1/fadeRange);
-    lines[i+10].color = rgbToString(baseColor[0]*factor, baseColor[1]*factor, baseColor[2]*factor);
+        let baseColor = lineColorFromI(i);
+        let factor = fadeFormula(h,i);
+        lines[i+10].color = rgbToString(baseColor[0] * factor, baseColor[1] * factor, baseColor[2] * factor);
       }
+
       lambert = Math.cos(Math.PI / 2.0 - alpha);
-      gColor = [gColor0[0] * lambert, gColor0[1] * lambert, gColor0[1] * lambert];
-      ground.color = rgbToString(gColor[0],gColor[1],gColor[2]);
+      ground.color = hslaToString(gColor[0], gColor[1], gColor[2] * lambert, 1.0);
     },
     onDragEnd:function(){
       alpha0 = alpha;
@@ -119,4 +132,4 @@ let illo = new Zdog.Illustration({
   
   animate();
   </script><footer class="container"><div class="row text-center"><div class="col-12"><p class="mt-5 mb-1">&copy; 2022
-Hasso-Plattner-Institut für Digital Engineering gGmbH</p><small class="mt-0 mb-5"><a class="text-muted" href="https://docs.github.com/en/github/site-policy/github-privacy-statement">Datenschutzerklärung</a></small></div></div><data hidden value="31793fc09217fb009e89868b76fca6dc710b56c9">revision</data></footer></body><script src="../jquery.min.js"></script><script src="../bootstrap.js"></script><script src="../scripts.js"></script></html>
+Hasso-Plattner-Institut für Digital Engineering gGmbH</p><small class="mt-0 mb-5"><a class="text-muted" href="https://docs.github.com/en/github/site-policy/github-privacy-statement">Datenschutzerklärung</a></small></div></div><data hidden value="53b6c64f92e6e6e944d0372d73d4e35e80220b9b">revision</data></footer></body><script src="../jquery.min.js"></script><script src="../bootstrap.js"></script><script src="../scripts.js"></script></html>
