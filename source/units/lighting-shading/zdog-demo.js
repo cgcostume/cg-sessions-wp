@@ -11,6 +11,31 @@ let illo = new Zdog.Illustration({
     return "hsla("+r.toString() +","+g.toString()+"%,"+b.toString()+"%,"+a+")";
   }
 
+  let getTrianglePoints = function(x, y, alpha) {
+    let arrowHeight = 50;
+    let arrowWidth = 30;
+
+    let o = Math.sin(alpha) * arrowHeight;
+    let p = Math.cos(alpha) * arrowHeight;
+
+    let A = {x: x - p, y: y - o};
+    let B = {x: x - p, y: y - o};
+    let C = {x: x, y: y};
+
+    let beta = Math.PI / 2.0 - alpha;
+
+    let i = Math.cos(beta) * arrowWidth / 2.0;
+    let j = Math.sin(beta) * arrowWidth / 2.0;
+
+    A.x -= i;
+    A.y += j;
+
+    B.x += i;
+    B.y -= j;
+
+    return [A, B, C];
+  }
+
   const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
   
   let alpha0 = 70.0 * Math.PI / 180.0;
@@ -49,7 +74,16 @@ let illo = new Zdog.Illustration({
   let fadeRange = 50;
   
   let lines = [];
-  
+  let triangles = [];
+  triangles.push(new Zdog.Shape({
+    addTo: illo,
+    path: getTrianglePoints(startX, startY+ b, alpha),
+    stroke: 0,
+    translate:{z:1},
+    visible: false,
+    fill: true
+  }));
+
   lines.push(new Zdog.Shape({
     addTo: null,
     path: [
@@ -82,9 +116,18 @@ let illo = new Zdog.Illustration({
         )
     );
 
+    triangles.push(triangles[0].copy(
+      {
+          visible:true,
+          addTo: illo,
+          translate: {x:h * i}
+      }
+  ));
+
     let baseColor = lineColorFromI(i);
     let factor = fadeFormula(h, i);
     lines[i+10].color = rgbToString(baseColor[0] * factor, baseColor[1] * factor, baseColor[2] * factor);
+    triangles[i+10].color = rgbToString(baseColor[0] * factor, baseColor[1] * factor, baseColor[2] * factor);
 
   }
   
@@ -96,7 +139,6 @@ let illo = new Zdog.Illustration({
       alpha = clamp(alpha, 0.2, Math.PI-0.2);
       c = b / Math.tan(alpha); 
       h = a / Math.sin(alpha);
-
       for(let i = -9; i <9; i++) {
           lines[i+10].path = [
             {x: startX - c, y: startY},
@@ -108,6 +150,12 @@ let illo = new Zdog.Illustration({
         let baseColor = lineColorFromI(i);
         let factor = fadeFormula(h,i);
         lines[i+10].color = rgbToString(baseColor[0] * factor, baseColor[1] * factor, baseColor[2] * factor);
+      
+        triangles[i+10].path = getTrianglePoints(startX, startY+b, alpha);
+        triangles[i+10].updatePath();
+        triangles[i+10].translate = {x: h * i};
+        triangles[i+10].color = rgbToString(baseColor[0] * factor, baseColor[1] * factor, baseColor[2] * factor);
+      
       }
 
       lambert = Math.cos(Math.PI / 2.0 - alpha);
