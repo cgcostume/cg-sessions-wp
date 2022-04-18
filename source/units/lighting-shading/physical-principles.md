@@ -28,7 +28,7 @@ Es steht die Modellannahme dahinter, dass das auf die Oberfläche auftreffende L
 | :--------------: |
 | Diffuse Reflexion - modelliertes Verhalten |
 
-Physikalisch lässt sich dieses Phänomen damit begründen, dass raue Flächen viele kleine Unebenheiten beinhalten. Treffen dicht nebeneinanderliegende Lichtstrahlen **(erklären, dass auch wenig Licht aus mehreren Strahlen besteht)** auf die Fläche, werden sie in praktisch zufällige Richtungen reflektiert. Durch dieses Verhalten der einzelnen Lichtstrahlen wird das Licht insgesamt annähernd gleichmäßig in alle verschiedenen Richtungen reflektiert.
+Physikalisch lässt sich dieses Phänomen damit begründen, dass raue Flächen viele kleine Unebenheiten beinhalten. Wir können uns die Wirkung einer Lichtquelle als viele dicht nebeneinanderliegende Lichtstrahlen vorstellen (**modellieren?**).- Treffen diese auf die Fläche, werden sie in praktisch zufällige Richtungen reflektiert. Durch dieses Verhalten der einzelnen Lichtstrahlen wird das Licht insgesamt annähernd gleichmäßig in alle verschiedenen Richtungen reflektiert.
 
 | ![camera-model](./diffuse_zoom.png?as=webp) |
 | :--------------: |
@@ -41,6 +41,7 @@ Dieses besagt, dass die reflektierte Lichtmenge, also die Lichtintensität $I$, 
 | :--------------: |
 | Lambertsches Gesetz |
 
+Dieser Zusammenhang lässt sich auch aus folgender Überlegung herleiten. Wir können uns das Licht als ein Bündel paralleler Lichtstrahlen mit gleichem Abstand vorstellen. Je größer der Winkel der Lichtstrahlen zur Flächennormale ist, umso größer ist der Abstand, mit dem die Lichtstrahlen auf der Oberfläche aufkommen. Die gleiche Fläche wird also bei einem größeren Winkel von weniger Lichtstrahlen getroffen.
 <div align="center">
     <canvas class="zdog-canvas" width="760" height="340"></canvas>
 </div>
@@ -48,16 +49,30 @@ Dieses besagt, dass die reflektierte Lichtmenge, also die Lichtintensität $I$, 
 <div align="center">
     <img alt="Nach links und rechts ziehen, um Winkel zu ändern" src="./drag.png" height="50"/>
 </div>
+<br/>
+
+Damit können wir also die Abhängigkeit der diffusen Reflexion von sowohl der Oberflächenbeschaffenheit als auch von der Lichtrichtung begründen.
 
 #### Spekulare Reflexion
-* Reflexion hauptsächlich in eine Richtung
-* Blickrichtungsunabhängig
-* besonders glatte Oberfläche -> besonders spiegelnd 
+Im Gegensatz zur Diffusen Reflexion ist die Spekulare Reflexion (auch *spiegelnde Reflexion* oder *Spiegellicht*) nicht nur von der Oberflächenbeschaffenheit und Lichtrichtung, sondern auch der Blickrichtung abhängig.
+
+Hier ist die Modellannahme, dass sich das Licht (im Gegensatz zur gleichmäßigen diffusen Reflexion) ungleichmäßig und besonders konzentriert in eine Richtung spiegelt. Daraus ergibt sich auch die Abhängigkeit von der Blickrichtung: Der Punkt erscheint umso heller, je ähnlicher Blick- und Spiegelrichtung sind.
+
+Spekulare Reflexion ist stärker auf sehr glatten (z.B. polierten) Oberflächen. Die Oberflächenbeschaffenheit bestimmt dabei sowohl, wie stark die spekulare Reflexion ist, als auch wie schnell die Helligkeit mit zunehmender Abweichung zwischen Blick- und Spiegelrichtung abnimmt.
 
 | ![camera-model](./specular.png?as=webp) |
 | :--------------: |
 | Spekulare Reflexion |
 
+**\<proportionale abhängigkeit\>**
+
+| ![camera-model](./specular_formula.png?as=webp) |
+| :--------------: |
+| Spekulare Reflexion |
+
+
+
+**\<how to programmier this\>**
 * why Reflexion is so important (wahrscheinlich kein extra abschnitt)
     * Materialabhängigkeit
     * wie bekommen wir daraus Farben?

@@ -130,6 +130,54 @@ let illo = new Zdog.Illustration({
     triangles[i+10].color = rgbToString(baseColor[0] * factor, baseColor[1] * factor, baseColor[2] * factor);
 
   }
+ let getDistanceMarker = function(x, y, h, b) {
+   let height = 50;
+return [
+  { x: x , y: y +b +height}, // start at 1st point
+  { x: x  + h, y: y +b+height} // start at 1st point
+]
+ };
+  let distance  = new Zdog.Shape({
+    addTo: illo,
+    path: getDistanceMarker(startX, startY, h, b),
+    stroke: 5,
+    closed: false,
+    color: hslaToString(185, 0, 100, 1.0),
+  });
+  let path = getDistanceMarker(startX, startY, h, b);
+  let pointA = path[0];
+  let pointB = path[1];
+  let distanceA  = new Zdog.Shape({
+    addTo: illo,
+    path: [
+      {x: pointA.x, y: pointA.y-15},
+      {x: pointA.x, y: pointA.y+15},
+    ],
+    stroke: 5,
+    closed: false,
+    color: hslaToString(185, 0, 100, 1.0),
+  });
+  let distanceB  = new Zdog.Shape({
+    addTo: illo,
+    path: [
+      {x: pointB.x, y: pointB.y-15},
+      {x: pointB.x, y: pointB.y+15},
+    ],
+    stroke: 5,
+    closed: false,
+    color: hslaToString(185, 0, 100, 1.0),
+  });
+  let distance2  = new Zdog.Shape({
+    addTo: illo,
+    path: [
+      { x: startX, y: startY+b}, // start at 1st point
+      { x: startX + Math.cos(Math.PI / 2 - alpha) * a, y: b+startY - Math.sin(Math.PI / 2 - alpha) * a} // start at 1st point
+    ],
+    stroke: 5,
+    closed: false,
+    color: "#888",
+    visible: false,
+  });
   
   new Zdog.Dragger({
     startElement:illo.element,
@@ -157,6 +205,29 @@ let illo = new Zdog.Illustration({
         triangles[i+10].color = rgbToString(baseColor[0] * factor, baseColor[1] * factor, baseColor[2] * factor);
       
       }
+
+      let path = getDistanceMarker(startX, startY, h, b);
+      let pointA = path[0];
+      let pointB = path[1];
+      distance.path = path;
+      distanceA.path = [
+        {x: pointA.x, y: pointA.y-15},
+        {x: pointA.x, y: pointA.y+15},
+      ];
+      distanceB.path = [
+        {x: pointB.x, y: pointB.y-15},
+        {x: pointB.x, y: pointB.y+15},
+      ];
+      distance.updatePath();
+      distanceA.updatePath();
+      distanceB.updatePath();
+
+
+      distance2.path =  [
+        { x: startX, y: startY+b}, // start at 1st point
+        { x: startX + Math.cos(Math.PI / 2 - alpha) * a, y: b+startY - Math.sin(Math.PI / 2 - alpha) * a} // start at 1st point
+      ];
+      distance2.updatePath();
 
       lambert = Math.cos(Math.PI / 2.0 - alpha);
       ground.color = hslaToString(gColor[0], gColor[1], gColor[2] * lambert, 1.0);
