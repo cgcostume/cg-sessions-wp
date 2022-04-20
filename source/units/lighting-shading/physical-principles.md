@@ -64,15 +64,20 @@ Spekulare Reflexion ist stärker auf sehr glatten (z.B. polierten) Oberflächen.
 | :--------------: |
 | Spekulare Reflexion |
 
-**\<proportionale abhängigkeit\>**
+Sei $\alpha$ der Winkel zwischen Blick-und Reflexionsrichtung. Dann ist die Intensität der Spekularen Reflexion proportional zu $cos^n \alpha$, wobei $n$ materialspezifisch ist.
 
 | ![camera-model](./specular_formula.png?as=webp) |
 | :--------------: |
 | Spekulare Reflexion |
 
+**\<Berechnung der Spiegelrichtung\>**
+
+| ![camera-model](./specular_formula2.png?as=webp) |
+| :--------------: |
+| Berechnung der Spiegelrichtung|
 
 
-**\<how to programmier this\>**
+
 * why Reflexion is so important (wahrscheinlich kein extra abschnitt)
     * Materialabhängigkeit
     * wie bekommen wir daraus Farben?
