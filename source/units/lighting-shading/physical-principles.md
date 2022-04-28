@@ -70,7 +70,17 @@ Sei $\alpha$ der Winkel zwischen Blick-und Reflexionsrichtung. Dann ist die Inte
 | :--------------: |
 | Spekulare Reflexion |
 
-**\<Berechnung der Spiegelrichtung\>**
+Die Spiegelrichtung $R$ liegt in einer Ebene mit $L$ und $N$ und der Winkel zwischen $L$ und $N$ ist identisch zu dem Winkel zwischen $N$ und $R$. Mit diesen Informationen können wir eine Berechnungformel für die Spiegelrichtung herleiten:
+
+Sei $P$ die auf die Normale $N$ projizierte Lichtrichtung $L$. Dann entspricht der Vektor $S$ aus der folgenden Darstellung der Differenz aus $P$ und $L$. $$S = -L + P = P - L$$
+
+Wie auch in der Abbildung gut erkennbar ist, entspricht der Reflexionsvektor $R$ der Summe aus der Lichtrichtung $L$ und zwei Mal $S$.
+$$R = L + 2\cdot S$$
+Damit gilt $$R = L + 2\cdot (P-L) = 2\cdot P - L.$$
+Der Vektor $P$ lässt sich wiederum durch Projektion von $L$ auf $N$ bestimmen.
+Den Kosinus von Theta können wir dabei mit dem Skalarprodukt aus $N$ und $L$ bestimmen.
+$$P = N\cdot \cos \theta = N \cdot \langle N, L\rangle$$
+Wir erhalten also als Formel für die Reflexionsrichtung $$R = 2\cdot(N\cdot\langle N, L\rangle) - L$$
 
 | ![camera-model](./specular_formula2.png?as=webp) |
 | :--------------: |
@@ -86,4 +96,6 @@ Sei $\alpha$ der Winkel zwischen Blick-und Reflexionsrichtung. Dann ist die Inte
 
 * (neuer Abschnitt) Diffus + spekular in more detail aka GIVE ME FORMELN
 * = how do we berechen this?
+
+* half vector
 
