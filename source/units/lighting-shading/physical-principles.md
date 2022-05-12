@@ -88,14 +88,19 @@ Wir erhalten also als Formel für die Reflexionsrichtung $$R = 2\cdot(N\cdot\lan
 
 
 
-* why Reflexion is so important (wahrscheinlich kein extra abschnitt)
-    * Materialabhängigkeit
-    * wie bekommen wir daraus Farben?
-* 1) diffus aka lambert
-* 2) spekular aka ...idk hat das nen extra namen?
-
-* (neuer Abschnitt) Diffus + spekular in more detail aka GIVE ME FORMELN
-* = how do we berechen this?
+ * wie bekommen wir daraus Farben?
 
 * half vector
+
+<div align="center">
+    <canvas class="zdog-canvas-half-vector" width="760" height="340"></canvas>
+</div>
+
+<iframe src="https://codesandbox.io/embed/amazing-sun-27mwhg?fontsize=14&hidenavigation=1&theme=dark"
+     style="width:100%; height:700px; border:0; border-radius: 4px; overflow:hidden;"
+     title="amazing-sun-27mwhg"
+     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+     scrolling = "no"
+   ></iframe>
 
