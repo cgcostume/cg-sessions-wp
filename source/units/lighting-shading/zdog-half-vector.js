@@ -39,6 +39,8 @@ let getTrianglePoints = function(x, y, alpha) {
   return [A, B, C];
 }
 
+let addV = (a,b) => ({x:a.x+b.x, y:a.y+b.y});
+
 const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
 // initialize trigonometry parameters-----------------
@@ -92,8 +94,7 @@ let canvasCoordinates = function(x,y) {
   let canvasRect = document.getElementsByClassName("zdog-canvas-half-vector")[0].getBoundingClientRect();
   let height = canvasRect.height;
   let width = canvasRect.width;
-  console.log(document.getElementsByClassName("zdog-canvas-half-vector")[0].getBoundingClientRect());
-  return{x: (x-canvasRect.x - width/2.0), y:( y-canvasRect.y-height/2.0 - startY/2.0)};
+  return{x: (x-canvasRect.x - width/2.0), y:-( y-canvasRect.y-height/2.0 - startY/2.0)};
 };
 
 let ground2 = ground.copy({
@@ -218,8 +219,8 @@ let getArcFromStuff = function(alpha, center, startY, radius, mirrored = false) 
   let vector1 = {x:(middlePoint.x - point1.x) / part, y:(middlePoint.y - point1.y)/part};
   let vector2 = {x:(middlePoint.x - point2.x) / part, y:(middlePoint.y - point2.y)/part};
 
-  let controlPoint1 = {x:point1.x + vector1.x ,y: point1.y + vector1.y};
-  let controlPoint2 = {x:point2.x + vector2.x ,y: point2.y + vector2.y};
+  let controlPoint1 = addV(point1, vector1);
+  let controlPoint2 = addV(point2, vector2);
 
   let path = [point1, {bezier:[controlPoint1,controlPoint2,point2]}];
   return mirrored ? getMirroredArc(path) : path;
@@ -237,21 +238,54 @@ let updateBezierControlPoints = function() {
 updateBezierControlPoints();
 
   let leftSide = false;
+  let angleDifference;
+  let movedRay = 0;
   new Zdog.Dragger({
     startElement:illo2.element,
     onDragStart:function(pointer){
-      leftSide = (canvasCoordinates(pointer.x, pointer.y).x < 0.0);
+      let coords = canvasCoordinates(pointer.x, pointer.y);
+      leftSide = (coords.x < 0.0);
+      // TODO: refactor this abomination
+      let angle = Math.atan(coords.x / coords.y);
+      let angleLight = -(Math.PI/2.0 - alpha);
+      let angleReflect = -angleLight;
+      let angleView = Math.PI/2.0 - alpha2;
+      let angleDifference1 = angle-angleLight;
+      let angleDifference2 = angle-angleReflect;
+      let angleDifference3 = angle-angleView;
+      if(Math.abs(angleDifference1) < Math.abs(angleDifference2)) {
+        if(Math.abs(angleDifference1) < Math.abs(angleDifference3)) {
+          angleDifference = angleDifference1;
+          movedRay = 0;
+        } else {
+          angleDifference = angleDifference3;
+          movedRay = 2;
+        }
+      } else if(Math.abs(angleDifference3) < Math.abs(angleDifference2)) {
+        angleDifference = angleDifference3;
+        movedRay = 2;
+      } else {
+        angleDifference = angleDifference2;
+        movedRay = 1;
+      }
       arc2.color = hslaToString(gColor0[0],gColor0[1],gColor0[2], 0.5);
       reflectionLine.color = rgbToString(magenta[0] * 0.5, magenta[1] * 0.5, magenta[2] * 0.5);
       reflectionTriangle.color = rgbToString(magenta[0] * 0.5, magenta[1] * 0.5, magenta[2] * 0.5);
     },
     onDragMove:function(pointer, moveX, moveY) {
-      if(leftSide) {
-        alpha =  alpha0 + moveX/300.0;
+      let coords = canvasCoordinates(pointer.x, pointer.y);
+      if(coords.y < 0) return;
+      let angle = Math.atan(coords.x / coords.y);
+      if(movedRay == 0) {
+        alpha =  Math.PI/2.0 + (angle - angleDifference);//alpha0 + moveX/300.0;
+        alpha = clamp(alpha, 0.2, 0.5*Math.PI-0.2);
+      } else if (movedRay == 1) {
+        alpha =  Math.PI/2.0 - (angle - angleDifference);//alpha0 + moveX/300.0;
         alpha = clamp(alpha, 0.2, 0.5*Math.PI-0.2);
       } else {
-        alpha2 =  alpha02 - moveX/300.0;
+        alpha2 = Math.PI/2.0 - (angle - angleDifference);// alpha02 - moveX/300.0;
         alpha2 = clamp(alpha2, 0.2, 0.5*Math.PI-0.2);
+
       }
       calculateLightRayParameters();
       
