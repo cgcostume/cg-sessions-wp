@@ -1,4 +1,5 @@
 // Made with Zdog
+/*
 let illo = new Zdog.Illustration({
     element: '.zdog-canvas',
     dragRotate: false,
@@ -243,4 +244,4 @@ return [
   }
   
   animate();
-  
+  */

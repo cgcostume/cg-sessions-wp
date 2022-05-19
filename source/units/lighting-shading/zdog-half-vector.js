@@ -1,22 +1,20 @@
 // Made with Zdog
-// {} for namespace
 {
-let illo2 = new Zdog.Illustration({
-    element: '.zdog-canvas-half-vector',
-    dragRotate: false,
-  });
-  
+let illo = new Zdog.Illustration({
+  element: '.zdog-canvas-half-vector',
+  dragRotate: false,
+});
+
 let rgbToString = function(r, g, b) {
   return "rgb("+r.toString() +","+g.toString()+","+b.toString()+")";
 }
-
 let hslaToString = function(r, g, b, a) {
   return "hsla("+r.toString() +","+g.toString()+"%,"+b.toString()+"%,"+a+")";
 }
 
 let getTrianglePoints = function(x, y, alpha) {
-  let arrowHeight = 50*zoom;
-  let arrowWidth = 30*zoom;
+  let arrowHeight = 50;
+  let arrowWidth = 30;
 
   let o = Math.sin(alpha) * arrowHeight;
   let p = Math.cos(alpha) * arrowHeight;
@@ -39,282 +37,211 @@ let getTrianglePoints = function(x, y, alpha) {
   return [A, B, C];
 }
 
-let addV = (a,b) => ({x:a.x+b.x, y:a.y+b.y});
-let vLength = (a) => (Math.sqrt(Math.pow(a.x,2) + Math.pow(a.y, 2)));
-let vScalar = (a, s) => ({x: a.x * s, y: a.y * s});
-let vNormalize = (a) => vScalar(a, 1 / vLength(a));
-
 const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
-let zoom = 0.5;
-// initialize trigonometry parameters-----------------
 let alpha0 = 70.0 * Math.PI / 180.0;
 let alpha = alpha0;
-let l = 500 * zoom; // light ray length
-let b = Math.sin(alpha) * l; // height of light rays
+let a = 100; // distance between light rays
+let b = 500; // height of light rays
 let c = b / Math.tan(alpha);
-let alpha02 = 20.0 * Math.PI / 180.0;
-let alpha2 = alpha02;
-let l2 = 600 * zoom; // view ray length
-let b2 = Math.sin(alpha2) * l2; // height of view ray
-let c2 = b2 / Math.tan(alpha2);
-// ---------------------------------------------------
-
-// update trigonometry parameters for new alpha-------
-let calculateLightRayParameters = function() {
-  b = Math.sin(alpha) * l; // height of light rays
-  c = b / Math.tan(alpha); 
-  b2 = Math.sin(alpha2) * l2; // height of light rays
-  c2 = b2 / Math.tan(alpha2); 
-}
+let h = a / Math.sin(alpha);
 
 // rgb [14, 223, 241];
 let gColor0 = [185, 89, 50];
-let gColor = [0, 0, 255];
-let shade = Math.cos(Math.PI / 2.0 - alpha);
+let gColor = gColor0;
+let lambert = Math.cos(Math.PI / 2.0 - alpha);
 
-let leftBorder = -520*zoom;
-let rightBorder = 520*zoom;
-
-// constant shapes (aside from color)
+let leftBorder = -520;
+let rightBorder = 520;
 let ground  = new Zdog.Shape({
-  addTo: illo2,
+  addTo: illo,
   path: [
-    { x: leftBorder, y: 300*zoom, z:1}, // start at 1st point
-    { x: leftBorder, y: 200*zoom, z:1}, // start at 1st point
-    { x:  rightBorder, y: 200*zoom, z:1 }, // line to 2nd point
-    { x:  rightBorder, y: 300*zoom, z:1 }, // line to 2nd point
+    { x: leftBorder, y: 300, z:1}, // start at 1st point
+    { x: leftBorder, y: 200, z:1}, // start at 1st point
+    { x:  rightBorder, y: 200, z:1 }, // line to 2nd point
+    { x:  rightBorder, y: 300, z:1 }, // line to 2nd point
   ],
-  stroke: 10*zoom,
+  stroke: 10,
   closed: false,
-  color: hslaToString(gColor[0],gColor[1],gColor[2]*shade, 1.0),
+  color: hslaToString(gColor[0],gColor[1],gColor[2]*lambert, 1.0),
 });
-
-let startX = -0;
-let startY = 200*zoom;
-
-let canvasCoordinates = function(x,y) {
-  let canvasRect = document.getElementsByClassName("zdog-canvas-half-vector")[0].getBoundingClientRect();
-  let height = canvasRect.height;
-  let width = canvasRect.width;
-  return{x: (x-canvasRect.x - width/2.0), y:-( y-canvasRect.y-height/2.0 - startY/2.0)};
-};
 
 let ground2 = ground.copy({
   fill:true,
-  color: "hsla(0,0%,80%,0.18)",});
-let center = 0.5 * (leftBorder + rightBorder);
+  color: "hsla(185,89%,50%,0.08)",});
 
-let normal  = new Zdog.Shape({
-  addTo: illo2,
-  path: [
-    { x: center, y: startY-b, z:1},
-    { x: center, y: startY, z:1}
-  ],
-  stroke: 10*zoom,
-  color: hslaToString(gColor[0],gColor[1],gColor[2]*shade, 1.0),
-});
-let normalTip  = new Zdog.Shape({
-  addTo: illo2,
-  path: getTrianglePoints(center, startY - b - 10*zoom, 1.5*Math.PI),
-  stroke: 5*zoom,
-  color: hslaToString(gColor[0],gColor[1],gColor[2]*shade, 1.0),
-  fill: true
-});
-  
+let startX = -0;
+let startY = -300;
+let fadeRange = 50;
 
-// directly modified by angle
-let lightLine = new Zdog.Shape({
-  addTo: illo2,
-  stroke: 5*zoom,
-  translate:{z:1},
-});
-let lightTriangle = new Zdog.Shape({
-  addTo: illo2,
+let lines = [];
+let triangles = [];
+triangles.push(new Zdog.Shape({
+  addTo: illo,
+  path: getTrianglePoints(startX, startY+ b, alpha),
   stroke: 0,
   translate:{z:1},
+  visible: false,
   fill: true
+}));
+
+lines.push(new Zdog.Shape({
+  addTo: null,
+  path: [
+    { x: startX-c, y: startY}, // start at 1st point
+    { x:  startX, y: startY + b }, // line to 2nd point
+  ],
+  stroke: 5,
+  translate:{z:1},
+  visible: false
+}));
+
+let fadeFormula = function(h, i) {
+  let left = startX + h * i - leftBorder;
+  let right = rightBorder - (startX  + h * i);
+  let leftClamped = clamp(left, 0, fadeRange) * (1 / fadeRange);
+  let rightClamped =  clamp(right, 0, fadeRange) * (1 / fadeRange);
+  return leftClamped * rightClamped;
+}
+let lineColorFromI = (i) => [255, 15, i * 20 + 200];
+
+for(let i = -9; i < 9; i++) {
+  
+  lines.push(
+      lines[0].copy(
+          {
+              visible:true,
+              addTo: illo,
+              translate: {x:h * i}
+          }
+      )
+  );
+
+  triangles.push(triangles[0].copy(
+    {
+        visible:true,
+        addTo: illo,
+        translate: {x:h * i}
+    }
+));
+
+  let baseColor = lineColorFromI(i);
+  let factor = fadeFormula(h, i);
+  lines[i+10].color = rgbToString(baseColor[0] * factor, baseColor[1] * factor, baseColor[2] * factor);
+  triangles[i+10].color = rgbToString(baseColor[0] * factor, baseColor[1] * factor, baseColor[2] * factor);
+
+}
+let getDistanceMarker = function(x, y, h, b) {
+ let height = 50;
+return [
+{ x: x , y: y +b +height}, // start at 1st point
+{ x: x  + h, y: y +b+height} // start at 1st point
+]
+};
+let distance  = new Zdog.Shape({
+  addTo: illo,
+  path: getDistanceMarker(startX, startY, h, b),
+  stroke: 5,
+  closed: false,
+  color: hslaToString(185, 0, 100, 1.0),
+});
+let path = getDistanceMarker(startX, startY, h, b);
+let pointA = path[0];
+let pointB = path[1];
+let distanceA  = new Zdog.Shape({
+  addTo: illo,
+  path: [
+    {x: pointA.x, y: pointA.y-15},
+    {x: pointA.x, y: pointA.y+15},
+  ],
+  stroke: 5,
+  closed: false,
+  color: hslaToString(185, 0, 100, 1.0),
+});
+let distanceB  = new Zdog.Shape({
+  addTo: illo,
+  path: [
+    {x: pointB.x, y: pointB.y-15},
+    {x: pointB.x, y: pointB.y+15},
+  ],
+  stroke: 5,
+  closed: false,
+  color: hslaToString(185, 0, 100, 1.0),
+});
+let distance2  = new Zdog.Shape({
+  addTo: illo,
+  path: [
+    { x: startX, y: startY+b}, // start at 1st point
+    { x: startX + Math.cos(Math.PI / 2 - alpha) * a, y: b+startY - Math.sin(Math.PI / 2 - alpha) * a} // start at 1st point
+  ],
+  stroke: 5,
+  closed: false,
+  color: "#888",
+  visible: false,
 });
 
-// reflection light ray
-let reflectionLine = lightLine.copy();
-let reflectionTriangle = lightTriangle.copy();
+new Zdog.Dragger({
+  startElement:illo.element,
+  onDragStart:function(){},
+  onDragMove:function(pointer, moveX, moveY) {
+    alpha =  alpha0 + moveX/300.0;
+    alpha = clamp(alpha, 0.2, Math.PI-0.2);
+    c = b / Math.tan(alpha); 
+    h = a / Math.sin(alpha);
+    for(let i = -9; i <9; i++) {
+        lines[i+10].path = [
+          {x: startX - c, y: startY},
+          {x:  startX, y: startY + b}
+        ];
+      lines[i+10].translate = {x: h * i};
+      lines[i+10].updatePath();
 
-// view light ray
-let viewLine = lightLine.copy();
-let viewTriangle = lightTriangle.copy();
-
-let updateLightLine = function() {
-  lightLine.path = [
-    { x: startX-c, y: startY-b}, // start at 1st point
-    { x:  startX, y: startY }, // line to 2nd point
-  ];
-  lightLine.updatePath();
-
-  lightTriangle.path = getTrianglePoints(startX-c, startY-b, Math.PI + alpha)
-  lightTriangle.updatePath();
-};
-let updateReflectionLine = function() {
-  reflectionLine.path = [
-    { x: startX+c, y: startY-b}, // start at 1st point
-    { x:  startX, y: startY }, // line to 2nd point
-  ];
-  reflectionLine.updatePath();
-
-  reflectionTriangle.path = getTrianglePoints(startX+c, startY-b, -alpha)
-  reflectionTriangle.updatePath();
-};
-let updateViewLine = function() {
-  viewLine.path = [
-    { x: startX+c2, y: startY-b2}, // start at 1st point
-    { x:  startX, y: startY }, // line to 2nd point
-  ];
-  viewLine.updatePath();
-
-  viewTriangle.path = getTrianglePoints(startX+c2, startY-b2, -alpha2)
-  viewTriangle.updatePath();
-}
-
-updateLightLine();
-updateReflectionLine();
-updateViewLine();
-
-let lineColor = () => [255, 15, 200];
-let lineColor2 = () => [14, 223, 241];
-
-  
-let magenta = lineColor();
-let cyan = lineColor2();
-let magentaString = rgbToString(magenta[0], magenta[1], magenta[2]);
-let cyanString = rgbToString(cyan[0], cyan[1], cyan[2]);
-
-lightLine.color = magentaString;
-lightTriangle.color = magentaString;
-reflectionLine.color = magentaString;
-reflectionTriangle.color = magentaString;
-viewLine.color = cyanString;
-viewTriangle.color = cyanString;
-
-let radius = 170;
-let point1 = {x:center , y:startY-radius};
-let point2, middlePoint, vector1, vector2, controlPoint1, controlPoint2, controlPoint1b, controlPoint2b;
-let part = 1.7;
-let arc = lightLine.copy({closed: false, color:hslaToString(gColor0[0],gColor0[1],gColor0[2], 1.0)});
-let arc2 = lightLine.copy({closed: false, color:hslaToString(gColor0[0],gColor0[1],gColor0[2], 1.0)});
-let arcView = lightLine.copy({closed: false, color: hslaToString(gColor[0],gColor[1],gColor[2], 1.0)});
-
-let getMirroredArc = function(path) {
-  let p1 = path[0];
-  let c1 = path[1].bezier[0];
-  let c2 = path[1].bezier[1];
-  let p2 = path[1].bezier[2];
-
-  c1.x *= -1;
-  c2.x *= -1;
-  p2.x *= -1;
-  return [p1, {bezier: [c1, c2, p2]}];
-}
-let getArcFromStuff = function(alpha, center, startY, radius, mirrored = false) {
-  let point1 = {x:center , y:startY-radius};
-  let point2 = {x:center - Math.sin(Math.PI/2.0-alpha) * radius , y:startY - Math.cos(Math.PI/2.0 - alpha) * radius};
-  let middlePoint = {x:center - Math.tan(Math.PI/4.0 - alpha/2.0) * radius , y:startY - radius};
-
-  let vector1 = {x:(middlePoint.x - point1.x) / part, y:(middlePoint.y - point1.y)/part};
-  let vector2 = {x:(middlePoint.x - point2.x) / part, y:(middlePoint.y - point2.y)/part};
-
-  let controlPoint1 = addV(point1, vector1);
-  let controlPoint2 = addV(point2, vector2);
-
-  let path = [point1, {bezier:[controlPoint1,controlPoint2,point2]}];
-  return mirrored ? getMirroredArc(path) : path;
-}
-let updateBezierControlPoints = function() {
-  let radiusView = 220;
-
-  arc.path = getArcFromStuff(alpha, center, startY, radius*zoom);
-  arc2.path = getMirroredArc(JSON.parse(JSON.stringify(arc.path)));
-  arcView.path =  getArcFromStuff(alpha2, center, startY, radiusView*zoom, true);
-  arc.updatePath();
-  arc2.updatePath();
-  arcView.updatePath();
-}
-updateBezierControlPoints();
-
-  let leftSide = false;
-  let angleDifference;
-  let movedRay = 0;
-  new Zdog.Dragger({
-    startElement:illo2.element,
-    onDragStart:function(pointer){
-      let coords = canvasCoordinates(pointer.x, pointer.y);
-      leftSide = (coords.x < 0.0);
-      // TODO: refactor this abomination
-      let angle = Math.atan(coords.x / coords.y);
-      let angleLight = -(Math.PI/2.0 - alpha);
-      let angleReflect = -angleLight;
-      let angleView = Math.PI/2.0 - alpha2;
-      let angleDifference1 = angle-angleLight;
-      let angleDifference2 = angle-angleReflect;
-      let angleDifference3 = angle-angleView;
-      if(Math.abs(angleDifference1) < Math.abs(angleDifference2)) {
-        if(Math.abs(angleDifference1) < Math.abs(angleDifference3)) {
-          angleDifference = angleDifference1;
-          movedRay = 0;
-        } else {
-          angleDifference = angleDifference3;
-          movedRay = 2;
-        }
-      } else if(Math.abs(angleDifference3) < Math.abs(angleDifference2)) {
-        angleDifference = angleDifference3;
-        movedRay = 2;
-      } else {
-        angleDifference = angleDifference2;
-        movedRay = 1;
-      }
-      arc2.color = hslaToString(gColor0[0],gColor0[1],gColor0[2], 0.5);
-      reflectionLine.color = rgbToString(magenta[0] * 0.5, magenta[1] * 0.5, magenta[2] * 0.5);
-      reflectionTriangle.color = rgbToString(magenta[0] * 0.5, magenta[1] * 0.5, magenta[2] * 0.5);
-    },
-    onDragMove:function(pointer, moveX, moveY) {
-      let coords = canvasCoordinates(pointer.x, pointer.y);
-      if(coords.y < 0) return;
-      let angle = Math.atan(coords.x / coords.y);
-      if(movedRay == 0) {
-        alpha =  Math.PI/2.0 + (angle - angleDifference);//alpha0 + moveX/300.0;
-        alpha = clamp(alpha, 0.2, 0.5*Math.PI-0.2);
-      } else if (movedRay == 1) {
-        alpha =  Math.PI/2.0 - (angle - angleDifference);//alpha0 + moveX/300.0;
-        alpha = clamp(alpha, 0.2, 0.5*Math.PI-0.2);
-      } else {
-        alpha2 = Math.PI/2.0 - (angle - angleDifference);// alpha02 - moveX/300.0;
-        alpha2 = clamp(alpha2, 0.2, 0.5*Math.PI-0.2);
-
-      }
-      calculateLightRayParameters();
-      
-      updateLightLine();
-      updateReflectionLine();
-      updateViewLine();
-      
-      updateBezierControlPoints();
-
-      shade = Math.cos(Math.PI / 2.0 - alpha);
-      ground.color = hslaToString(gColor[0], gColor[1], gColor[2] * shade, 1.0);
-    },
-    onDragEnd:function(){
-      alpha0 = alpha;
-      alpha02 = alpha2;
-
-      arc2.color = hslaToString(gColor0[0],gColor0[1],gColor0[2], 1.0);
-      reflectionLine.color = rgbToString(magenta[0], magenta[1], magenta[2]);
-      reflectionTriangle.color = rgbToString(magenta[0] , magenta[1] , magenta[2]);
+      let baseColor = lineColorFromI(i);
+      let factor = fadeFormula(h,i);
+      lines[i+10].color = rgbToString(baseColor[0] * factor, baseColor[1] * factor, baseColor[2] * factor);
+    
+      triangles[i+10].path = getTrianglePoints(startX, startY+b, alpha);
+      triangles[i+10].updatePath();
+      triangles[i+10].translate = {x: h * i};
+      triangles[i+10].color = rgbToString(baseColor[0] * factor, baseColor[1] * factor, baseColor[2] * factor);
+    
     }
-  });
-  illo2.zoom = 0.5;
-  function animate() {
-    illo2.updateRenderGraph();
-    requestAnimationFrame( animate );
+
+    let path = getDistanceMarker(startX, startY, h, b);
+    let pointA = path[0];
+    let pointB = path[1];
+    distance.path = path;
+    distanceA.path = [
+      {x: pointA.x, y: pointA.y-15},
+      {x: pointA.x, y: pointA.y+15},
+    ];
+    distanceB.path = [
+      {x: pointB.x, y: pointB.y-15},
+      {x: pointB.x, y: pointB.y+15},
+    ];
+    distance.updatePath();
+    distanceA.updatePath();
+    distanceB.updatePath();
+
+
+    distance2.path =  [
+      { x: startX, y: startY+b}, // start at 1st point
+      { x: startX + Math.cos(Math.PI / 2 - alpha) * a, y: b+startY - Math.sin(Math.PI / 2 - alpha) * a} // start at 1st point
+    ];
+    distance2.updatePath();
+
+    lambert = Math.cos(Math.PI / 2.0 - alpha);
+    ground.color = hslaToString(gColor[0], gColor[1], gColor[2] * lambert, 1.0);
+  },
+  onDragEnd:function(){
+    alpha0 = alpha;
   }
-  
-  animate();
+});
+illo.zoom = 0.5;
+function animate() {
+  illo.updateRenderGraph();
+  requestAnimationFrame( animate );
+}
+
+animate();
 }
