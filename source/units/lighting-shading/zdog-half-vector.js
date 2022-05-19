@@ -1,6 +1,5 @@
 // Made with Zdog
 // {} for namespace
-let aaaa = function() {
   let illo2 = new Zdog.Illustration({
       element: '.zdog-canvas-half-vector',
       dragRotate: false,
@@ -97,7 +96,7 @@ let aaaa = function() {
     let canvasRect = document.getElementsByClassName("zdog-canvas-half-vector")[0].getBoundingClientRect();
     let height = canvasRect.height;
     let width = canvasRect.width;
-    return{x: (x-canvasRect.x - width/2.0), y:-( y-canvasRect.y-height/2.0 - startY/2.0)};
+    return{x: (x-canvasRect.x - width/2.0), y:-( y-canvasRect.y-height/2.0) + startY};
   };
   
   let ground2 = ground.copy({
@@ -250,9 +249,17 @@ let aaaa = function() {
         leftSide = (coords.x < 0.0);
         // TODO: refactor this abomination
         let angle = Math.atan(coords.x / coords.y);
+        //console.log(coords);
+        //console.log(angle);
         let angleLight = -(Math.PI/2.0 - alpha);
         let angleReflect = -angleLight;
         let angleView = Math.PI/2.0 - alpha2;
+        /*console.log("angle 1");
+        console.log(angleLight);
+        console.log("angle 2");
+        console.log(angleReflect);
+        console.log("angle 3");
+        console.log(angleView);*/
         let angleDifference1 = angle-angleLight;
         let angleDifference2 = angle-angleReflect;
         let angleDifference3 = angle-angleView;
@@ -278,6 +285,7 @@ let aaaa = function() {
       onDragMove:function(pointer, moveX, moveY) {
         let coords = canvasCoordinates(pointer.x, pointer.y);
         if(coords.y < 0) return;
+        // TODO for if I have time some day: determine the quadrant the angle is in to correctly find angles for y < 0
         let angle = Math.atan(coords.x / coords.y);
         if(movedRay == 0) {
           alpha =  Math.PI/2.0 + (angle - angleDifference);//alpha0 + moveX/300.0;
@@ -318,6 +326,4 @@ let aaaa = function() {
     
     animate();
   
-  }
-  aaaa();
   

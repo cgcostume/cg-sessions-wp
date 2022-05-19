@@ -1,4 +1,6 @@
 // Made with Zdog
+
+let aaaa = function() {
 let illo = new Zdog.Illustration({
   element: '.zdog-canvas',
   dragRotate: false,
@@ -242,4 +244,6 @@ function animate() {
   requestAnimationFrame( animate );
 }
 
-animate();
+animate();}
+
+aaaa();
