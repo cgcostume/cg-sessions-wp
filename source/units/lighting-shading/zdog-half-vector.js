@@ -1,5 +1,5 @@
 // Made with Zdog
-{
+
 let illo = new Zdog.Illustration({
   element: '.zdog-canvas-half-vector',
   dragRotate: false,
@@ -244,4 +244,3 @@ function animate() {
 }
 
 animate();
-}
