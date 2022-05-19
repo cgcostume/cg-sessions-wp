@@ -93,7 +93,7 @@ Wir erhalten also als Formel für die Reflexionsrichtung $$R = 2\cdot(N\cdot\lan
 * half vector
 
 <div align="center">
-    <canvas class="zdog-canvas-half-vector" width="760" height="340"></canvas>
+    <svg class="zdog-canvas-half-vector" width="760" height="340"></svg>
 </div>
 
 <!--<iframe src="https://codesandbox.io/embed/amazing-sun-27mwhg?fontsize=14&hidenavigation=1&theme=dark"

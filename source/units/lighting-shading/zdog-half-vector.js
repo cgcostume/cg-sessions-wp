@@ -15,8 +15,8 @@ let hslaToString = function(r, g, b, a) {
 }
 
 let getTrianglePoints = function(x, y, alpha) {
-  let arrowHeight = 50;
-  let arrowWidth = 30;
+  let arrowHeight = 50*zoom;
+  let arrowWidth = 30*zoom;
 
   let o = Math.sin(alpha) * arrowHeight;
   let p = Math.cos(alpha) * arrowHeight;
@@ -40,18 +40,22 @@ let getTrianglePoints = function(x, y, alpha) {
 }
 
 let addV = (a,b) => ({x:a.x+b.x, y:a.y+b.y});
+let vLength = (a) => (Math.sqrt(Math.pow(a.x,2) + Math.pow(a.y, 2)));
+let vScalar = (a, s) => ({x: a.x * s, y: a.y * s});
+let vNormalize = (a) => vScalar(a, 1 / vLength(a));
 
 const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
+let zoom = 0.5;
 // initialize trigonometry parameters-----------------
 let alpha0 = 70.0 * Math.PI / 180.0;
 let alpha = alpha0;
-let l = 500; // light ray length
+let l = 500 * zoom; // light ray length
 let b = Math.sin(alpha) * l; // height of light rays
 let c = b / Math.tan(alpha);
 let alpha02 = 20.0 * Math.PI / 180.0;
 let alpha2 = alpha02;
-let l2 = 600; // view ray length
+let l2 = 600 * zoom; // view ray length
 let b2 = Math.sin(alpha2) * l2; // height of view ray
 let c2 = b2 / Math.tan(alpha2);
 // ---------------------------------------------------
@@ -69,26 +73,25 @@ let gColor0 = [185, 89, 50];
 let gColor = [0, 0, 255];
 let shade = Math.cos(Math.PI / 2.0 - alpha);
 
-let leftBorder = -520;
-let rightBorder = 520;
+let leftBorder = -520*zoom;
+let rightBorder = 520*zoom;
 
 // constant shapes (aside from color)
 let ground  = new Zdog.Shape({
   addTo: illo2,
   path: [
-    { x: leftBorder, y: 300, z:1}, // start at 1st point
-    { x: leftBorder, y: 200, z:1}, // start at 1st point
-    { x:  rightBorder, y: 200, z:1 }, // line to 2nd point
-    { x:  rightBorder, y: 300, z:1 }, // line to 2nd point
+    { x: leftBorder, y: 300*zoom, z:1}, // start at 1st point
+    { x: leftBorder, y: 200*zoom, z:1}, // start at 1st point
+    { x:  rightBorder, y: 200*zoom, z:1 }, // line to 2nd point
+    { x:  rightBorder, y: 300*zoom, z:1 }, // line to 2nd point
   ],
-  stroke: 10,
+  stroke: 10*zoom,
   closed: false,
   color: hslaToString(gColor[0],gColor[1],gColor[2]*shade, 1.0),
 });
 
 let startX = -0;
-let startY = 200;
-let fadeRange = 50;
+let startY = 200*zoom;
 
 let canvasCoordinates = function(x,y) {
   let canvasRect = document.getElementsByClassName("zdog-canvas-half-vector")[0].getBoundingClientRect();
@@ -108,13 +111,13 @@ let normal  = new Zdog.Shape({
     { x: center, y: startY-b, z:1},
     { x: center, y: startY, z:1}
   ],
-  stroke: 10,
+  stroke: 10*zoom,
   color: hslaToString(gColor[0],gColor[1],gColor[2]*shade, 1.0),
 });
 let normalTip  = new Zdog.Shape({
   addTo: illo2,
-  path: getTrianglePoints(center, startY - b - 10, 1.5*Math.PI),
-  stroke: 5,
+  path: getTrianglePoints(center, startY - b - 10*zoom, 1.5*Math.PI),
+  stroke: 5*zoom,
   color: hslaToString(gColor[0],gColor[1],gColor[2]*shade, 1.0),
   fill: true
 });
@@ -123,7 +126,7 @@ let normalTip  = new Zdog.Shape({
 // directly modified by angle
 let lightLine = new Zdog.Shape({
   addTo: illo2,
-  stroke: 5,
+  stroke: 5*zoom,
   translate:{z:1},
 });
 let lightTriangle = new Zdog.Shape({
@@ -228,9 +231,9 @@ let getArcFromStuff = function(alpha, center, startY, radius, mirrored = false) 
 let updateBezierControlPoints = function() {
   let radiusView = 220;
 
-  arc.path = getArcFromStuff(alpha, center, startY, radius);
+  arc.path = getArcFromStuff(alpha, center, startY, radius*zoom);
   arc2.path = getMirroredArc(JSON.parse(JSON.stringify(arc.path)));
-  arcView.path =  getArcFromStuff(alpha2, center, startY, radiusView, true);
+  arcView.path =  getArcFromStuff(alpha2, center, startY, radiusView*zoom, true);
   arc.updatePath();
   arc2.updatePath();
   arcView.updatePath();
