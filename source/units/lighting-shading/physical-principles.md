@@ -91,9 +91,15 @@ Wir erhalten also als Formel für die Reflexionsrichtung $$R = 2\cdot(N\cdot\lan
  * wie bekommen wir daraus Farben?
 
 * half vector
-
-<div align="center">
-    <svg class="zdog-canvas-half-vector" width="760" height="340"></svg>
+<div align="center" id = "canvasContainer" style = "position: relative; width:min(760px,100%)" width="760" height="340" >
+    <svg class="zdog-canvas-half-vector" width="760" height="340">
+    <div id = "theta" style = "position:absolute; top: 0"><img src = "theta.png" width = 35></div>
+    <div id = "alpha" style = "position:absolute; top: 0"><img src = "alpha.png" width = 30></div>
+    <div id = "normal" style = "position:absolute; top: 0; font-weight: 900"><b>N</b></div>
+    <div id = "light" style = "position:absolute; top: 0; font-weight: 900; color:#d62ea7"><b>L</b></div>
+    <div id = "reflection" style = "position:absolute; top: 0; font-weight: 900; color:#d62ea7"><b>R</b></div>
+    <div id = "view" style = "position:absolute; top: 0; font-weight: 900; color:#0ceedb"><b>V</b></div>
+</svg>
 </div>
 
 <!--<iframe src="https://codesandbox.io/embed/amazing-sun-27mwhg?fontsize=14&hidenavigation=1&theme=dark"
