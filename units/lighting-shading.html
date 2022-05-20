@@ -20,84 +20,84 @@
     return "hsla("+r.toString() +","+g.toString()+"%,"+b.toString()+"%,"+a+")";
   }
   
-  let getTrianglePoints = function(x, y, alpha) {
-    let arrowHeight = 50*zoom;
-    let arrowWidth = 30*zoom;
-  
-    let o = Math.sin(alpha) * arrowHeight;
-    let p = Math.cos(alpha) * arrowHeight;
-  
-    let A = {x: x - p, y: y - o};
-    let B = {x: x - p, y: y - o};
-    let C = {x: x, y: y};
-  
-    let beta = Math.PI / 2.0 - alpha;
-  
-    let i = Math.cos(beta) * arrowWidth / 2.0;
-    let j = Math.sin(beta) * arrowWidth / 2.0;
-  
-    A.x -= i;
-    A.y += j;
-  
-    B.x += i;
-    B.y -= j;
-  
-    return [A, B, C];
-  }
-  
-  let addV = (a,b) => ({x:a.x+b.x, y:a.y+b.y});
+  // vector maths
+  let vAdd = (a,b) => ({x:a.x+b.x, y:a.y+b.y});
   let vLength = (a) => (Math.sqrt(Math.pow(a.x,2) + Math.pow(a.y, 2)));
   let vScalar = (a, s) => ({x: a.x * s, y: a.y * s});
+  let vSub = (a,b) => vAdd(a, vScalar(b, -1));
   let vNormalize = (a) => vScalar(a, 1 / vLength(a));
+  let vPerpendicular = (a) => (Math.sign(a.x) == Math.sign(a.y) ? {x:a.y, y:-a.x} : {x:-a.y, y:a.x});
+  let getPathDirection = (angle, radius) => (vScalar({x: Math.sin(angle), y: -Math.cos(angle)}, radius)); // angle is between the ground and the vector
+  let getPath = (origin, angle, radius) => [origin, vAdd(origin, getPathDirection(angle, radius))];
+  let p = (x,y) =>  ({x:x, y:y});
   
   const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
   
+  
+  let getTrianglePoints = function(v, alpha) {
+    let arrowHeight = 50 * zoom;
+    let arrowWidth = 30 * zoom;
+
+    let x = Math.sin(alpha) * arrowHeight;
+    let y = -Math.cos(alpha) * arrowHeight;
+  
+    let A = {x: v.x - x, y: v.y - y};
+    let B = {x: v.x - x, y: v.y - y};
+    let C = v;
+  
+  
+    let deltaX = -Math.cos(alpha) * arrowWidth / 2.0;
+    let deltaY = -Math.sin(alpha) * arrowWidth / 2.0;
+  
+    A = vAdd(A, p(deltaX, deltaY));
+    B = vSub(B, p(deltaX, deltaY));
+  
+    return [A, B, C];
+  }
+
+
   let zoom = 0.5;
   // initialize trigonometry parameters-----------------
-  let alpha0 = 70.0 * Math.PI / 180.0;
+  let alpha0 = -20.0 * Math.PI / 180.0;
   let alpha = alpha0;
   let l = 500 * zoom; // light ray length
-  let b = Math.sin(alpha) * l; // height of light rays
-  let c = b / Math.tan(alpha);
-  let alpha02 = 20.0 * Math.PI / 180.0;
+  let b = Math.cos(alpha) * l; // normal height
+  let alpha02 = 70.0 * Math.PI / 180.0;
   let alpha2 = alpha02;
   let l2 = 600 * zoom; // view ray length
-  let b2 = Math.sin(alpha2) * l2; // height of view ray
-  let c2 = b2 / Math.tan(alpha2);
   // ---------------------------------------------------
   
-  // update trigonometry parameters for new alpha-------
-  let calculateLightRayParameters = function() {
-    b = Math.sin(alpha) * l; // height of light rays
-    c = b / Math.tan(alpha); 
-    b2 = Math.sin(alpha2) * l2; // height of light rays
-    c2 = b2 / Math.tan(alpha2); 
-  }
   
   // rgb [14, 223, 241];
   let gColor0 = [185, 89, 50];
   let gColor = [0, 0, 255];
-  let shade = Math.cos(Math.PI / 2.0 - alpha);
+  //TODO: update for specular lighting
+  let shade = Math.cos(alpha);
   
-  let leftBorder = -520*zoom;
-  let rightBorder = 520*zoom;
+  let leftBorder = -520 * zoom;
+  let rightBorder = 520 * zoom;
   
+  let startY = 200 * zoom;
+  let center = 0.5 * (leftBorder + rightBorder);
+  
+  let origin = {x:center, y: startY};
+  
+  let groundHeight = 50;
+
   // constant shapes (aside from color)
   let ground  = new Zdog.Shape({
     addTo: illo2,
     path: [
-      { x: leftBorder, y: 300*zoom, z:1}, // start at 1st point
-      { x: leftBorder, y: 200*zoom, z:1}, // start at 1st point
-      { x:  rightBorder, y: 200*zoom, z:1 }, // line to 2nd point
-      { x:  rightBorder, y: 300*zoom, z:1 }, // line to 2nd point
+      { x: leftBorder, y: startY + groundHeight, z:1}, // start at 1st point
+      { x: leftBorder, y: startY, z:1}, // start at 1st point
+      { x:  rightBorder, y: startY, z:1 }, // line to 2nd point
+      { x:  rightBorder, y: startY + groundHeight, z:1 }, // line to 2nd point
     ],
-    stroke: 10*zoom,
+    stroke: 10 * zoom,
     closed: false,
     color: hslaToString(gColor[0],gColor[1],gColor[2]*shade, 1.0),
   });
   
-  let startX = -0;
-  let startY = 200*zoom;
   
   let canvasCoordinates = function(x,y) {
     let canvasRect = document.getElementsByClassName("zdog-canvas-half-vector")[0].getBoundingClientRect();
@@ -109,20 +109,15 @@
   let ground2 = ground.copy({
     fill:true,
     color: "hsla(0,0%,80%,0.18)",});
-  let center = 0.5 * (leftBorder + rightBorder);
-  
   let normal  = new Zdog.Shape({
     addTo: illo2,
-    path: [
-      { x: center, y: startY-b, z:1},
-      { x: center, y: startY, z:1}
-    ],
-    stroke: 10*zoom,
+    path: getPath(origin, 0, b),
+    stroke: 10 * zoom,
     color: hslaToString(gColor[0],gColor[1],gColor[2]*shade, 1.0),
   });
   let normalTip  = new Zdog.Shape({
     addTo: illo2,
-    path: getTrianglePoints(center, startY - b - 10*zoom, 1.5*Math.PI),
+    path: getTrianglePoints(normal.path[1], 0),
     stroke: 5*zoom,
     color: hslaToString(gColor[0],gColor[1],gColor[2]*shade, 1.0),
     fill: true
@@ -132,8 +127,8 @@
   // directly modified by angle
   let lightLine = new Zdog.Shape({
     addTo: illo2,
-    stroke: 5*zoom,
-    translate:{z:1},
+    stroke: 5 * zoom,
+    translate: {z:1},
   });
   let lightTriangle = new Zdog.Shape({
     addTo: illo2,
@@ -145,39 +140,29 @@
   // reflection light ray
   let reflectionLine = lightLine.copy();
   let reflectionTriangle = lightTriangle.copy();
-  
   // view light ray
   let viewLine = lightLine.copy();
   let viewTriangle = lightTriangle.copy();
   
   let updateLightLine = function() {
-    lightLine.path = [
-      { x: startX-c, y: startY-b}, // start at 1st point
-      { x:  startX, y: startY }, // line to 2nd point
-    ];
+    lightLine.path = getPath(origin, alpha, l);
     lightLine.updatePath();
   
-    lightTriangle.path = getTrianglePoints(startX-c, startY-b, Math.PI + alpha)
+    lightTriangle.path = getTrianglePoints(lightLine.path[1], alpha);
     lightTriangle.updatePath();
   };
   let updateReflectionLine = function() {
-    reflectionLine.path = [
-      { x: startX+c, y: startY-b}, // start at 1st point
-      { x:  startX, y: startY }, // line to 2nd point
-    ];
+    reflectionLine.path = getPath(origin, - alpha, l);
     reflectionLine.updatePath();
   
-    reflectionTriangle.path = getTrianglePoints(startX+c, startY-b, -alpha)
+    reflectionTriangle.path = getTrianglePoints(reflectionLine.path[1], -alpha);
     reflectionTriangle.updatePath();
   };
   let updateViewLine = function() {
-    viewLine.path = [
-      { x: startX+c2, y: startY-b2}, // start at 1st point
-      { x:  startX, y: startY }, // line to 2nd point
-    ];
+    viewLine.path = getPath(origin, alpha2, l2)
     viewLine.updatePath();
   
-    viewTriangle.path = getTrianglePoints(startX+c2, startY-b2, -alpha2)
+    viewTriangle.path = getTrianglePoints(viewLine.path[1], alpha2);
     viewTriangle.updatePath();
   }
   
@@ -201,10 +186,6 @@
   viewLine.color = cyanString;
   viewTriangle.color = cyanString;
   
-  let radius = 170;
-  let point1 = {x:center , y:startY-radius};
-  let point2, middlePoint, vector1, vector2, controlPoint1, controlPoint2, controlPoint1b, controlPoint2b;
-  let part = 1.7;
   let arc = lightLine.copy({closed: false, color:hslaToString(gColor0[0],gColor0[1],gColor0[2], 1.0)});
   let arc2 = lightLine.copy({closed: false, color:hslaToString(gColor0[0],gColor0[1],gColor0[2], 1.0)});
   let arcView = lightLine.copy({closed: false, color: hslaToString(gColor[0],gColor[1],gColor[2], 1.0)});
@@ -220,7 +201,8 @@
     p2.x *= -1;
     return [p1, {bezier: [c1, c2, p2]}];
   }
-  let getArcFromStuff = function(alpha, center, startY, radius, mirrored = false) {
+  let getArcFromStuff0 = function(alpha, center, startY, radius, mirrored = false) {
+    let part = 1.7;
     let point1 = {x:center , y:startY-radius};
     let point2 = {x:center - Math.sin(Math.PI/2.0-alpha) * radius , y:startY - Math.cos(Math.PI/2.0 - alpha) * radius};
     let middlePoint = {x:center - Math.tan(Math.PI/4.0 - alpha/2.0) * radius , y:startY - radius};
@@ -228,18 +210,38 @@
     let vector1 = {x:(middlePoint.x - point1.x) / part, y:(middlePoint.y - point1.y)/part};
     let vector2 = {x:(middlePoint.x - point2.x) / part, y:(middlePoint.y - point2.y)/part};
   
-    let controlPoint1 = addV(point1, vector1);
-    let controlPoint2 = addV(point2, vector2);
+    let controlPoint1 = vAdd(point1, vector1);
+    let controlPoint2 = vAdd(point2, vector2);
+  
+    let path = [point1, {bezier:[controlPoint1,controlPoint2,point2]}];
+    return mirrored ? getMirroredArc(path) : path;
+  }
+  let getArcFromStuff = function(alpha1, alpha2, origin, radius, mirrored = false) {
+    let part = 1.7;
+    let point1 = vAdd(origin, getPathDirection(alpha1, radius));//vAdd(origin, p(0, -radius));
+    let point2 = vAdd(origin, getPathDirection(alpha2, radius));
+
+    let alphaDifference = Math.abs(alpha1 - alpha2);
+    let middlePointRadius = radius / Math.cos(alphaDifference / 2.0);
+    let middleAlpha = 0.5 * (alpha1 + alpha2);
+    let middlePoint = vAdd(origin, getPathDirection(middleAlpha, middlePointRadius));
+  
+    let vector1 = vScalar(vSub(middlePoint, point1), 1.0/part);
+    let vector2 = vScalar(vSub(middlePoint, point2), 1.0/part)
+  
+    let controlPoint1 = vAdd(point1, vector1);
+    let controlPoint2 = vAdd(point2, vector2);
   
     let path = [point1, {bezier:[controlPoint1,controlPoint2,point2]}];
     return mirrored ? getMirroredArc(path) : path;
   }
   let updateBezierControlPoints = function() {
-    let radiusView = 220;
+    let radiusView = 280;
+    let radius = 240;
   
-    arc.path = getArcFromStuff(alpha, center, startY, radius*zoom);
+    arc.path = getArcFromStuff(0, alpha, p(center, startY), radius * zoom);
     arc2.path = getMirroredArc(JSON.parse(JSON.stringify(arc.path)));
-    arcView.path =  getArcFromStuff(alpha2, center, startY, radiusView*zoom, true);
+    arcView.path =  getArcFromStuff(alpha2, -alpha,p(center, startY), radiusView * zoom, false);
     arc.updatePath();
     arc2.updatePath();
     arcView.updatePath();
@@ -256,17 +258,17 @@
         leftSide = (coords.x < 0.0);
         // TODO: refactor this abomination
         let angle = Math.atan(coords.x / coords.y);
-        //console.log(coords);
-        //console.log(angle);
-        let angleLight = -(Math.PI/2.0 - alpha);
-        let angleReflect = -angleLight;
-        let angleView = Math.PI/2.0 - alpha2;
-        /*console.log("angle 1");
+        let angleLight = alpha;
+        let angleReflect = -alpha;
+        let angleView = alpha2;
+        /* debug statements in case everything breaks again
+        console.log("angle 1");
         console.log(angleLight);
         console.log("angle 2");
         console.log(angleReflect);
         console.log("angle 3");
-        console.log(angleView);*/
+        console.log(angleView);
+        console.log(angle);*/
         let angleDifference1 = angle-angleLight;
         let angleDifference2 = angle-angleReflect;
         let angleDifference3 = angle-angleView;
@@ -291,21 +293,21 @@
       },
       onDragMove:function(pointer, moveX, moveY) {
         let coords = canvasCoordinates(pointer.x, pointer.y);
-        if(coords.y < 0) return;
-        // TODO for if I have time some day: determine the quadrant the angle is in to correctly find angles for y < 0
         let angle = Math.atan(coords.x / coords.y);
+        // TODO for if I have time some day: determine the quadrant the angle is in to correctly find angles for y < 0
+        if(coords.y < 0) return;
         if(movedRay == 0) {
-          alpha =  Math.PI/2.0 + (angle - angleDifference);//alpha0 + moveX/300.0;
-          alpha = clamp(alpha, 0.2, 0.5*Math.PI-0.2);
+          alpha = (angle - angleDifference);
+          alpha = clamp(alpha, -0.5*Math.PI+0.2, -0.2);
         } else if (movedRay == 1) {
-          alpha =  Math.PI/2.0 - (angle - angleDifference);//alpha0 + moveX/300.0;
-          alpha = clamp(alpha, 0.2, 0.5*Math.PI-0.2);
+          alpha =  -(angle - angleDifference);
+          alpha = clamp(alpha, -0.5*Math.PI+0.2, -0.2);
         } else {
-          alpha2 = Math.PI/2.0 - (angle - angleDifference);// alpha02 - moveX/300.0;
+          alpha2 = (angle - angleDifference);
           alpha2 = clamp(alpha2, 0.2, 0.5*Math.PI-0.2);
   
         }
-        calculateLightRayParameters();
+        //calculateLightRayParameters();
         
         updateLightLine();
         updateReflectionLine();
@@ -582,4 +584,4 @@ function animate() {
 animate();}
 
 aaaa();</script><footer class="container"><div class="row text-center"><div class="col-12"><p class="mt-5 mb-1">&copy; 2022
-Hasso-Plattner-Institut für Digital Engineering gGmbH</p><small class="mt-0 mb-5"><a class="text-muted" href="https://docs.github.com/en/github/site-policy/github-privacy-statement">Datenschutzerklärung</a></small></div></div><data hidden value="061260672aa287d6a9670ee75896fba01b8cf7cb">revision</data></footer></body><script src="../jquery.min.js"></script><script src="../bootstrap.js"></script><script src="../scripts.js"></script></html>
+Hasso-Plattner-Institut für Digital Engineering gGmbH</p><small class="mt-0 mb-5"><a class="text-muted" href="https://docs.github.com/en/github/site-policy/github-privacy-statement">Datenschutzerklärung</a></small></div></div><data hidden value="eb986236984a858c85bbd503b68dcf8fe133dfa7">revision</data></footer></body><script src="../jquery.min.js"></script><script src="../bootstrap.js"></script><script src="../scripts.js"></script></html>
