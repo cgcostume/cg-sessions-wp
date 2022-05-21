@@ -294,7 +294,7 @@ let applyLabelCoordinates = function(label, position) {
 
 }
 let thetaLabel = document.getElementById("theta");
-let thetaLabel2 = theta.cloneNode(true);
+let thetaLabel2 = thetaLabel.cloneNode(true);
 document.getElementById('canvasContainer').appendChild(thetaLabel2);
 
 let alphaLabel = document.getElementById("alpha");
@@ -306,7 +306,7 @@ let alphaValueLabel = document.getElementById("alphaValue");
 let alphaValueContainer = document.getElementById("alphaLabel");
 
 let thetaLabel_2 = document.getElementById("theta2");
-let thetaLabel2_2 = theta.cloneNode(true);
+let thetaLabel2_2 = thetaLabel.cloneNode(true);
 document.getElementById('canvasHalfVectorContainer').appendChild(thetaLabel2_2);
 
 let alphaLabel2 = document.getElementById("alpha2");
