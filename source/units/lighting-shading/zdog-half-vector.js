@@ -4,6 +4,10 @@ let illo2 = new Zdog.Illustration({
     element: '.zdog-canvas-half-vector',
     dragRotate: false,
   });
+let illo3 = new Zdog.Illustration({
+  element: '.zdog-canvas-half-vector2',
+  dragRotate: false,
+});
   
 let rgbToString = function(r, g, b) {
   return "rgb("+r.toString() +","+g.toString()+","+b.toString()+")";
@@ -91,14 +95,14 @@ let ground  = new Zdog.Shape({
 });
 
 
-let canvasCoordinates = function(x,y) {
-  let canvasRect = document.getElementsByClassName("zdog-canvas-half-vector")[0].getBoundingClientRect();
+let canvasCoordinates = function(x,y, name = "zdog-canvas-half-vector") {
+  let canvasRect = document.getElementsByClassName(name)[0].getBoundingClientRect();
   let height = canvasRect.height;
   let width = canvasRect.width;
   return{x: (x-canvasRect.x - width/2.0), y:-( y-canvasRect.y-height/2.0) + startY};
 };
-let htmlCoordinates = function(x,y) {
-  let canvasRect = document.getElementsByClassName("zdog-canvas-half-vector")[0].getBoundingClientRect();
+let htmlCoordinates = function(x,y, name = "zdog-canvas-half-vector") {
+  let canvasRect = document.getElementsByClassName(name)[0].getBoundingClientRect();
   let height = canvasRect.height;
   let width = canvasRect.width;
   return{x: (x + width/2.0), y:-y + startY+ height/2.0 };
@@ -141,37 +145,18 @@ let reflectionTriangle = lightTriangle.copy();
 // view light ray
 let viewLine = lightLine.copy();
 let viewTriangle = lightTriangle.copy();
+// halfVector ray
+let halfVectorLine = lightLine.copy({addTo:illo3});
+let halfVectorTriangle = lightTriangle.copy({addTo:illo3});
 
-let updateLightLine = function() {
-  lightLine.path = getPath(origin, alpha, l);
-  lightLine.updatePath();
+let arc = lightLine.copy({closed: false, color:hslaToString(gColor0[0],gColor0[1],gColor0[2], 1.0)});
+let arc2 = lightLine.copy({closed: false, color:hslaToString(gColor0[0],gColor0[1],gColor0[2], 1.0)});
+let arcView = lightLine.copy({closed: false, color: hslaToString(gColor[0],gColor[1],gColor[2], 1.0)});
 
-  lightTriangle.path = getTrianglePoints(vAdd(lightLine.path[1], getPathDirection(alpha, 10)), alpha);
-  lightTriangle.updatePath();
-};
-let updateReflectionLine = function() {
-  reflectionLine.path = getPath(origin, - alpha, l);
-  reflectionLine.updatePath();
 
-  reflectionTriangle.path = getTrianglePoints(vAdd(reflectionLine.path[1], getPathDirection(-alpha, 10)), -alpha);
-  reflectionTriangle.updatePath();
-};
-let updateViewLine = function() {
-  viewLine.path = getPath(origin, alpha2, l2)
-  viewLine.updatePath();
-
-  viewTriangle.path = getTrianglePoints(vAdd(viewLine.path[1], getPathDirection(alpha2, 10)), alpha2);
-  viewTriangle.updatePath();
-}
-
-updateLightLine();
-updateReflectionLine();
-updateViewLine();
-
+// color initialization
 let lineColor = () => [255, 15, 200];
 let lineColor2 = () => [14, 223, 241];
-
-  
 let magenta = lineColor();
 let cyan = lineColor2();
 let magentaString = rgbToString(magenta[0], magenta[1], magenta[2]);
@@ -183,10 +168,70 @@ reflectionLine.color = magentaString;
 reflectionTriangle.color = magentaString;
 viewLine.color = cyanString;
 viewTriangle.color = cyanString;
+halfVectorLine.color = hslaToString(gColor0[0],gColor0[1],gColor0[2]*0.37, 1.0);;
+halfVectorTriangle.color = hslaToString(gColor0[0],gColor0[1],gColor0[2]*0.37, 1.0);;
 
-let arc = lightLine.copy({closed: false, color:hslaToString(gColor0[0],gColor0[1],gColor0[2], 1.0)});
-let arc2 = lightLine.copy({closed: false, color:hslaToString(gColor0[0],gColor0[1],gColor0[2], 1.0)});
-let arcView = lightLine.copy({closed: false, color: hslaToString(gColor[0],gColor[1],gColor[2], 1.0)});
+
+// create second illustration----------------------------
+
+// TODO: find out how to do this right
+normal.copy({addTo: illo3});
+normalTip.copy({addTo: illo3});
+let groundH = ground.copy({addTo: illo3});
+ground2.copy({addTo: illo3});
+let lightLineH = lightLine.copy({addTo: illo3});
+let lightTriangleH = lightTriangle.copy({addTo: illo3});
+let reflectionLineH = reflectionLine.copy({addTo: illo3});
+let reflectionTriangleH = reflectionTriangle.copy({addTo: illo3});
+let viewLineH = viewLine.copy({addTo: illo3});
+let viewTriangleH = viewTriangle.copy({addTo: illo3});
+
+let arcH = arc.copy({addTo: illo3});
+let arc2H = arc2.copy({addTo: illo3});
+
+let arcViewH = arcView.copy({addTo: illo3});
+// --------------------------------------------------------
+
+let updateLightLine = function(line = lightLine, triangle = lightTriangle) {
+  line.path = getPath(origin, alpha, l);
+  line.updatePath();
+
+  triangle.path = getTrianglePoints(vAdd(line.path[1], getPathDirection(alpha, 10)), alpha);
+  triangle.updatePath();
+};
+let updateReflectionLine = function(line = reflectionLine, triangle = reflectionTriangle) {
+  line.path = getPath(origin, - alpha, l);
+  line.updatePath();
+
+  triangle.path = getTrianglePoints(vAdd(line.path[1], getPathDirection(-alpha, 10)), -alpha);
+  triangle.updatePath();
+};
+let updateViewLine = function(line = viewLine, triangle = viewTriangle) {
+  line.path = getPath(origin, alpha2, l2)
+  line.updatePath();
+
+  triangle.path = getTrianglePoints(vAdd(viewLine.path[1], getPathDirection(alpha2, 10)), alpha2);
+  triangle.updatePath();
+}
+let updatehalfVectorLine = function(line = lightLine, triangle = lightTriangle) {
+  let halfAngle = (alpha + alpha2) / 2.0;
+  halfVectorLine.path = getPath(origin, halfAngle, l)
+  halfVectorLine.updatePath();
+
+  halfVectorTriangle.path = getTrianglePoints(vAdd(halfVectorLine.path[1], getPathDirection(halfAngle, 10)), halfAngle);
+  halfVectorTriangle.updatePath();
+}
+
+let updateLines = function() {
+  updateLightLine();
+  updateLightLine(lightLineH, lightTriangleH);
+  updateReflectionLine();
+  updateReflectionLine(reflectionLineH, reflectionTriangleH);
+  updateViewLine();
+  updateViewLine(viewLineH, viewTriangleH);
+  updatehalfVectorLine();
+}
+updateLines();
 
 let getMirroredArc = function(path) {
   let p1 = path[0];
@@ -199,21 +244,7 @@ let getMirroredArc = function(path) {
   p2.x *= -1;
   return [p1, {bezier: [c1, c2, p2]}];
 }
-let getArcFromStuff0 = function(alpha, center, startY, radius, mirrored = false) {
-  let part = 1.7;
-  let point1 = {x:center , y:startY-radius};
-  let point2 = {x:center - Math.sin(Math.PI/2.0-alpha) * radius , y:startY - Math.cos(Math.PI/2.0 - alpha) * radius};
-  let middlePoint = {x:center - Math.tan(Math.PI/4.0 - alpha/2.0) * radius , y:startY - radius};
 
-  let vector1 = {x:(middlePoint.x - point1.x) / part, y:(middlePoint.y - point1.y)/part};
-  let vector2 = {x:(middlePoint.x - point2.x) / part, y:(middlePoint.y - point2.y)/part};
-
-  let controlPoint1 = vAdd(point1, vector1);
-  let controlPoint2 = vAdd(point2, vector2);
-
-  let path = [point1, {bezier:[controlPoint1,controlPoint2,point2]}];
-  return mirrored ? getMirroredArc(path) : path;
-}
 let getArcFromStuff = function(alpha1, alpha2, origin, radius, mirrored = false) {
   let part = 1.7;
   let point1 = vAdd(origin, getPathDirection(alpha1, radius));//vAdd(origin, p(0, -radius));
@@ -233,16 +264,22 @@ let getArcFromStuff = function(alpha1, alpha2, origin, radius, mirrored = false)
   let path = [point1, {bezier:[controlPoint1,controlPoint2,point2]}];
   return mirrored ? getMirroredArc(path) : path;
 }
-  let radiusView = 280;
+  let radiusView = 280 * zoom;
   let radius = 240;
 let updateBezierControlPoints = function() {
 
   arc.path = getArcFromStuff(0, alpha, p(center, startY), radius * zoom);
   arc2.path = getMirroredArc(JSON.parse(JSON.stringify(arc.path)));
-  arcView.path =  getArcFromStuff(alpha2, -alpha,p(center, startY), radiusView * zoom, false);
+  arcView.path =  getArcFromStuff(alpha2, -alpha,p(center, startY), radiusView, false);
+  arcH.path = arc.path;
+  arc2H.path = arc2.path;
+  arcViewH.path = getArcFromStuff(0, (alpha2 + alpha)/2.0,p(center, startY), radiusView, false);
   arc.updatePath();
   arc2.updatePath();
   arcView.updatePath();
+  arcH.updatePath();
+  arc2H.updatePath();
+  arcViewH.updatePath();
 }
 updateBezierControlPoints();
 
@@ -265,17 +302,38 @@ let normalLabel = document.getElementById("normal");
 let lightLabel = document.getElementById("light");
 let reflectionLabel = document.getElementById("reflection");
 let viewLabel = document.getElementById("view");
+let alphaValueLabel = document.getElementById("alphaValue");
+let alphaValueContainer = document.getElementById("alphaLabel");
 
-//let normalCoordinates = htmlCoordinates(path3[1].x, -path3[1].y + startY);
+let thetaLabel_2 = document.getElementById("theta2");
+let thetaLabel2_2 = theta.cloneNode(true);
+document.getElementById('canvasHalfVectorContainer').appendChild(thetaLabel2_2);
+
+let alphaLabel2 = document.getElementById("alpha2");
+let normalLabel2 = document.getElementById("normal2");
+let lightLabel2 = document.getElementById("light2");
+let reflectionLabel2 = document.getElementById("reflection2");
+let viewLabel2 = document.getElementById("view2");
+let alphaValueLabelH = document.getElementById("alphaValue2");
+let alphaValueContainerH = document.getElementById("alphaLabel2");
+let halfLabelH = document.getElementById("halfVector");
+
+
 applyLabelCoordinates(normalLabel, p(0, startY - 250));
+applyLabelCoordinates(normalLabel2, p(0, startY - 250));
+applyLabelCoordinates(alphaValueContainer, p(rightBorder / 2.0, startY + groundHeight / 2.0));
+applyLabelCoordinates(alphaValueContainerH, p(rightBorder / 2.0, startY + groundHeight / 2.0));
 
 let updateLabels = function() {
   let path = getPath(origin, alpha / 2.0, radius * zoom / 1.5);
   let path2 = getPath(origin, -alpha / 2.0, radius * zoom / 1.5);
-  let path3 = getPath(origin, (alpha2 - alpha) / 2.0, radiusView * zoom / 1.5);
+  let path3 = getPath(origin, (alpha2 - alpha) / 2.0, radiusView / 1.5);
   let pathL = getPath(origin, alpha, l + 30);
   let pathR = getPath(origin, -alpha, l + 30);
   let pathV = getPath(origin, alpha2, l2 + 30);
+
+  let pathHalfAlpha = getPath(origin,(alpha + alpha2) / 4.0, (l + radiusView) / 2.0);
+  let pathHalfAlpha2 = getPath(origin,(alpha + alpha2) / 2.0, l + 30);
 
   applyLabelCoordinates(thetaLabel, path[1]);
   applyLabelCoordinates(thetaLabel2, path2[1]);
@@ -283,91 +341,156 @@ let updateLabels = function() {
   applyLabelCoordinates(lightLabel, pathL[1]);
   applyLabelCoordinates(reflectionLabel, pathR[1]);
   applyLabelCoordinates(viewLabel, pathV[1]);
+
+
+  applyLabelCoordinates(thetaLabel_2, path[1]);
+  applyLabelCoordinates(thetaLabel2_2, path2[1]);
+  applyLabelCoordinates(alphaLabel2, pathHalfAlpha[1]);
+  applyLabelCoordinates(lightLabel2, pathL[1]);
+  applyLabelCoordinates(reflectionLabel2, pathR[1]);
+  applyLabelCoordinates(viewLabel2, pathV[1]);
+  applyLabelCoordinates(halfLabelH, pathHalfAlpha2[1]);
+
+  let shownAlphaValue = (alpha + alpha2) * 180 / Math.PI;
+  shownAlphaValue = Math.abs(Math.round(shownAlphaValue));
+  alphaValueLabel.innerHTML = shownAlphaValue;
+  document.getElementById("alphaValue2").innerHTML = shownAlphaValue / 2.0;
 };
 updateLabels();
-new Zdog.Dragger({
-  startElement:illo2.element,
-  onDragStart:function(pointer){
-    let coords = canvasCoordinates(pointer.x, pointer.y);
-    leftSide = (coords.x < 0.0);
-    // TODO: refactor this abomination
-    let angle = Math.atan(coords.x / coords.y);
-    let angleLight = alpha;
-    let angleReflect = -alpha;
-    let angleView = alpha2;
-    /* debug statements in case everything breaks again
-    console.log("angle 1");
-    console.log(angleLight);
-    console.log("angle 2");
-    console.log(angleReflect);
-    console.log("angle 3");
-    console.log(angleView);
-    console.log(angle);*/
-    let angleDifference1 = angle-angleLight;
-    let angleDifference2 = angle-angleReflect;
-    let angleDifference3 = angle-angleView;
-    if(Math.abs(angleDifference1) < Math.abs(angleDifference2)) {
-      if(Math.abs(angleDifference1) < Math.abs(angleDifference3)) {
-        angleDifference = angleDifference1;
-        movedRay = 0;
-      } else {
-        angleDifference = angleDifference3;
-        movedRay = 2;
-      }
-    } else if(Math.abs(angleDifference3) < Math.abs(angleDifference2)) {
+
+let lightingIndicator = new Zdog.Ellipse({
+  addTo: illo2,
+  diameter: 40,
+  stroke:2,
+  fill: true,
+  translate: {x: -300, y: -100},
+  color: '#fff',
+});
+let lightingIndicatorH = lightingIndicator.copy({addTo: illo3});
+
+let updateLightingFor = function(angle = alpha2 + alpha, indicator = lightingIndicator, g = ground) {
+  let specularExponent = 16;
+  let diffuse = Math.cos(alpha);
+  let specular = Math.pow(Math.cos(angle), specularExponent);
+  shade = diffuse + specular;
+  shade *= 0.25;
+  g.color = hslaToString(gColor[0], gColor[1], gColor[2] * shade, 1.0);
+  indicator.color = hslaToString(gColor[0], gColor[1], gColor[2] * shade, 1.0);
+}
+let updateLighting = function() {
+  updateLightingFor();
+  updateLightingFor((alpha2 + alpha) / 2.0, lightingIndicatorH, groundH);
+};
+updateLighting();
+
+let dragStart = function(pointer, illustration) {
+  let coords = canvasCoordinates(pointer.x, pointer.y, "zdog-canvas-half-vector" + (illustration == 0 ? "" : "2"));
+  leftSide = (coords.x < 0.0);
+  // TODO: refactor this abomination
+  let angle = Math.atan(coords.x / coords.y);
+  let angleLight = alpha;
+  let angleReflect = -alpha;
+  let angleView = alpha2;
+  /* debug statements in case everything breaks again
+  console.log("angle 1");
+  console.log(angleLight);
+  console.log("angle 2");
+  console.log(angleReflect);
+  console.log("angle 3");
+  console.log(angleView);
+  console.log(angle);*/
+  let angleDifference1 = angle-angleLight;
+  let angleDifference2 = angle-angleReflect;
+  let angleDifference3 = angle-angleView;
+  if(Math.abs(angleDifference1) < Math.abs(angleDifference2)) {
+    if(Math.abs(angleDifference1) < Math.abs(angleDifference3)) {
+      angleDifference = angleDifference1;
+      movedRay = 0;
+    } else {
       angleDifference = angleDifference3;
       movedRay = 2;
-    } else {
-      angleDifference = angleDifference2;
-      movedRay = 1;
     }
-    arc2.color = hslaToString(gColor0[0],gColor0[1],gColor0[2], 0.5);
-    reflectionLine.color = rgbToString(magenta[0] * 0.5, magenta[1] * 0.5, magenta[2] * 0.5);
-    reflectionTriangle.color = rgbToString(magenta[0] * 0.5, magenta[1] * 0.5, magenta[2] * 0.5);
+  } else if(Math.abs(angleDifference3) < Math.abs(angleDifference2)) {
+    angleDifference = angleDifference3;
+    movedRay = 2;
+  } else {
+    angleDifference = angleDifference2;
+    movedRay = 1;
+  }
+
+  // TODO: handle transparency differently (e.g. make non-moved rays transparent)
+  //arc2.color = hslaToString(gColor0[0],gColor0[1],gColor0[2], 0.5);
+  //reflectionLine.color = rgbToString(magenta[0] * 0.5, magenta[1] * 0.5, magenta[2] * 0.5);
+  //reflectionTriangle.color = rgbToString(magenta[0] * 0.5, magenta[1] * 0.5, magenta[2] * 0.5);
+}
+
+let dragMove = function(pointer, illustration) {
+  let coords = canvasCoordinates(pointer.x, pointer.y, "zdog-canvas-half-vector" + (illustration == 0 ? "" : "2"));
+  let angle = Math.atan(coords.x / coords.y);
+  // TODO for if I have time some day: determine the quadrant the angle is in to correctly find angles for y < 0
+  if(coords.y < 0) return;
+  if(movedRay == 0) {
+    alpha = (angle - angleDifference);
+    alpha = clamp(alpha, -0.5*Math.PI+0.1, -0.1);
+  } else if (movedRay == 1) {
+    alpha =  -(angle - angleDifference);
+    alpha = clamp(alpha, -0.5*Math.PI+0.1, -0.1);
+  } else {
+    alpha2 = (angle - angleDifference);
+    alpha2 = clamp(alpha2, 0.1, 0.5*Math.PI-0.1);
+
+  }
+  
+  updateLines();
+  
+  updateBezierControlPoints();
+
+  updateLabels();
+  updateLighting();
+
+}
+
+let dragEnd = function() {
+  alpha0 = alpha;
+  alpha02 = alpha2;
+
+  arc2.color = hslaToString(gColor0[0],gColor0[1],gColor0[2], 1.0);
+  reflectionLine.color = rgbToString(magenta[0], magenta[1], magenta[2]);
+  reflectionTriangle.color = rgbToString(magenta[0] , magenta[1] , magenta[2]);
+
+}
+let dragger = new Zdog.Dragger({
+  startElement:illo2.element,
+  onDragStart:function(pointer){
+    dragStart(pointer, 0);
   },
   onDragMove:function(pointer, moveX, moveY) {
-    let coords = canvasCoordinates(pointer.x, pointer.y);
-    let angle = Math.atan(coords.x / coords.y);
-    // TODO for if I have time some day: determine the quadrant the angle is in to correctly find angles for y < 0
-    if(coords.y < 0) return;
-    if(movedRay == 0) {
-      alpha = (angle - angleDifference);
-      alpha = clamp(alpha, -0.5*Math.PI+0.2, -0.2);
-    } else if (movedRay == 1) {
-      alpha =  -(angle - angleDifference);
-      alpha = clamp(alpha, -0.5*Math.PI+0.2, -0.2);
-    } else {
-      alpha2 = (angle - angleDifference);
-      alpha2 = clamp(alpha2, 0.2, 0.5*Math.PI-0.2);
-
-    }
-    //calculateLightRayParameters();
-    
-    updateLightLine();
-    updateReflectionLine();
-    updateViewLine();
-    
-    updateBezierControlPoints();
-
-    updateLabels();
-
-    shade = Math.cos(Math.PI / 2.0 - alpha);
-    ground.color = hslaToString(gColor[0], gColor[1], gColor[2] * shade, 1.0);
+    dragMove(pointer, 0)
   },
   onDragEnd:function(){
-    alpha0 = alpha;
-    alpha02 = alpha2;
-
-    arc2.color = hslaToString(gColor0[0],gColor0[1],gColor0[2], 1.0);
-    reflectionLine.color = rgbToString(magenta[0], magenta[1], magenta[2]);
-    reflectionTriangle.color = rgbToString(magenta[0] , magenta[1] , magenta[2]);
+    dragEnd();
   }
 });
-illo2.zoom = 0.5;
+
+let dragger2 =  new Zdog.Dragger({
+  startElement:illo3.element,
+  onDragStart:function(pointer){
+    dragStart(pointer, 1);
+  },
+  onDragMove:function(pointer, moveX, moveY) {
+    dragMove(pointer, 1)
+  },
+  onDragEnd:function(){
+    dragEnd();
+  }
+});
+
 function animate() {
   illo2.updateRenderGraph();
+  illo3.updateRenderGraph();
   requestAnimationFrame( animate );
 }
 
 animate();
+
 
