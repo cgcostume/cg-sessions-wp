@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><meta http-equiv="x-ua-compatible" content="ie=edge"><meta charset="utf-8"><meta name="viewport" content="width=device-widthinitial-scale=1"><title>CG-Session</title><meta name="description" content="ToDo"><meta name="robots" content="index, follow"><link rel="stylesheet" href="../styles.css"><noscript><style class="js-only">{ display: none; }</style></noscript><body id="page-top" data-spy="scroll"><section class="container" id="lecture"><div class="row text-center"><div class="col-12"><div class="title"><img class="img-fluid" src="../webp-generated/fire-life-is-strange_f143.webp"><h2><strong>Beleuchtung</strong> und <strong>Schattierung</strong></h2></div><a href="../index.html">Zurück zu <strong>Vorlesungsübersicht</strong></a></div></div></section><div class="container"><div class="row"><div class="offset-1 col-10"><div class="alert alert-primary"><p>In dieser Einheit wird gezeigt, wie virtuelle Kameras in der Theorie und in der praktischen Umsetzung funktionieren und wie effizient 3D Szenen aus wohldefinierten Blickwinkeln dargestellt werden können.</p><hr><h4>Nach dieser Lehreinheit solltest Du&hellip;</h4><ul class="list-unstyled"><li>&hellip;die Bedeutung von Beleuchtung für die Computergrafik kennen,</li><li>&hellip;die Unterschiede zwischen lokalen und globalen Beleuchtungsmodellen erklären können, (shading und shadowing),</li><li>&hellip;verschiedene Lichtquellen-Modelle und deren Unterschiede sowie Anwendungszwecke zuordnen können</li><li>&hellip;die Bestandteile des phong-Beleuchtungsmodells kennen.</li><li>&hellip;Schattierungsverfahren kennen.</li></ul></div></div></div><div class="row"><div class="offset-1 col-10"><div class="alert alert-secondary"><h4>Vorwissen</h4></div></div></div></div><section class="container"><div class="row"><div class="offset-1 col-10"><h3>Motivation und Problemstellung</h3> <p>Ziel dieser Einheit soll es sein, zu verstehen, welche Rolle Beleuchtung in der Computergrafik spielt und wie simple lokale Beleuchtungsverfahren funktionieren. Bevor wir uns jedoch genauer mit der Umsetzung beschäftigen, müssen wir uns zunächst erarbeiten, welche Eigenschaften virtuelle Beleuchtung auszeichnen.</p> <p>Wir wollen uns dafür ein paar Aufnahmen aus verschiedenen Spielen ansehen. Welche Eigenschaften, die ein Beleuchtungsmodell charakterisieren, kannst du daraus ableiten?</p> <table> <thead> <tr> <th style="text-align:center"><img src="../webp-generated/fire-life-is-strange_f143.webp" alt="camera-model"></th> </tr> </thead> <tbody> <tr> <td style="text-align:center">🧩 Beispielscreenshots</td> </tr> </tbody> </table> <textarea class="notes" rows="8" placeholder="Mach Dir ein paar Notizen wenn du magst."></textarea> <p>Wie auch auf den Screenshots zu erkennen, ist Beleuchtung ein zentrales Ausdrucksmittel und für 3D-Wahrnehmung wichtig. Sie vermittelt Betrachter*innen Informationen über Oberflächenbeschaffenheit und Form von Objekten und trägt dadurch signifikant dazu bei, einen räumlichen Eindruck zu erzeugen.</p> <p>Um diese Informationen zu vermitteln, muss die Belechtung der Szene also in irgendeiner Form von der Oberfläche abhängen, also insbesondere ihrer <strong>Ausrichtung</strong> sowie ihrem <strong>Material und Struktur</strong>. So würde z.B. ein Ball aus Gummi bei gleicher Beleuchtung anders aussehen als eine Kugel aus Metall.</p> <p>Dabei sind verschiedene Beleuchtungseffekte zu beobachten: Zum einen sind Flächen stärker erleuchtet, je mehr sie dem Licht zugewandt sind, unabhängig von der Kameraposition. Dieser Bestandteil der Beleuchtung nennt sich <strong>diffuse</strong> Beleuchtung. Zum anderen sind auch Glanzpunkte zu erkennen, deren Position sich in Abhängigkeit von der Blickrichtung verändert. Diese <em>highlights</em> sind der <strong>spekulare</strong> Anteil der Beleuchtung.</p> <p>In der Computergrafik I möchten wir zunächst darauf eingehen, wie diese beiden Effekte umgesetzt werden können, um grundlegend plausible Beleuchtung zu erzeugen, die von Oberflächenausrichtung und -material abhängig ist. Natürlich gehört für eine realistische Beleuchtung aber noch einiges mehr dazu. Weiterführende Effekte, die in den Screenshots zu erkennen sind, sind z.B. <strong>indirekte Beleuchtung</strong> und <strong>Schattenwurf</strong>.</p> <p><strong>Direkte vs. Indirekte Beleuchtung</strong> <br> Direkte Beleuchtung bezeichnet alle Beleuchtungseffekte, die nur Licht berücksichtigen, das auf direktem Wege auf die Oberfläche trifft. U.a. werden Reflexion oder Refraktion von Licht durch andere Objekte zwischen der Oberfläche und der Lichtquelle nicht berücksichtigt. Wird beispielsweise eine weiße Wand angestrahlt, würde mit einer physikalisch korrekten Darstellung ein Teil des reflektierten Lichts andere Objekte der Szene erleuchten. Dieser Effekt kann durch Beleuchtungsmodelle mit rein direkter Beleuchtung nicht abgebildet werden.</p> <table> <thead> <tr> <th style="text-align:center"><img src="../webp-generated/cornell_660a.webp" alt="camera-model"></th> </tr> </thead> <tbody> <tr> <td style="text-align:center">🧩 Cornell-Box direct vs indirect: Platzhalter</td> </tr> </tbody> </table> <p><strong>Schattierung vs. Schattenwurf</strong> <br> Während es bei der Schattierung darum geht, die Oberflächenfarbe gemäß Material und Ausrichtung gegenüber Lichtquelle und Kamera anzupassen, meint Schattenwurf das Entstehen von Schatten durch Hindernisse zwischen Oberfläche und Lichtquelle.</p> <table> <thead> <tr> <th style="text-align:center"><img src="../webp-generated/shadowing_d737.webp" alt="camera-model"></th> </tr> </thead> <tbody> <tr> <td style="text-align:center">🧩 Shading/Shadowing</td> </tr> </tbody> </table> <p>Aber was macht diese Effekte so viel schwieriger umzusetzen als direkte Beleuchtung ohne Schattenwurf? Das liegt daran, welche Informationen jeweils benötigt werden, um das Ergebnis zu berechnen. Für direkte Beleuchtung ohne Schatten reicht es aus, die Oberflächennormale und die Positionen von Lichtquellen, Kamera und dem aktuellen Punkt auf der Oberfläche zu kennen. Für indirekte Beleuchtung und Schattenwurf hingegen wird Information über <em>alle</em> Objekte der Szene benötigt, die sich in irgendeiner Weise auf die Beleuchtung der aktuellen Oberfläche auswirken könnten. Zwischen all diesen Objekten kann das Licht zudem potenziell beliebig oft hin und her reflektiert werden, was die Beleuchtungsberechnung deutlich komplexer und rechenintensiver macht.</p> <p>Es gibt natürlich viele clevere Ansätze, um auch mit weniger Rechenkapazität einige Aspekte komplexerer Beleuchtung umzusetzen. Einige davon, insbesondere Techniken zum Annähern von Schatten, werden in Computergrafik II thematisiert.</p> <p>Zusammenfassung:</p> <ul> <li>Beleuchtung ist wichtig</li> <li>Beleuchtung vermittelt Informationen über die Szene -&gt; insbesondere Position, Ausrichtung und Material von Oberflächen</li> <li>es gibt diffuse und spekulare Beleuchtung</li> <li>direkte Beleuchtung ist leichter als indirekte</li> <li>Schattierung ist leichter als Schattenwurf</li> </ul> </div></div></section><section><img class="img-fluid" src="../webp-generated/transition_8204.webp"></section><div class="container-dark"><section class="container no-padding"><div class="row"><div class="offset-1 col-10"><h3>Physikalische Grundlagen</h3> <p><em>Für eine detailliertere Einführung in die physikalischen Grundlagen des Lichts empfehlen wir die Seite von Bartosz Ciechanowski <strong>&lt;insert link&gt;</strong>. Für diese Einheit werden wir jedoch ein einfaches <strong>Strahlenmodell</strong> annehmen.</em></p> <p>Wir nehmen die Welt um uns darüber wahr, wie Licht mit ihr interagiert. Wir können Objekte nur sehen, wenn sie mit Licht in Kontakt kommen und dieses entweder in Richtung Betrachter*in zurückwerfen (<strong>Reflexion</strong>), durchlassen (<strong>Transmission</strong>) oder verschlucken (<strong>Absorption</strong>). Diese Erscheinungen nehmen Einfluss darauf wie hell oder dunkel ein Objekt wahrgenommen wird und bewirken dadurch Schattierung und Schattenwurf. Damit bilden sie auch die Grundlage für unser Beleuchtungsmodell.</p> <table> <thead> <tr> <th style="text-align:center"><img src="../webp-generated/ray_types_73a5.webp" alt="camera-model"></th> </tr> </thead> <tbody> <tr> <td style="text-align:center">Strahlentypen</td> </tr> </tbody> </table> <p>Weitere Phänomene, die bei der Interaktion von Licht mit Objekten einer Szene auftreten können, sind z.B. Lichtbeugung und -brechung sowie Interferenzerscheinungen, diese spielen jedoch in den Lichtausbreitungsmodellen der Computergrafik in der Regel eine untergeordnete Rolle. Den Hauptfaktor bildet die <strong>Reflexion</strong>.</p> <h3>Reflexion</h3> <p>Wie bereits erwähnt unterscheiden wir zwischen <strong>diffuser</strong> und <strong>spekularer</strong> Reflexion, die zusammen unser (sehr simples) Beleuchtungsmodell bilden. Welche physikalischen Grundlagen bzw. welche Modellannahmen stecken dahinter?</p> <h4>Diffuse Reflexion</h4> <p>Als diffuse Reflexion wird der Effekt bezeichnet, dass Flächen heller wirken, je mehr sie dem Licht zugewandt sind. Sie ist vollständig unabhängig vom Betrachtungswinkel und nur von Oberflächenausrichtung und Lichtposition bzw. Lichtrichtung abhängig.</p> <p>Es steht die Modellannahme dahinter, dass das auf die Oberfläche auftreffende Licht gleichmäßig in alle Richtungen reflektiert wird. Dieses Phänomen ist stärker, je rauer die Oberfläche ist.</p> <table> <thead> <tr> <th style="text-align:center"><img src="../webp-generated/diffuse_e892.webp" alt="camera-model"></th> </tr> </thead> <tbody> <tr> <td style="text-align:center">Diffuse Reflexion - modelliertes Verhalten</td> </tr> </tbody> </table> <p>Physikalisch lässt sich dieses Phänomen damit begründen, dass raue Flächen viele kleine Unebenheiten beinhalten. Wir können uns die Wirkung einer Lichtquelle als viele dicht nebeneinanderliegende Lichtstrahlen vorstellen (<strong>modellieren?</strong>).- Treffen diese auf die Fläche, werden sie in praktisch zufällige Richtungen reflektiert. Durch dieses Verhalten der einzelnen Lichtstrahlen wird das Licht insgesamt annähernd gleichmäßig in alle verschiedenen Richtungen reflektiert.</p> <table> <thead> <tr> <th style="text-align:center"><img src="../webp-generated/diffuse_zoom_c224.webp" alt="camera-model"></th> </tr> </thead> <tbody> <tr> <td style="text-align:center">Reflexion an Unebenheiten in der Oberfläche</td> </tr> </tbody> </table> <p>Wie viel Licht genau in Abhängigkeit vom Lichteinfallswinkel reflektiert wird, lässt sich mithilfe des <strong>Lambertschen Gesetzes</strong> berechnen. Dieses besagt, dass die reflektierte Lichtmenge, also die Lichtintensität <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi></mrow><annotation encoding="application/x-tex">I</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.07847em">I</span></span></span></span></eq>, proportional zum Kosinus des Winkels zwischen der <strong>(invertierten)</strong> Einfallsrichtung des Lichtes und der Flächennormale ist.</p> <table> <thead> <tr> <th style="text-align:center"><img src="../webp-generated/lambert_0e6d.webp" alt="camera-model"></th> </tr> </thead> <tbody> <tr> <td style="text-align:center">Lambertsches Gesetz</td> </tr> </tbody> </table> <p>Dieser Zusammenhang lässt sich auch aus folgender Überlegung herleiten. Wir können uns das Licht als ein Bündel paralleler Lichtstrahlen mit gleichem Abstand vorstellen. Je größer der Winkel der Lichtstrahlen zur Flächennormale ist, umso größer ist der Abstand, mit dem die Lichtstrahlen auf der Oberfläche aufkommen. Die gleiche Fläche wird also bei einem größeren Winkel von weniger Lichtstrahlen getroffen.</p> <div align="center"> <canvas class="zdog-canvas" width="760" height="340"></canvas> </div> <div align="center"> <img alt="Nach links und rechts ziehen, um Winkel zu ändern" src="../webp-generated/drag_53ec.png" height="50"> </div> <br> <p>Damit können wir also die Abhängigkeit der diffusen Reflexion von sowohl der Oberflächenbeschaffenheit als auch von der Lichtrichtung begründen.</p> <h4>Spekulare Reflexion</h4> <p>Im Gegensatz zur Diffusen Reflexion ist die Spekulare Reflexion (auch <em>spiegelnde Reflexion</em> oder <em>Spiegellicht</em>) nicht nur von der Oberflächenbeschaffenheit und Lichtrichtung, sondern auch der Blickrichtung abhängig.</p> <p>Hier ist die Modellannahme, dass sich das Licht (im Gegensatz zur gleichmäßigen diffusen Reflexion) ungleichmäßig und besonders konzentriert in eine Richtung spiegelt. Daraus ergibt sich auch die Abhängigkeit von der Blickrichtung: Der Punkt erscheint umso heller, je ähnlicher Blick- und Spiegelrichtung sind.</p> <p>Spekulare Reflexion ist stärker auf sehr glatten (z.B. polierten) Oberflächen. Die Oberflächenbeschaffenheit bestimmt dabei sowohl, wie stark die spekulare Reflexion ist, als auch wie schnell die Helligkeit mit zunehmender Abweichung zwischen Blick- und Spiegelrichtung abnimmt.</p> <table> <thead> <tr> <th style="text-align:center"><img src="../webp-generated/specular_0733.webp" alt="camera-model"></th> </tr> </thead> <tbody> <tr> <td style="text-align:center">Spekulare Reflexion</td> </tr> </tbody> </table> <p>Sei <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.4306em"></span><span class="mord mathnormal" style="margin-right:.0037em">α</span></span></span></span></eq> der Winkel zwischen Blick-und Reflexionsrichtung. Dann ist die Intensität der Spekularen Reflexion proportional zu <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mi>o</mi><msup><mi>s</mi><mi>n</mi></msup><mi>α</mi></mrow><annotation encoding="application/x-tex">cos^n \alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6644em"></span><span class="mord mathnormal">co</span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:.6644em"><span style="top:-3.063em;margin-right:.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:.0037em">α</span></span></span></span></eq>, wobei <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.4306em"></span><span class="mord mathnormal">n</span></span></span></span></eq> materialspezifisch ist.</p> <table> <thead> <tr> <th style="text-align:center"><img src="../webp-generated/specular_formula_d654.webp" alt="camera-model"></th> </tr> </thead> <tbody> <tr> <td style="text-align:center">Spekulare Reflexion</td> </tr> </tbody> </table> <p>Die Spiegelrichtung <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi></mrow><annotation encoding="application/x-tex">R</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.00773em">R</span></span></span></span></eq> liegt in einer Ebene mit <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi></mrow><annotation encoding="application/x-tex">L</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal">L</span></span></span></span></eq> und <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.10903em">N</span></span></span></span></eq> und der Winkel zwischen <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi></mrow><annotation encoding="application/x-tex">L</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal">L</span></span></span></span></eq> und <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.10903em">N</span></span></span></span></eq> ist identisch zu dem Winkel zwischen <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.10903em">N</span></span></span></span></eq> und <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi></mrow><annotation encoding="application/x-tex">R</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.00773em">R</span></span></span></span></eq>. Mit diesen Informationen können wir eine Berechnungformel für die Spiegelrichtung herleiten:</p> <p>Sei <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi></mrow><annotation encoding="application/x-tex">P</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.13889em">P</span></span></span></span></eq> die auf die Normale <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.10903em">N</span></span></span></span></eq> projizierte Lichtrichtung <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi></mrow><annotation encoding="application/x-tex">L</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal">L</span></span></span></span></eq>. Dann entspricht der Vektor <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi></mrow><annotation encoding="application/x-tex">S</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.05764em">S</span></span></span></span></eq> aus der folgenden Darstellung der Differenz aus <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi></mrow><annotation encoding="application/x-tex">P</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.13889em">P</span></span></span></span></eq> und <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi></mrow><annotation encoding="application/x-tex">L</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal">L</span></span></span></span></eq>. <section><eqn><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>S</mi><mo>=</mo><mo>−</mo><mi>L</mi><mo>+</mo><mi>P</mi><mo>=</mo><mi>P</mi><mo>−</mo><mi>L</mi></mrow><annotation encoding="application/x-tex">S = -L + P = P - L</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.05764em">S</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:.7667em;vertical-align:-.0833em"></span><span class="mord">−</span><span class="mord mathnormal">L</span><span class="mspace" style="margin-right:.2222em"></span><span class="mbin">+</span><span class="mspace" style="margin-right:.2222em"></span></span><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.13889em">P</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:.7667em;vertical-align:-.0833em"></span><span class="mord mathnormal" style="margin-right:.13889em">P</span><span class="mspace" style="margin-right:.2222em"></span><span class="mbin">−</span><span class="mspace" style="margin-right:.2222em"></span></span><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal">L</span></span></span></span></span></eqn></section></p> <p>Wie auch in der Abbildung gut erkennbar ist, entspricht der Reflexionsvektor <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi></mrow><annotation encoding="application/x-tex">R</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.00773em">R</span></span></span></span></eq> der Summe aus der Lichtrichtung <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi></mrow><annotation encoding="application/x-tex">L</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal">L</span></span></span></span></eq> und zwei Mal <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi></mrow><annotation encoding="application/x-tex">S</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.05764em">S</span></span></span></span></eq>. <section><eqn><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>R</mi><mo>=</mo><mi>L</mi><mo>+</mo><mn>2</mn><mo>⋅</mo><mi>S</mi></mrow><annotation encoding="application/x-tex">R = L + 2\cdot S</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.00773em">R</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:.7667em;vertical-align:-.0833em"></span><span class="mord mathnormal">L</span><span class="mspace" style="margin-right:.2222em"></span><span class="mbin">+</span><span class="mspace" style="margin-right:.2222em"></span></span><span class="base"><span class="strut" style="height:.6444em"></span><span class="mord">2</span><span class="mspace" style="margin-right:.2222em"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:.2222em"></span></span><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.05764em">S</span></span></span></span></span></eqn></section> Damit gilt <section><eqn><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>R</mi><mo>=</mo><mi>L</mi><mo>+</mo><mn>2</mn><mo>⋅</mo><mo stretchy="false">(</mo><mi>P</mi><mo>−</mo><mi>L</mi><mo stretchy="false">)</mo><mo>=</mo><mn>2</mn><mo>⋅</mo><mi>P</mi><mo>−</mo><mi>L</mi><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">R = L + 2\cdot (P-L) = 2\cdot P - L.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.00773em">R</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:.7667em;vertical-align:-.0833em"></span><span class="mord mathnormal">L</span><span class="mspace" style="margin-right:.2222em"></span><span class="mbin">+</span><span class="mspace" style="margin-right:.2222em"></span></span><span class="base"><span class="strut" style="height:.6444em"></span><span class="mord">2</span><span class="mspace" style="margin-right:.2222em"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:.2222em"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-.25em"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:.13889em">P</span><span class="mspace" style="margin-right:.2222em"></span><span class="mbin">−</span><span class="mspace" style="margin-right:.2222em"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-.25em"></span><span class="mord mathnormal">L</span><span class="mclose">)</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:.6444em"></span><span class="mord">2</span><span class="mspace" style="margin-right:.2222em"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:.2222em"></span></span><span class="base"><span class="strut" style="height:.7667em;vertical-align:-.0833em"></span><span class="mord mathnormal" style="margin-right:.13889em">P</span><span class="mspace" style="margin-right:.2222em"></span><span class="mbin">−</span><span class="mspace" style="margin-right:.2222em"></span></span><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal">L</span><span class="mord">.</span></span></span></span></span></eqn></section> Der Vektor <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi></mrow><annotation encoding="application/x-tex">P</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.13889em">P</span></span></span></span></eq> lässt sich wiederum durch Projektion von <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi></mrow><annotation encoding="application/x-tex">L</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal">L</span></span></span></span></eq> auf <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.10903em">N</span></span></span></span></eq> bestimmen. Den Kosinus von Theta können wir dabei mit dem Skalarprodukt aus <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.10903em">N</span></span></span></span></eq> und <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi></mrow><annotation encoding="application/x-tex">L</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal">L</span></span></span></span></eq> bestimmen. <section><eqn><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>P</mi><mo>=</mo><mi>N</mi><mo>⋅</mo><mi>cos</mi><mo>⁡</mo><mi>θ</mi><mo>=</mo><mi>N</mi><mo>⋅</mo><mo stretchy="false">⟨</mo><mi>N</mi><mo separator="true">,</mo><mi>L</mi><mo stretchy="false">⟩</mo></mrow><annotation encoding="application/x-tex">P = N\cdot \cos \theta = N \cdot \langle N, L\rangle</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.13889em">P</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.10903em">N</span><span class="mspace" style="margin-right:.2222em"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:.2222em"></span></span><span class="base"><span class="strut" style="height:.6944em"></span><span class="mop">cos</span><span class="mspace" style="margin-right:.1667em"></span><span class="mord mathnormal" style="margin-right:.02778em">θ</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.10903em">N</span><span class="mspace" style="margin-right:.2222em"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:.2222em"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-.25em"></span><span class="mopen">⟨</span><span class="mord mathnormal" style="margin-right:.10903em">N</span><span class="mpunct">,</span><span class="mspace" style="margin-right:.1667em"></span><span class="mord mathnormal">L</span><span class="mclose">⟩</span></span></span></span></span></eqn></section> Wir erhalten also als Formel für die Reflexionsrichtung <section><eqn><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>R</mi><mo>=</mo><mn>2</mn><mo>⋅</mo><mo stretchy="false">(</mo><mi>N</mi><mo>⋅</mo><mo stretchy="false">⟨</mo><mi>N</mi><mo separator="true">,</mo><mi>L</mi><mo stretchy="false">⟩</mo><mo stretchy="false">)</mo><mo>−</mo><mi>L</mi></mrow><annotation encoding="application/x-tex">R = 2\cdot(N\cdot\langle N, L\rangle) - L</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.00773em">R</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:.6444em"></span><span class="mord">2</span><span class="mspace" style="margin-right:.2222em"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:.2222em"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-.25em"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:.10903em">N</span><span class="mspace" style="margin-right:.2222em"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:.2222em"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-.25em"></span><span class="mopen">⟨</span><span class="mord mathnormal" style="margin-right:.10903em">N</span><span class="mpunct">,</span><span class="mspace" style="margin-right:.1667em"></span><span class="mord mathnormal">L</span><span class="mclose">⟩)</span><span class="mspace" style="margin-right:.2222em"></span><span class="mbin">−</span><span class="mspace" style="margin-right:.2222em"></span></span><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal">L</span></span></span></span></span></eqn></section></p> <table> <thead> <tr> <th style="text-align:center"><img src="../webp-generated/specular_formula2_f8b4.webp" alt="camera-model"></th> </tr> </thead> <tbody> <tr> <td style="text-align:center">Berechnung der Spiegelrichtung</td> </tr> </tbody> </table> <ul> <li> <p>wie bekommen wir daraus Farben?</p> </li> <li> <p>half vector</p> </li> </ul> <div align="center" id="canvasContainer" style="position:relative;width:min(760px,100%)" width="760" height="340"> <svg class="zdog-canvas-half-vector" width="760" height="340"> <div id="theta" style="position:absolute;top:0"><img src="../webp-generated/theta_3b03.png" width="35"></div> <div id="alpha" style="position:absolute;top:0"><img src="../webp-generated/alpha_7f38.png" width="30"></div> <div id="normal" style="position:absolute;top:0;font-weight:900"><b>N</b></div> <div id="light" style="position:absolute;top:0;font-weight:900;color:#d62ea7"><b>L</b></div> <div id="reflection" style="position:absolute;top:0;font-weight:900;color:#d62ea7"><b>R</b></div> <div id="view" style="position:absolute;top:0;font-weight:900;color:#0ceedb"><b>V</b></div> </svg> </div> </div></div></section></div><script>/*!
+<!DOCTYPE html><html lang="en"><meta http-equiv="x-ua-compatible" content="ie=edge"><meta charset="utf-8"><meta name="viewport" content="width=device-widthinitial-scale=1"><title>CG-Session</title><meta name="description" content="ToDo"><meta name="robots" content="index, follow"><link rel="stylesheet" href="../styles.css"><noscript><style class="js-only">{ display: none; }</style></noscript><body id="page-top" data-spy="scroll"><section class="container" id="lecture"><div class="row text-center"><div class="col-12"><div class="title"><img class="img-fluid" src="../webp-generated/fire-life-is-strange_f143.webp"><h2><strong>Beleuchtung</strong> und <strong>Schattierung</strong></h2></div><a href="../index.html">Zurück zu <strong>Vorlesungsübersicht</strong></a></div></div></section><div class="container"><div class="row"><div class="offset-1 col-10"><div class="alert alert-primary"><p>In dieser Einheit wird gezeigt, wie virtuelle Kameras in der Theorie und in der praktischen Umsetzung funktionieren und wie effizient 3D Szenen aus wohldefinierten Blickwinkeln dargestellt werden können.</p><hr><h4>Nach dieser Lehreinheit solltest Du&hellip;</h4><ul class="list-unstyled"><li>&hellip;die Bedeutung von Beleuchtung für die Computergrafik kennen,</li><li>&hellip;die Unterschiede zwischen lokalen und globalen Beleuchtungsmodellen erklären können, (shading und shadowing),</li><li>&hellip;verschiedene Lichtquellen-Modelle und deren Unterschiede sowie Anwendungszwecke zuordnen können</li><li>&hellip;die Bestandteile des phong-Beleuchtungsmodells kennen.</li><li>&hellip;Schattierungsverfahren kennen.</li></ul></div></div></div><div class="row"><div class="offset-1 col-10"><div class="alert alert-secondary"><h4>Vorwissen</h4></div></div></div></div><section class="container"><div class="row"><div class="offset-1 col-10"><h3>Motivation und Problemstellung</h3> <p>Ziel dieser Einheit soll es sein, zu verstehen, welche Rolle Beleuchtung in der Computergrafik spielt und wie simple lokale Beleuchtungsverfahren funktionieren. Bevor wir uns jedoch genauer mit der Umsetzung beschäftigen, müssen wir uns zunächst erarbeiten, welche Eigenschaften virtuelle Beleuchtung auszeichnen.</p> <p>Wir wollen uns dafür ein paar Aufnahmen aus verschiedenen Spielen ansehen. Welche Eigenschaften, die ein Beleuchtungsmodell charakterisieren, kannst du daraus ableiten?</p> <table> <thead> <tr> <th style="text-align:center"><img src="../webp-generated/fire-life-is-strange_f143.webp" alt="camera-model"></th> </tr> </thead> <tbody> <tr> <td style="text-align:center">🧩 Beispielscreenshots</td> </tr> </tbody> </table> <textarea class="notes" rows="8" placeholder="Mach Dir ein paar Notizen wenn du magst."></textarea> <p>Wie auch auf den Screenshots zu erkennen, ist Beleuchtung ein zentrales Ausdrucksmittel und für 3D-Wahrnehmung wichtig. Sie vermittelt Betrachter*innen Informationen über Oberflächenbeschaffenheit und Form von Objekten und trägt dadurch signifikant dazu bei, einen räumlichen Eindruck zu erzeugen.</p> <p>Um diese Informationen zu vermitteln, muss die Belechtung der Szene also in irgendeiner Form von der Oberfläche abhängen, also insbesondere ihrer <strong>Ausrichtung</strong> sowie ihrem <strong>Material und Struktur</strong>. So würde z.B. ein Ball aus Gummi bei gleicher Beleuchtung anders aussehen als eine Kugel aus Metall.</p> <p>Dabei sind verschiedene Beleuchtungseffekte zu beobachten: Zum einen sind Flächen stärker erleuchtet, je mehr sie dem Licht zugewandt sind, unabhängig von der Kameraposition. Dieser Bestandteil der Beleuchtung nennt sich <strong>diffuse</strong> Beleuchtung. Zum anderen sind auch Glanzpunkte zu erkennen, deren Position sich in Abhängigkeit von der Blickrichtung verändert. Diese <em>highlights</em> sind der <strong>spekulare</strong> Anteil der Beleuchtung.</p> <p>In der Computergrafik I möchten wir zunächst darauf eingehen, wie diese beiden Effekte umgesetzt werden können, um grundlegend plausible Beleuchtung zu erzeugen, die von Oberflächenausrichtung und -material abhängig ist. Natürlich gehört für eine realistische Beleuchtung aber noch einiges mehr dazu. Weiterführende Effekte, die in den Screenshots zu erkennen sind, sind z.B. <strong>indirekte Beleuchtung</strong> und <strong>Schattenwurf</strong>.</p> <p><strong>Direkte vs. Indirekte Beleuchtung</strong> <br> Direkte Beleuchtung bezeichnet alle Beleuchtungseffekte, die nur Licht berücksichtigen, das auf direktem Wege auf die Oberfläche trifft. U.a. werden Reflexion oder Refraktion von Licht durch andere Objekte zwischen der Oberfläche und der Lichtquelle nicht berücksichtigt. Wird beispielsweise eine weiße Wand angestrahlt, würde mit einer physikalisch korrekten Darstellung ein Teil des reflektierten Lichts andere Objekte der Szene erleuchten. Dieser Effekt kann durch Beleuchtungsmodelle mit rein direkter Beleuchtung nicht abgebildet werden.</p> <table> <thead> <tr> <th style="text-align:center"><img src="../webp-generated/cornell_660a.webp" alt="camera-model"></th> </tr> </thead> <tbody> <tr> <td style="text-align:center">🧩 Cornell-Box direct vs indirect: Platzhalter</td> </tr> </tbody> </table> <p><strong>Schattierung vs. Schattenwurf</strong> <br> Während es bei der Schattierung darum geht, die Oberflächenfarbe gemäß Material und Ausrichtung gegenüber Lichtquelle und Kamera anzupassen, meint Schattenwurf das Entstehen von Schatten durch Hindernisse zwischen Oberfläche und Lichtquelle.</p> <table> <thead> <tr> <th style="text-align:center"><img src="../webp-generated/shadowing_d737.webp" alt="camera-model"></th> </tr> </thead> <tbody> <tr> <td style="text-align:center">🧩 Shading/Shadowing</td> </tr> </tbody> </table> <p>Aber was macht diese Effekte so viel schwieriger umzusetzen als direkte Beleuchtung ohne Schattenwurf? Das liegt daran, welche Informationen jeweils benötigt werden, um das Ergebnis zu berechnen. Für direkte Beleuchtung ohne Schatten reicht es aus, die Oberflächennormale und die Positionen von Lichtquellen, Kamera und dem aktuellen Punkt auf der Oberfläche zu kennen. Für indirekte Beleuchtung und Schattenwurf hingegen wird Information über <em>alle</em> Objekte der Szene benötigt, die sich in irgendeiner Weise auf die Beleuchtung der aktuellen Oberfläche auswirken könnten. Zwischen all diesen Objekten kann das Licht zudem potenziell beliebig oft hin und her reflektiert werden, was die Beleuchtungsberechnung deutlich komplexer und rechenintensiver macht.</p> <p>Es gibt natürlich viele clevere Ansätze, um auch mit weniger Rechenkapazität einige Aspekte komplexerer Beleuchtung umzusetzen. Einige davon, insbesondere Techniken zum Annähern von Schatten, werden in Computergrafik II thematisiert.</p> <p>Zusammenfassung:</p> <ul> <li>Beleuchtung ist wichtig</li> <li>Beleuchtung vermittelt Informationen über die Szene -&gt; insbesondere Position, Ausrichtung und Material von Oberflächen</li> <li>es gibt diffuse und spekulare Beleuchtung</li> <li>direkte Beleuchtung ist leichter als indirekte</li> <li>Schattierung ist leichter als Schattenwurf</li> </ul> </div></div></section><section><img class="img-fluid" src="../webp-generated/transition_8204.webp"></section><div class="container-dark"><section class="container no-padding"><div class="row"><div class="offset-1 col-10"><h3>Physikalische Grundlagen</h3> <p><em>Für eine detailliertere Einführung in die physikalischen Grundlagen des Lichts empfehlen wir die Seite von Bartosz Ciechanowski <strong>&lt;insert link&gt;</strong>. Für diese Einheit werden wir jedoch ein einfaches <strong>Strahlenmodell</strong> annehmen.</em></p> <p>Wir nehmen die Welt um uns darüber wahr, wie Licht mit ihr interagiert. Wir können Objekte nur sehen, wenn sie mit Licht in Kontakt kommen und dieses entweder in Richtung Betrachter*in zurückwerfen (<strong>Reflexion</strong>), durchlassen (<strong>Transmission</strong>) oder verschlucken (<strong>Absorption</strong>). Diese Erscheinungen nehmen Einfluss darauf wie hell oder dunkel ein Objekt wahrgenommen wird und bewirken dadurch Schattierung und Schattenwurf. Damit bilden sie auch die Grundlage für unser Beleuchtungsmodell.</p> <table> <thead> <tr> <th style="text-align:center"><img src="../webp-generated/ray_types_73a5.webp" alt="camera-model"></th> </tr> </thead> <tbody> <tr> <td style="text-align:center">Strahlentypen</td> </tr> </tbody> </table> <p>Weitere Phänomene, die bei der Interaktion von Licht mit Objekten einer Szene auftreten können, sind z.B. Lichtbeugung und -brechung sowie Interferenzerscheinungen, diese spielen jedoch in den Lichtausbreitungsmodellen der Computergrafik in der Regel eine untergeordnete Rolle. Den Hauptfaktor bildet die <strong>Reflexion</strong>.</p> <h3>Reflexion</h3> <p>Wie bereits erwähnt unterscheiden wir zwischen <strong>diffuser</strong> und <strong>spekularer</strong> Reflexion, die zusammen unser (sehr simples) Beleuchtungsmodell bilden. Welche physikalischen Grundlagen bzw. welche Modellannahmen stecken dahinter?</p> <h4>Diffuse Reflexion</h4> <p>Als diffuse Reflexion wird der Effekt bezeichnet, dass Flächen heller wirken, je mehr sie dem Licht zugewandt sind. Sie ist vollständig unabhängig vom Betrachtungswinkel und nur von Oberflächenausrichtung und Lichtposition bzw. Lichtrichtung abhängig.</p> <p>Es steht die Modellannahme dahinter, dass das auf die Oberfläche auftreffende Licht gleichmäßig in alle Richtungen reflektiert wird. Dieses Phänomen ist stärker, je rauer die Oberfläche ist.</p> <table> <thead> <tr> <th style="text-align:center"><img src="../webp-generated/diffuse_e892.webp" alt="camera-model"></th> </tr> </thead> <tbody> <tr> <td style="text-align:center">Diffuse Reflexion - modelliertes Verhalten</td> </tr> </tbody> </table> <p>Physikalisch lässt sich dieses Phänomen damit begründen, dass raue Flächen viele kleine Unebenheiten beinhalten. Wir können uns die Wirkung einer Lichtquelle als viele dicht nebeneinanderliegende Lichtstrahlen vorstellen (<strong>modellieren?</strong>).- Treffen diese auf die Fläche, werden sie in praktisch zufällige Richtungen reflektiert. Durch dieses Verhalten der einzelnen Lichtstrahlen wird das Licht insgesamt annähernd gleichmäßig in alle verschiedenen Richtungen reflektiert.</p> <table> <thead> <tr> <th style="text-align:center"><img src="../webp-generated/diffuse_zoom_c224.webp" alt="camera-model"></th> </tr> </thead> <tbody> <tr> <td style="text-align:center">Reflexion an Unebenheiten in der Oberfläche</td> </tr> </tbody> </table> <p>Wie viel Licht genau in Abhängigkeit vom Lichteinfallswinkel reflektiert wird, lässt sich mithilfe des <strong>Lambertschen Gesetzes</strong> berechnen. Dieses besagt, dass die reflektierte Lichtmenge, also die Lichtintensität <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi></mrow><annotation encoding="application/x-tex">I</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.07847em">I</span></span></span></span></eq>, proportional zum Kosinus des Winkels zwischen der <strong>(invertierten)</strong> Einfallsrichtung des Lichtes und der Flächennormale ist.</p> <table> <thead> <tr> <th style="text-align:center"><img src="../webp-generated/lambert_0e6d.webp" alt="camera-model"></th> </tr> </thead> <tbody> <tr> <td style="text-align:center">Lambertsches Gesetz</td> </tr> </tbody> </table> <p>Dieser Zusammenhang lässt sich auch aus folgender Überlegung herleiten. Wir können uns das Licht als ein Bündel paralleler Lichtstrahlen mit gleichem Abstand vorstellen. Je größer der Winkel der Lichtstrahlen zur Flächennormale ist, umso größer ist der Abstand, mit dem die Lichtstrahlen auf der Oberfläche aufkommen. Die gleiche Fläche wird also bei einem größeren Winkel von weniger Lichtstrahlen getroffen.</p> <div align="center"> <canvas class="zdog-canvas" width="760" height="340"></canvas> </div> <div align="center"> <img alt="Nach links und rechts ziehen, um Winkel zu ändern" src="../webp-generated/drag_53ec.png" height="50"> </div> <br> <p>Damit können wir also die Abhängigkeit der diffusen Reflexion von sowohl der Oberflächenbeschaffenheit als auch von der Lichtrichtung begründen.</p> <h4>Spekulare Reflexion</h4> <p>Im Gegensatz zur Diffusen Reflexion ist die Spekulare Reflexion (auch <em>spiegelnde Reflexion</em> oder <em>Spiegellicht</em>) nicht nur von der Oberflächenbeschaffenheit und Lichtrichtung, sondern auch der Blickrichtung abhängig.</p> <p>Hier ist die Modellannahme, dass sich das Licht (im Gegensatz zur gleichmäßigen diffusen Reflexion) ungleichmäßig und besonders konzentriert in eine Richtung spiegelt. Daraus ergibt sich auch die Abhängigkeit von der Blickrichtung: Der Punkt erscheint umso heller, je ähnlicher Blick- und Spiegelrichtung sind.</p> <p>Spekulare Reflexion ist stärker auf sehr glatten (z.B. polierten) Oberflächen. Die Oberflächenbeschaffenheit bestimmt dabei sowohl, wie stark die spekulare Reflexion ist, als auch wie schnell die Helligkeit mit zunehmender Abweichung zwischen Blick- und Spiegelrichtung abnimmt.</p> <table> <thead> <tr> <th style="text-align:center"><img src="../webp-generated/specular_0733.webp" alt="camera-model"></th> </tr> </thead> <tbody> <tr> <td style="text-align:center">Spekulare Reflexion</td> </tr> </tbody> </table> <p>Sei <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.4306em"></span><span class="mord mathnormal" style="margin-right:.0037em">α</span></span></span></span></eq> der Winkel zwischen Blick-und Reflexionsrichtung. Dann ist die Intensität der Spekularen Reflexion proportional zu <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mi>o</mi><msup><mi>s</mi><mi>n</mi></msup><mi>α</mi></mrow><annotation encoding="application/x-tex">cos^n \alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6644em"></span><span class="mord mathnormal">co</span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:.6644em"><span style="top:-3.063em;margin-right:.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:.0037em">α</span></span></span></span></eq>, wobei <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.4306em"></span><span class="mord mathnormal">n</span></span></span></span></eq> materialspezifisch ist.</p> <table> <thead> <tr> <th style="text-align:center"><img src="../webp-generated/specular_formula_d654.webp" alt="camera-model"></th> </tr> </thead> <tbody> <tr> <td style="text-align:center">Spekulare Reflexion</td> </tr> </tbody> </table> <p>Die Spiegelrichtung <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi></mrow><annotation encoding="application/x-tex">R</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.00773em">R</span></span></span></span></eq> liegt in einer Ebene mit <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi></mrow><annotation encoding="application/x-tex">L</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal">L</span></span></span></span></eq> und <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.10903em">N</span></span></span></span></eq> und der Winkel zwischen <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi></mrow><annotation encoding="application/x-tex">L</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal">L</span></span></span></span></eq> und <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.10903em">N</span></span></span></span></eq> ist identisch zu dem Winkel zwischen <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.10903em">N</span></span></span></span></eq> und <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi></mrow><annotation encoding="application/x-tex">R</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.00773em">R</span></span></span></span></eq>. Mit diesen Informationen können wir eine Berechnungformel für die Spiegelrichtung herleiten:</p> <p>Sei <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi></mrow><annotation encoding="application/x-tex">P</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.13889em">P</span></span></span></span></eq> die auf die Normale <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.10903em">N</span></span></span></span></eq> projizierte Lichtrichtung <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi></mrow><annotation encoding="application/x-tex">L</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal">L</span></span></span></span></eq>. Dann entspricht der Vektor <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi></mrow><annotation encoding="application/x-tex">S</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.05764em">S</span></span></span></span></eq> aus der folgenden Darstellung der Differenz aus <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi></mrow><annotation encoding="application/x-tex">P</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.13889em">P</span></span></span></span></eq> und <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi></mrow><annotation encoding="application/x-tex">L</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal">L</span></span></span></span></eq>. <section><eqn><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>S</mi><mo>=</mo><mo>−</mo><mi>L</mi><mo>+</mo><mi>P</mi><mo>=</mo><mi>P</mi><mo>−</mo><mi>L</mi></mrow><annotation encoding="application/x-tex">S = -L + P = P - L</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.05764em">S</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:.7667em;vertical-align:-.0833em"></span><span class="mord">−</span><span class="mord mathnormal">L</span><span class="mspace" style="margin-right:.2222em"></span><span class="mbin">+</span><span class="mspace" style="margin-right:.2222em"></span></span><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.13889em">P</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:.7667em;vertical-align:-.0833em"></span><span class="mord mathnormal" style="margin-right:.13889em">P</span><span class="mspace" style="margin-right:.2222em"></span><span class="mbin">−</span><span class="mspace" style="margin-right:.2222em"></span></span><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal">L</span></span></span></span></span></eqn></section></p> <p>Wie auch in der Abbildung gut erkennbar ist, entspricht der Reflexionsvektor <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi></mrow><annotation encoding="application/x-tex">R</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.00773em">R</span></span></span></span></eq> der Summe aus der Lichtrichtung <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi></mrow><annotation encoding="application/x-tex">L</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal">L</span></span></span></span></eq> und zwei Mal <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi></mrow><annotation encoding="application/x-tex">S</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.05764em">S</span></span></span></span></eq>. <section><eqn><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>R</mi><mo>=</mo><mi>L</mi><mo>+</mo><mn>2</mn><mo>⋅</mo><mi>S</mi></mrow><annotation encoding="application/x-tex">R = L + 2\cdot S</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.00773em">R</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:.7667em;vertical-align:-.0833em"></span><span class="mord mathnormal">L</span><span class="mspace" style="margin-right:.2222em"></span><span class="mbin">+</span><span class="mspace" style="margin-right:.2222em"></span></span><span class="base"><span class="strut" style="height:.6444em"></span><span class="mord">2</span><span class="mspace" style="margin-right:.2222em"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:.2222em"></span></span><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.05764em">S</span></span></span></span></span></eqn></section> Damit gilt <section><eqn><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>R</mi><mo>=</mo><mi>L</mi><mo>+</mo><mn>2</mn><mo>⋅</mo><mo stretchy="false">(</mo><mi>P</mi><mo>−</mo><mi>L</mi><mo stretchy="false">)</mo><mo>=</mo><mn>2</mn><mo>⋅</mo><mi>P</mi><mo>−</mo><mi>L</mi><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">R = L + 2\cdot (P-L) = 2\cdot P - L.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.00773em">R</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:.7667em;vertical-align:-.0833em"></span><span class="mord mathnormal">L</span><span class="mspace" style="margin-right:.2222em"></span><span class="mbin">+</span><span class="mspace" style="margin-right:.2222em"></span></span><span class="base"><span class="strut" style="height:.6444em"></span><span class="mord">2</span><span class="mspace" style="margin-right:.2222em"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:.2222em"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-.25em"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:.13889em">P</span><span class="mspace" style="margin-right:.2222em"></span><span class="mbin">−</span><span class="mspace" style="margin-right:.2222em"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-.25em"></span><span class="mord mathnormal">L</span><span class="mclose">)</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:.6444em"></span><span class="mord">2</span><span class="mspace" style="margin-right:.2222em"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:.2222em"></span></span><span class="base"><span class="strut" style="height:.7667em;vertical-align:-.0833em"></span><span class="mord mathnormal" style="margin-right:.13889em">P</span><span class="mspace" style="margin-right:.2222em"></span><span class="mbin">−</span><span class="mspace" style="margin-right:.2222em"></span></span><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal">L</span><span class="mord">.</span></span></span></span></span></eqn></section> Der Vektor <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi></mrow><annotation encoding="application/x-tex">P</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.13889em">P</span></span></span></span></eq> lässt sich wiederum durch Projektion von <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi></mrow><annotation encoding="application/x-tex">L</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal">L</span></span></span></span></eq> auf <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.10903em">N</span></span></span></span></eq> bestimmen. Den Kosinus von Theta können wir dabei mit dem Skalarprodukt aus <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.10903em">N</span></span></span></span></eq> und <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi></mrow><annotation encoding="application/x-tex">L</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal">L</span></span></span></span></eq> bestimmen. <section><eqn><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>P</mi><mo>=</mo><mi>N</mi><mo>⋅</mo><mi>cos</mi><mo>⁡</mo><mi>θ</mi><mo>=</mo><mi>N</mi><mo>⋅</mo><mo stretchy="false">⟨</mo><mi>N</mi><mo separator="true">,</mo><mi>L</mi><mo stretchy="false">⟩</mo></mrow><annotation encoding="application/x-tex">P = N\cdot \cos \theta = N \cdot \langle N, L\rangle</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.13889em">P</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.10903em">N</span><span class="mspace" style="margin-right:.2222em"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:.2222em"></span></span><span class="base"><span class="strut" style="height:.6944em"></span><span class="mop">cos</span><span class="mspace" style="margin-right:.1667em"></span><span class="mord mathnormal" style="margin-right:.02778em">θ</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.10903em">N</span><span class="mspace" style="margin-right:.2222em"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:.2222em"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-.25em"></span><span class="mopen">⟨</span><span class="mord mathnormal" style="margin-right:.10903em">N</span><span class="mpunct">,</span><span class="mspace" style="margin-right:.1667em"></span><span class="mord mathnormal">L</span><span class="mclose">⟩</span></span></span></span></span></eqn></section> Wir erhalten also als Formel für die Reflexionsrichtung <section><eqn><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>R</mi><mo>=</mo><mn>2</mn><mo>⋅</mo><mo stretchy="false">(</mo><mi>N</mi><mo>⋅</mo><mo stretchy="false">⟨</mo><mi>N</mi><mo separator="true">,</mo><mi>L</mi><mo stretchy="false">⟩</mo><mo stretchy="false">)</mo><mo>−</mo><mi>L</mi></mrow><annotation encoding="application/x-tex">R = 2\cdot(N\cdot\langle N, L\rangle) - L</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.00773em">R</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:.6444em"></span><span class="mord">2</span><span class="mspace" style="margin-right:.2222em"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:.2222em"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-.25em"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:.10903em">N</span><span class="mspace" style="margin-right:.2222em"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:.2222em"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-.25em"></span><span class="mopen">⟨</span><span class="mord mathnormal" style="margin-right:.10903em">N</span><span class="mpunct">,</span><span class="mspace" style="margin-right:.1667em"></span><span class="mord mathnormal">L</span><span class="mclose">⟩)</span><span class="mspace" style="margin-right:.2222em"></span><span class="mbin">−</span><span class="mspace" style="margin-right:.2222em"></span></span><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal">L</span></span></span></span></span></eqn></section></p> <table> <thead> <tr> <th style="text-align:center"><img src="../webp-generated/specular_formula2_f8b4.webp" alt="camera-model"></th> </tr> </thead> <tbody> <tr> <td style="text-align:center">Berechnung der Spiegelrichtung</td> </tr> </tbody> </table> <ul> <li> <p>wie bekommen wir daraus Farben?</p> </li> <li> <p>half vector</p> </li> </ul> <div align="center" id="canvasContainer" style="position:relative;width:min(760px,100%)" width="760" height="340"> <svg class="zdog-canvas-half-vector" width="760" height="340"> <div id="theta" style="position:absolute;top:0"><img src="../webp-generated/theta_3b03.png" width="35"></div> <div id="alpha" style="position:absolute;top:0"><img src="../webp-generated/alpha_7f38.png" width="30"></div> <div id="normal" style="position:absolute;top:0;font-weight:900"><b>N</b></div> <div id="light" style="position:absolute;top:0;font-weight:900;color:#d62ea7"><b>L</b></div> <div id="reflection" style="position:absolute;top:0;font-weight:900;color:#d62ea7"><b>R</b></div> <div id="view" style="position:absolute;top:0;font-weight:900;color:#0ceedb"><b>V</b></div> <div id="alphaLabel" style="position:absolute;top:0;font-weight:700;color:#0ceedb"><img src="../webp-generated/alpha_7f38.png" width="25"> = <div id="alphaValue" style="display:inline;color:#fff">123</div>°</div> </svg> </div> <div align="center" id="canvasHalfVectorContainer" style="position:relative;width:min(760px,100%)" width="760" height="340"> <svg class="zdog-canvas-half-vector2" width="760" height="340"> <div id="theta2" style="position:absolute;top:0"><img src="../webp-generated/theta_3b03.png" width="35"></div> <div id="alpha2" style="position:absolute;top:0"><img src="../webp-generated/alpha_7f38.png" width="30"></div> <div id="normal2" style="position:absolute;top:0;font-weight:900"><b>N</b></div> <div id="light2" style="position:absolute;top:0;font-weight:900;color:#d62ea7"><b>L</b></div> <div id="reflection2" style="position:absolute;top:0;font-weight:900;color:#d62ea7"><b>R</b></div> <div id="view2" style="position:absolute;top:0;font-weight:900;color:#0ceedb"><b>V</b></div> <div id="halfVector" style="position:absolute;top:0;font-weight:900;color:#06776b"><b>H</b></div> <div id="alphaLabel2" style="position:absolute;top:0;font-weight:700;color:#0ceedb"><img src="../webp-generated/alpha_7f38.png" width="25"> = <div id="alphaValue2" style="display:inline;color:#fff">123</div>°</div> </svg> </div> </div></div></section></div><script>/*!
  * Zdog v1.1.3
  * Round, flat, designer-friendly pseudo-3D engine
  * Licensed MIT
@@ -11,6 +11,10 @@ let illo2 = new Zdog.Illustration({
     element: '.zdog-canvas-half-vector',
     dragRotate: false,
   });
+let illo3 = new Zdog.Illustration({
+  element: '.zdog-canvas-half-vector2',
+  dragRotate: false,
+});
   
 let rgbToString = function(r, g, b) {
   return "rgb("+r.toString() +","+g.toString()+","+b.toString()+")";
@@ -98,14 +102,14 @@ let ground  = new Zdog.Shape({
 });
 
 
-let canvasCoordinates = function(x,y) {
-  let canvasRect = document.getElementsByClassName("zdog-canvas-half-vector")[0].getBoundingClientRect();
+let canvasCoordinates = function(x,y, name = "zdog-canvas-half-vector") {
+  let canvasRect = document.getElementsByClassName(name)[0].getBoundingClientRect();
   let height = canvasRect.height;
   let width = canvasRect.width;
   return{x: (x-canvasRect.x - width/2.0), y:-( y-canvasRect.y-height/2.0) + startY};
 };
-let htmlCoordinates = function(x,y) {
-  let canvasRect = document.getElementsByClassName("zdog-canvas-half-vector")[0].getBoundingClientRect();
+let htmlCoordinates = function(x,y, name = "zdog-canvas-half-vector") {
+  let canvasRect = document.getElementsByClassName(name)[0].getBoundingClientRect();
   let height = canvasRect.height;
   let width = canvasRect.width;
   return{x: (x + width/2.0), y:-y + startY+ height/2.0 };
@@ -148,37 +152,18 @@ let reflectionTriangle = lightTriangle.copy();
 // view light ray
 let viewLine = lightLine.copy();
 let viewTriangle = lightTriangle.copy();
+// halfVector ray
+let halfVectorLine = lightLine.copy({addTo:illo3});
+let halfVectorTriangle = lightTriangle.copy({addTo:illo3});
 
-let updateLightLine = function() {
-  lightLine.path = getPath(origin, alpha, l);
-  lightLine.updatePath();
+let arc = lightLine.copy({closed: false, color:hslaToString(gColor0[0],gColor0[1],gColor0[2], 1.0)});
+let arc2 = lightLine.copy({closed: false, color:hslaToString(gColor0[0],gColor0[1],gColor0[2], 1.0)});
+let arcView = lightLine.copy({closed: false, color: hslaToString(gColor[0],gColor[1],gColor[2], 1.0)});
 
-  lightTriangle.path = getTrianglePoints(vAdd(lightLine.path[1], getPathDirection(alpha, 10)), alpha);
-  lightTriangle.updatePath();
-};
-let updateReflectionLine = function() {
-  reflectionLine.path = getPath(origin, - alpha, l);
-  reflectionLine.updatePath();
 
-  reflectionTriangle.path = getTrianglePoints(vAdd(reflectionLine.path[1], getPathDirection(-alpha, 10)), -alpha);
-  reflectionTriangle.updatePath();
-};
-let updateViewLine = function() {
-  viewLine.path = getPath(origin, alpha2, l2)
-  viewLine.updatePath();
-
-  viewTriangle.path = getTrianglePoints(vAdd(viewLine.path[1], getPathDirection(alpha2, 10)), alpha2);
-  viewTriangle.updatePath();
-}
-
-updateLightLine();
-updateReflectionLine();
-updateViewLine();
-
+// color initialization
 let lineColor = () => [255, 15, 200];
 let lineColor2 = () => [14, 223, 241];
-
-  
 let magenta = lineColor();
 let cyan = lineColor2();
 let magentaString = rgbToString(magenta[0], magenta[1], magenta[2]);
@@ -190,10 +175,70 @@ reflectionLine.color = magentaString;
 reflectionTriangle.color = magentaString;
 viewLine.color = cyanString;
 viewTriangle.color = cyanString;
+halfVectorLine.color = hslaToString(gColor0[0],gColor0[1],gColor0[2]*0.37, 1.0);;
+halfVectorTriangle.color = hslaToString(gColor0[0],gColor0[1],gColor0[2]*0.37, 1.0);;
 
-let arc = lightLine.copy({closed: false, color:hslaToString(gColor0[0],gColor0[1],gColor0[2], 1.0)});
-let arc2 = lightLine.copy({closed: false, color:hslaToString(gColor0[0],gColor0[1],gColor0[2], 1.0)});
-let arcView = lightLine.copy({closed: false, color: hslaToString(gColor[0],gColor[1],gColor[2], 1.0)});
+
+// create second illustration----------------------------
+
+// TODO: find out how to do this right
+normal.copy({addTo: illo3});
+normalTip.copy({addTo: illo3});
+let groundH = ground.copy({addTo: illo3});
+ground2.copy({addTo: illo3});
+let lightLineH = lightLine.copy({addTo: illo3});
+let lightTriangleH = lightTriangle.copy({addTo: illo3});
+let reflectionLineH = reflectionLine.copy({addTo: illo3});
+let reflectionTriangleH = reflectionTriangle.copy({addTo: illo3});
+let viewLineH = viewLine.copy({addTo: illo3});
+let viewTriangleH = viewTriangle.copy({addTo: illo3});
+
+let arcH = arc.copy({addTo: illo3});
+let arc2H = arc2.copy({addTo: illo3});
+
+let arcViewH = arcView.copy({addTo: illo3});
+// --------------------------------------------------------
+
+let updateLightLine = function(line = lightLine, triangle = lightTriangle) {
+  line.path = getPath(origin, alpha, l);
+  line.updatePath();
+
+  triangle.path = getTrianglePoints(vAdd(line.path[1], getPathDirection(alpha, 10)), alpha);
+  triangle.updatePath();
+};
+let updateReflectionLine = function(line = reflectionLine, triangle = reflectionTriangle) {
+  line.path = getPath(origin, - alpha, l);
+  line.updatePath();
+
+  triangle.path = getTrianglePoints(vAdd(line.path[1], getPathDirection(-alpha, 10)), -alpha);
+  triangle.updatePath();
+};
+let updateViewLine = function(line = viewLine, triangle = viewTriangle) {
+  line.path = getPath(origin, alpha2, l2)
+  line.updatePath();
+
+  triangle.path = getTrianglePoints(vAdd(viewLine.path[1], getPathDirection(alpha2, 10)), alpha2);
+  triangle.updatePath();
+}
+let updatehalfVectorLine = function(line = lightLine, triangle = lightTriangle) {
+  let halfAngle = (alpha + alpha2) / 2.0;
+  halfVectorLine.path = getPath(origin, halfAngle, l)
+  halfVectorLine.updatePath();
+
+  halfVectorTriangle.path = getTrianglePoints(vAdd(halfVectorLine.path[1], getPathDirection(halfAngle, 10)), halfAngle);
+  halfVectorTriangle.updatePath();
+}
+
+let updateLines = function() {
+  updateLightLine();
+  updateLightLine(lightLineH, lightTriangleH);
+  updateReflectionLine();
+  updateReflectionLine(reflectionLineH, reflectionTriangleH);
+  updateViewLine();
+  updateViewLine(viewLineH, viewTriangleH);
+  updatehalfVectorLine();
+}
+updateLines();
 
 let getMirroredArc = function(path) {
   let p1 = path[0];
@@ -206,21 +251,7 @@ let getMirroredArc = function(path) {
   p2.x *= -1;
   return [p1, {bezier: [c1, c2, p2]}];
 }
-let getArcFromStuff0 = function(alpha, center, startY, radius, mirrored = false) {
-  let part = 1.7;
-  let point1 = {x:center , y:startY-radius};
-  let point2 = {x:center - Math.sin(Math.PI/2.0-alpha) * radius , y:startY - Math.cos(Math.PI/2.0 - alpha) * radius};
-  let middlePoint = {x:center - Math.tan(Math.PI/4.0 - alpha/2.0) * radius , y:startY - radius};
 
-  let vector1 = {x:(middlePoint.x - point1.x) / part, y:(middlePoint.y - point1.y)/part};
-  let vector2 = {x:(middlePoint.x - point2.x) / part, y:(middlePoint.y - point2.y)/part};
-
-  let controlPoint1 = vAdd(point1, vector1);
-  let controlPoint2 = vAdd(point2, vector2);
-
-  let path = [point1, {bezier:[controlPoint1,controlPoint2,point2]}];
-  return mirrored ? getMirroredArc(path) : path;
-}
 let getArcFromStuff = function(alpha1, alpha2, origin, radius, mirrored = false) {
   let part = 1.7;
   let point1 = vAdd(origin, getPathDirection(alpha1, radius));//vAdd(origin, p(0, -radius));
@@ -240,16 +271,22 @@ let getArcFromStuff = function(alpha1, alpha2, origin, radius, mirrored = false)
   let path = [point1, {bezier:[controlPoint1,controlPoint2,point2]}];
   return mirrored ? getMirroredArc(path) : path;
 }
-  let radiusView = 280;
+  let radiusView = 280 * zoom;
   let radius = 240;
 let updateBezierControlPoints = function() {
 
   arc.path = getArcFromStuff(0, alpha, p(center, startY), radius * zoom);
   arc2.path = getMirroredArc(JSON.parse(JSON.stringify(arc.path)));
-  arcView.path =  getArcFromStuff(alpha2, -alpha,p(center, startY), radiusView * zoom, false);
+  arcView.path =  getArcFromStuff(alpha2, -alpha,p(center, startY), radiusView, false);
+  arcH.path = arc.path;
+  arc2H.path = arc2.path;
+  arcViewH.path = getArcFromStuff(0, (alpha2 + alpha)/2.0,p(center, startY), radiusView, false);
   arc.updatePath();
   arc2.updatePath();
   arcView.updatePath();
+  arcH.updatePath();
+  arc2H.updatePath();
+  arcViewH.updatePath();
 }
 updateBezierControlPoints();
 
@@ -272,17 +309,38 @@ let normalLabel = document.getElementById("normal");
 let lightLabel = document.getElementById("light");
 let reflectionLabel = document.getElementById("reflection");
 let viewLabel = document.getElementById("view");
+let alphaValueLabel = document.getElementById("alphaValue");
+let alphaValueContainer = document.getElementById("alphaLabel");
 
-//let normalCoordinates = htmlCoordinates(path3[1].x, -path3[1].y + startY);
+let thetaLabel_2 = document.getElementById("theta2");
+let thetaLabel2_2 = theta.cloneNode(true);
+document.getElementById('canvasHalfVectorContainer').appendChild(thetaLabel2_2);
+
+let alphaLabel2 = document.getElementById("alpha2");
+let normalLabel2 = document.getElementById("normal2");
+let lightLabel2 = document.getElementById("light2");
+let reflectionLabel2 = document.getElementById("reflection2");
+let viewLabel2 = document.getElementById("view2");
+let alphaValueLabelH = document.getElementById("alphaValue2");
+let alphaValueContainerH = document.getElementById("alphaLabel2");
+let halfLabelH = document.getElementById("halfVector");
+
+
 applyLabelCoordinates(normalLabel, p(0, startY - 250));
+applyLabelCoordinates(normalLabel2, p(0, startY - 250));
+applyLabelCoordinates(alphaValueContainer, p(rightBorder / 2.0, startY + groundHeight / 2.0));
+applyLabelCoordinates(alphaValueContainerH, p(rightBorder / 2.0, startY + groundHeight / 2.0));
 
 let updateLabels = function() {
   let path = getPath(origin, alpha / 2.0, radius * zoom / 1.5);
   let path2 = getPath(origin, -alpha / 2.0, radius * zoom / 1.5);
-  let path3 = getPath(origin, (alpha2 - alpha) / 2.0, radiusView * zoom / 1.5);
+  let path3 = getPath(origin, (alpha2 - alpha) / 2.0, radiusView / 1.5);
   let pathL = getPath(origin, alpha, l + 30);
   let pathR = getPath(origin, -alpha, l + 30);
   let pathV = getPath(origin, alpha2, l2 + 30);
+
+  let pathHalfAlpha = getPath(origin,(alpha + alpha2) / 4.0, (l + radiusView) / 2.0);
+  let pathHalfAlpha2 = getPath(origin,(alpha + alpha2) / 2.0, l + 30);
 
   applyLabelCoordinates(thetaLabel, path[1]);
   applyLabelCoordinates(thetaLabel2, path2[1]);
@@ -290,93 +348,158 @@ let updateLabels = function() {
   applyLabelCoordinates(lightLabel, pathL[1]);
   applyLabelCoordinates(reflectionLabel, pathR[1]);
   applyLabelCoordinates(viewLabel, pathV[1]);
+
+
+  applyLabelCoordinates(thetaLabel_2, path[1]);
+  applyLabelCoordinates(thetaLabel2_2, path2[1]);
+  applyLabelCoordinates(alphaLabel2, pathHalfAlpha[1]);
+  applyLabelCoordinates(lightLabel2, pathL[1]);
+  applyLabelCoordinates(reflectionLabel2, pathR[1]);
+  applyLabelCoordinates(viewLabel2, pathV[1]);
+  applyLabelCoordinates(halfLabelH, pathHalfAlpha2[1]);
+
+  let shownAlphaValue = (alpha + alpha2) * 180 / Math.PI;
+  shownAlphaValue = Math.abs(Math.round(shownAlphaValue));
+  alphaValueLabel.innerHTML = shownAlphaValue;
+  document.getElementById("alphaValue2").innerHTML = shownAlphaValue / 2.0;
 };
 updateLabels();
-new Zdog.Dragger({
-  startElement:illo2.element,
-  onDragStart:function(pointer){
-    let coords = canvasCoordinates(pointer.x, pointer.y);
-    leftSide = (coords.x < 0.0);
-    // TODO: refactor this abomination
-    let angle = Math.atan(coords.x / coords.y);
-    let angleLight = alpha;
-    let angleReflect = -alpha;
-    let angleView = alpha2;
-    /* debug statements in case everything breaks again
-    console.log("angle 1");
-    console.log(angleLight);
-    console.log("angle 2");
-    console.log(angleReflect);
-    console.log("angle 3");
-    console.log(angleView);
-    console.log(angle);*/
-    let angleDifference1 = angle-angleLight;
-    let angleDifference2 = angle-angleReflect;
-    let angleDifference3 = angle-angleView;
-    if(Math.abs(angleDifference1) < Math.abs(angleDifference2)) {
-      if(Math.abs(angleDifference1) < Math.abs(angleDifference3)) {
-        angleDifference = angleDifference1;
-        movedRay = 0;
-      } else {
-        angleDifference = angleDifference3;
-        movedRay = 2;
-      }
-    } else if(Math.abs(angleDifference3) < Math.abs(angleDifference2)) {
+
+let lightingIndicator = new Zdog.Ellipse({
+  addTo: illo2,
+  diameter: 40,
+  stroke:2,
+  fill: true,
+  translate: {x: -300, y: -100},
+  color: '#fff',
+});
+let lightingIndicatorH = lightingIndicator.copy({addTo: illo3});
+
+let updateLightingFor = function(angle = alpha2 + alpha, indicator = lightingIndicator, g = ground) {
+  let specularExponent = 16;
+  let diffuse = Math.cos(alpha);
+  let specular = Math.pow(Math.cos(angle), specularExponent);
+  shade = diffuse + specular;
+  shade *= 0.25;
+  g.color = hslaToString(gColor[0], gColor[1], gColor[2] * shade, 1.0);
+  indicator.color = hslaToString(gColor[0], gColor[1], gColor[2] * shade, 1.0);
+}
+let updateLighting = function() {
+  updateLightingFor();
+  updateLightingFor((alpha2 + alpha) / 2.0, lightingIndicatorH, groundH);
+};
+updateLighting();
+
+let dragStart = function(pointer, illustration) {
+  let coords = canvasCoordinates(pointer.x, pointer.y, "zdog-canvas-half-vector" + (illustration == 0 ? "" : "2"));
+  leftSide = (coords.x < 0.0);
+  // TODO: refactor this abomination
+  let angle = Math.atan(coords.x / coords.y);
+  let angleLight = alpha;
+  let angleReflect = -alpha;
+  let angleView = alpha2;
+  /* debug statements in case everything breaks again
+  console.log("angle 1");
+  console.log(angleLight);
+  console.log("angle 2");
+  console.log(angleReflect);
+  console.log("angle 3");
+  console.log(angleView);
+  console.log(angle);*/
+  let angleDifference1 = angle-angleLight;
+  let angleDifference2 = angle-angleReflect;
+  let angleDifference3 = angle-angleView;
+  if(Math.abs(angleDifference1) < Math.abs(angleDifference2)) {
+    if(Math.abs(angleDifference1) < Math.abs(angleDifference3)) {
+      angleDifference = angleDifference1;
+      movedRay = 0;
+    } else {
       angleDifference = angleDifference3;
       movedRay = 2;
-    } else {
-      angleDifference = angleDifference2;
-      movedRay = 1;
     }
-    arc2.color = hslaToString(gColor0[0],gColor0[1],gColor0[2], 0.5);
-    reflectionLine.color = rgbToString(magenta[0] * 0.5, magenta[1] * 0.5, magenta[2] * 0.5);
-    reflectionTriangle.color = rgbToString(magenta[0] * 0.5, magenta[1] * 0.5, magenta[2] * 0.5);
+  } else if(Math.abs(angleDifference3) < Math.abs(angleDifference2)) {
+    angleDifference = angleDifference3;
+    movedRay = 2;
+  } else {
+    angleDifference = angleDifference2;
+    movedRay = 1;
+  }
+
+  // TODO: handle transparency differently (e.g. make non-moved rays transparent)
+  //arc2.color = hslaToString(gColor0[0],gColor0[1],gColor0[2], 0.5);
+  //reflectionLine.color = rgbToString(magenta[0] * 0.5, magenta[1] * 0.5, magenta[2] * 0.5);
+  //reflectionTriangle.color = rgbToString(magenta[0] * 0.5, magenta[1] * 0.5, magenta[2] * 0.5);
+}
+
+let dragMove = function(pointer, illustration) {
+  let coords = canvasCoordinates(pointer.x, pointer.y, "zdog-canvas-half-vector" + (illustration == 0 ? "" : "2"));
+  let angle = Math.atan(coords.x / coords.y);
+  // TODO for if I have time some day: determine the quadrant the angle is in to correctly find angles for y < 0
+  if(coords.y < 0) return;
+  if(movedRay == 0) {
+    alpha = (angle - angleDifference);
+    alpha = clamp(alpha, -0.5*Math.PI+0.1, -0.1);
+  } else if (movedRay == 1) {
+    alpha =  -(angle - angleDifference);
+    alpha = clamp(alpha, -0.5*Math.PI+0.1, -0.1);
+  } else {
+    alpha2 = (angle - angleDifference);
+    alpha2 = clamp(alpha2, 0.1, 0.5*Math.PI-0.1);
+
+  }
+  
+  updateLines();
+  
+  updateBezierControlPoints();
+
+  updateLabels();
+  updateLighting();
+
+}
+
+let dragEnd = function() {
+  alpha0 = alpha;
+  alpha02 = alpha2;
+
+  arc2.color = hslaToString(gColor0[0],gColor0[1],gColor0[2], 1.0);
+  reflectionLine.color = rgbToString(magenta[0], magenta[1], magenta[2]);
+  reflectionTriangle.color = rgbToString(magenta[0] , magenta[1] , magenta[2]);
+
+}
+let dragger = new Zdog.Dragger({
+  startElement:illo2.element,
+  onDragStart:function(pointer){
+    dragStart(pointer, 0);
   },
   onDragMove:function(pointer, moveX, moveY) {
-    let coords = canvasCoordinates(pointer.x, pointer.y);
-    let angle = Math.atan(coords.x / coords.y);
-    // TODO for if I have time some day: determine the quadrant the angle is in to correctly find angles for y < 0
-    if(coords.y < 0) return;
-    if(movedRay == 0) {
-      alpha = (angle - angleDifference);
-      alpha = clamp(alpha, -0.5*Math.PI+0.2, -0.2);
-    } else if (movedRay == 1) {
-      alpha =  -(angle - angleDifference);
-      alpha = clamp(alpha, -0.5*Math.PI+0.2, -0.2);
-    } else {
-      alpha2 = (angle - angleDifference);
-      alpha2 = clamp(alpha2, 0.2, 0.5*Math.PI-0.2);
-
-    }
-    //calculateLightRayParameters();
-    
-    updateLightLine();
-    updateReflectionLine();
-    updateViewLine();
-    
-    updateBezierControlPoints();
-
-    updateLabels();
-
-    shade = Math.cos(Math.PI / 2.0 - alpha);
-    ground.color = hslaToString(gColor[0], gColor[1], gColor[2] * shade, 1.0);
+    dragMove(pointer, 0)
   },
   onDragEnd:function(){
-    alpha0 = alpha;
-    alpha02 = alpha2;
-
-    arc2.color = hslaToString(gColor0[0],gColor0[1],gColor0[2], 1.0);
-    reflectionLine.color = rgbToString(magenta[0], magenta[1], magenta[2]);
-    reflectionTriangle.color = rgbToString(magenta[0] , magenta[1] , magenta[2]);
+    dragEnd();
   }
 });
-illo2.zoom = 0.5;
+
+let dragger2 =  new Zdog.Dragger({
+  startElement:illo3.element,
+  onDragStart:function(pointer){
+    dragStart(pointer, 1);
+  },
+  onDragMove:function(pointer, moveX, moveY) {
+    dragMove(pointer, 1)
+  },
+  onDragEnd:function(){
+    dragEnd();
+  }
+});
+
 function animate() {
   illo2.updateRenderGraph();
+  illo3.updateRenderGraph();
   requestAnimationFrame( animate );
 }
 
 animate();
+
 
 </script><script>// Made with Zdog
 
@@ -627,4 +750,4 @@ function animate() {
 animate();}
 
 aaaa();</script><footer class="container"><div class="row text-center"><div class="col-12"><p class="mt-5 mb-1">&copy; 2022
-Hasso-Plattner-Institut für Digital Engineering gGmbH</p><small class="mt-0 mb-5"><a class="text-muted" href="https://docs.github.com/en/github/site-policy/github-privacy-statement">Datenschutzerklärung</a></small></div></div><data hidden value="1bba09d42a758278c6436169620f46c075737d4b">revision</data></footer></body><script src="../jquery.min.js"></script><script src="../bootstrap.js"></script><script src="../scripts.js"></script></html>
+Hasso-Plattner-Institut für Digital Engineering gGmbH</p><small class="mt-0 mb-5"><a class="text-muted" href="https://docs.github.com/en/github/site-policy/github-privacy-statement">Datenschutzerklärung</a></small></div></div><data hidden value="d6c0ebe66a41f12e88f1a60e1b8a58182756cd56">revision</data></footer></body><script src="../jquery.min.js"></script><script src="../bootstrap.js"></script><script src="../scripts.js"></script></html>
