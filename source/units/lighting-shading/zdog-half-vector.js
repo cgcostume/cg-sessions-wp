@@ -246,7 +246,7 @@ let getMirroredArc = function(path) {
 }
 
 let getArcFromStuff = function(alpha1, alpha2, origin, radius, mirrored = false) {
-  let part = 1.8;
+  let part = 1.6;
   let point1 = vAdd(origin, getPathDirection(alpha1, radius));//vAdd(origin, p(0, -radius));
   let point2 = vAdd(origin, getPathDirection(alpha2, radius));
 
@@ -264,16 +264,28 @@ let getArcFromStuff = function(alpha1, alpha2, origin, radius, mirrored = false)
   let path = [point1, {bezier:[controlPoint1,controlPoint2,point2]}];
   return mirrored ? getMirroredArc(path) : path;
 }
+
+function getArcFromStuffWithMiddlePoint(alpha1, alpha2, origin, radius, mirrored = false) {
+  let firstArc, secondArc;
+  if(Math.abs(alpha2-alpha1) > Math.PI / 3.0) {
+    firstArc = getArcFromStuffWithMiddlePoint(alpha1, (alpha1 + alpha2)/2.0, origin, radius, mirrored);
+    secondArc = getArcFromStuffWithMiddlePoint((alpha1 + alpha2)/2.0, alpha2, origin, radius, mirrored);
+  } else {
+    firstArc = getArcFromStuff(alpha1, (alpha1 + alpha2)/2.0, origin, radius, mirrored);
+    secondArc = getArcFromStuff((alpha1 + alpha2)/2.0, alpha2, origin, radius, mirrored);
+  }
+  return firstArc.concat(secondArc);
+}
   let radiusView = 280 * zoom;
   let radius = 240;
 let updateBezierControlPoints = function() {
 
-  arc.path = getArcFromStuff(0, alpha, p(center, startY), radius * zoom);
-  arc2.path = getMirroredArc(JSON.parse(JSON.stringify(arc.path)));
-  arcView.path =  getArcFromStuff(alpha2, -alpha,p(center, startY), radiusView, false);
+  arc.path = getArcFromStuffWithMiddlePoint(0, alpha, p(center, startY), radius * zoom);
+  arc2.path = getArcFromStuffWithMiddlePoint(0, -alpha, p(center, startY), radius * zoom);
+  arcView.path =  getArcFromStuffWithMiddlePoint(alpha2, -alpha,p(center, startY), radiusView, false);
   arcH.path = arc.path;
   //arc2H.path = arc2.path;
-  arcViewH.path = getArcFromStuff(0, (alpha2 + alpha)/2.0,p(center, startY), radiusView, false);
+  arcViewH.path = getArcFromStuffWithMiddlePoint(0, (alpha2 + alpha)/2.0,p(center, startY), radiusView, false);
   arc.updatePath();
   arc2.updatePath();
   arcView.updatePath();
@@ -437,7 +449,7 @@ let dragMove = function(pointer, illustration) {
     alpha = clamp(alpha, -0.5*Math.PI+0.1, -0.1);
   } else {
     alpha2 = (angle - angleDifference);
-    alpha2 = clamp(alpha2, -0.5*Math.PI+0.5, 0.5*Math.PI-0.1);
+    alpha2 = clamp(alpha2, -0.5*Math.PI+0.1, 0.5*Math.PI-0.1);
 
   }
   
