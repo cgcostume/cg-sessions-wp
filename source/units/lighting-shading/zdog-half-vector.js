@@ -149,9 +149,9 @@ let viewTriangle = lightTriangle.copy();
 let halfVectorLine = lightLine.copy({addTo:illo3});
 let halfVectorTriangle = lightTriangle.copy({addTo:illo3});
 
-let arc = lightLine.copy({closed: false, color:hslaToString(gColor0[0],gColor0[1],gColor0[2], 1.0)});
-let arc2 = lightLine.copy({closed: false, color:hslaToString(gColor0[0],gColor0[1],gColor0[2], 1.0)});
-let arcView = lightLine.copy({closed: false, color: hslaToString(gColor[0],gColor[1],gColor[2], 1.0)});
+let arc = lightLine.copy({closed: false, translate:{z:-1}, color:hslaToString(gColor0[0],gColor0[1],gColor0[2], 1.0)});
+let arc2 = lightLine.copy({closed: false, translate:{z:-1}, color:hslaToString(gColor0[0],gColor0[1],gColor0[2], 1.0)});
+let arcView = lightLine.copy({closed: false, translate:{z:-1}, color: hslaToString(gColor[0],gColor[1],gColor[2], 1.0)});
 
 
 // color initialization
@@ -168,8 +168,8 @@ reflectionLine.color = magentaString;
 reflectionTriangle.color = magentaString;
 viewLine.color = cyanString;
 viewTriangle.color = cyanString;
-halfVectorLine.color = hslaToString(gColor0[0],gColor0[1],gColor0[2]*0.37, 1.0);;
-halfVectorTriangle.color = hslaToString(gColor0[0],gColor0[1],gColor0[2]*0.37, 1.0);;
+halfVectorLine.color = hslaToString(gColor0[0],gColor0[1],gColor0[2]*0.37, 1.0);
+halfVectorTriangle.color = hslaToString(gColor0[0],gColor0[1],gColor0[2]*0.37, 1.0);
 
 
 // create second illustration----------------------------
@@ -384,8 +384,8 @@ let updateLightingFor = function(angle = alpha2 + alpha, indicator = lightingInd
   let specularExponent = 16;
   let diffuse = Math.cos(alpha);
   let specular = Math.pow(Math.cos(angle), specularExponent);
-  shade = diffuse + specular;
-  shade *= 0.25;
+  shade = diffuse*0.1 + specular;
+  shade /= 1.1;
   g.color = hslaToString(gColor[0], gColor[1], gColor[2] * shade, 1.0);
   indicator.color = hslaToString(gColor[0], gColor[1], gColor[2] * shade, 1.0);
 }
