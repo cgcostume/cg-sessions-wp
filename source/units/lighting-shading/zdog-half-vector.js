@@ -181,13 +181,13 @@ let groundH = ground.copy({addTo: illo3});
 ground2.copy({addTo: illo3});
 let lightLineH = lightLine.copy({addTo: illo3});
 let lightTriangleH = lightTriangle.copy({addTo: illo3});
-let reflectionLineH = reflectionLine.copy({addTo: illo3});
-let reflectionTriangleH = reflectionTriangle.copy({addTo: illo3});
+//let reflectionLineH = reflectionLine.copy({addTo: illo3});
+//let reflectionTriangleH = reflectionTriangle.copy({addTo: illo3});
 let viewLineH = viewLine.copy({addTo: illo3});
 let viewTriangleH = viewTriangle.copy({addTo: illo3});
 
 let arcH = arc.copy({addTo: illo3});
-let arc2H = arc2.copy({addTo: illo3});
+//let arc2H = arc2.copy({addTo: illo3});
 
 let arcViewH = arcView.copy({addTo: illo3});
 // --------------------------------------------------------
@@ -226,7 +226,7 @@ let updateLines = function() {
   updateLightLine();
   updateLightLine(lightLineH, lightTriangleH);
   updateReflectionLine();
-  updateReflectionLine(reflectionLineH, reflectionTriangleH);
+  //updateReflectionLine(reflectionLineH, reflectionTriangleH);
   updateViewLine();
   updateViewLine(viewLineH, viewTriangleH);
   updatehalfVectorLine();
@@ -272,13 +272,13 @@ let updateBezierControlPoints = function() {
   arc2.path = getMirroredArc(JSON.parse(JSON.stringify(arc.path)));
   arcView.path =  getArcFromStuff(alpha2, -alpha,p(center, startY), radiusView, false);
   arcH.path = arc.path;
-  arc2H.path = arc2.path;
+  //arc2H.path = arc2.path;
   arcViewH.path = getArcFromStuff(0, (alpha2 + alpha)/2.0,p(center, startY), radiusView, false);
   arc.updatePath();
   arc2.updatePath();
   arcView.updatePath();
   arcH.updatePath();
-  arc2H.updatePath();
+  //arc2H.updatePath();
   arcViewH.updatePath();
 }
 updateBezierControlPoints();
@@ -306,13 +306,13 @@ let alphaValueLabel = document.getElementById("alphaValue");
 let alphaValueContainer = document.getElementById("alphaLabel");
 
 let thetaLabel_2 = document.getElementById("theta2");
-let thetaLabel2_2 = thetaLabel.cloneNode(true);
-document.getElementById('canvasHalfVectorContainer').appendChild(thetaLabel2_2);
+//let thetaLabel2_2 = thetaLabel.cloneNode(true);
+//document.getElementById('canvasHalfVectorContainer').appendChild(thetaLabel2_2);
 
 let alphaLabel2 = document.getElementById("alpha2");
 let normalLabel2 = document.getElementById("normal2");
 let lightLabel2 = document.getElementById("light2");
-let reflectionLabel2 = document.getElementById("reflection2");
+//let reflectionLabel2 = document.getElementById("reflection2");
 let viewLabel2 = document.getElementById("view2");
 let alphaValueLabelH = document.getElementById("alphaValue2");
 let alphaValueContainerH = document.getElementById("alphaLabel2");
@@ -344,10 +344,10 @@ let updateLabels = function() {
 
 
   applyLabelCoordinates(thetaLabel_2, path[1]);
-  applyLabelCoordinates(thetaLabel2_2, path2[1]);
+  //applyLabelCoordinates(thetaLabel2_2, path2[1]);
   applyLabelCoordinates(alphaLabel2, pathHalfAlpha[1]);
   applyLabelCoordinates(lightLabel2, pathL[1]);
-  applyLabelCoordinates(reflectionLabel2, pathR[1]);
+  //applyLabelCoordinates(reflectionLabel2, pathR[1]);
   applyLabelCoordinates(viewLabel2, pathV[1]);
   applyLabelCoordinates(halfLabelH, pathHalfAlpha2[1]);
 

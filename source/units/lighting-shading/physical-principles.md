@@ -109,7 +109,7 @@ Wir erhalten also als Formel für die Reflexionsrichtung $$R = 2\cdot(N\cdot\lan
     <div id = "alpha2" style = "position:absolute; top: 0"><img src = "alpha.png" width = 30></div>
     <div id = "normal2" style = "position:absolute; top: 0; font-weight: 900"><b>N</b></div>
     <div id = "light2" style = "position:absolute; top: 0; font-weight: 900; color:#d62ea7"><b>L</b></div>
-    <div id = "reflection2" style = "position:absolute; top: 0; font-weight: 900; color:#d62ea7"><b>R</b></div>
+    <!--<div id = "reflection2" style = "position:absolute; top: 0; font-weight: 900; color:#d62ea7"><b>R</b></div>-->
     <div id = "view2" style = "position:absolute; top: 0; font-weight: 900; color:#0ceedb"><b>V</b></div>
     <div id = "halfVector" style = "position:absolute; top: 0; font-weight: 900; color:#06776b"><b>H</b></div>
     <div id = "alphaLabel2" style = "position:absolute; top: 0; font-weight: 700; color:#0ceedb"><img src = "alpha.png" width = 25> = <div id = "alphaValue2" style = "display: inline; color:#ffffff">123</div>°</div>
