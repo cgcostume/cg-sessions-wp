@@ -246,7 +246,7 @@ let getMirroredArc = function(path) {
 }
 
 let getArcFromStuff = function(alpha1, alpha2, origin, radius, mirrored = false) {
-  let part = 1.7;
+  let part = 1.8;
   let point1 = vAdd(origin, getPathDirection(alpha1, radius));//vAdd(origin, p(0, -radius));
   let point2 = vAdd(origin, getPathDirection(alpha2, radius));
 
@@ -414,8 +414,8 @@ let dragStart = function(pointer, illustration) {
     angleDifference = angleDifference3;
     movedRay = 2;
   } else {
-    angleDifference = angleDifference2;
-    movedRay = 1;
+    angleDifference = illustration == 0 ? angleDifference2 : angleDifference3;
+    movedRay = illustration == 0 ? 1 : 2;
   }
 
   // TODO: handle transparency differently (e.g. make non-moved rays transparent)
@@ -437,7 +437,7 @@ let dragMove = function(pointer, illustration) {
     alpha = clamp(alpha, -0.5*Math.PI+0.1, -0.1);
   } else {
     alpha2 = (angle - angleDifference);
-    alpha2 = clamp(alpha2, 0.1, 0.5*Math.PI-0.1);
+    alpha2 = clamp(alpha2, -0.5*Math.PI+0.5, 0.5*Math.PI-0.1);
 
   }
   
