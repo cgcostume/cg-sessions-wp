@@ -2,7 +2,7 @@
 let illoTransition = new Zdog.Illustration({
     element: '.zdog-transition',
     dragRotate:false,
-    //translate:{y:-200},
+    translate:{y:-150},
   });
 function p3(x,y,z) {
     return {x:x, y:y, z:z};
@@ -97,6 +97,7 @@ function updateStuff(){
     shadow.path = [p(thing1.x,thing1.y+yDiff),p(thing1.x/thing1.magnitude() *10000.0,thing1.y/thing1.magnitude() *10000.0+yDiff), p(thing2.x/thing2.magnitude() *10000.0,thing2.y/thing2.magnitude()*10000.0+yDiff), p(thing2.x,thing2.y+yDiff)];
     shadow.updatePath();
 }
+/*
 new Zdog.Dragger({
     startElement: illoTransition.element,
     onDragStart: function() {
@@ -113,7 +114,7 @@ new Zdog.Dragger({
     onDragEnd:function(){
 
     }
-});
+});*/
 function mix(a, b, t) {
     t = clamp(t, 0.0, 1.0);
     return a*(1-t) + b*t;
@@ -131,7 +132,7 @@ function updateAngleFromScroll() {
     let box = document.getElementById("transitionContainer").getBoundingClientRect();
     let top = box.top;
     let windowHeight = Math.max(document.documentElement.clientHeight, window.innerHeight, 0);
-    let transitionElementHeight = 1000;
+    let transitionElementHeight = 700;
     let minTop = 0.1 * windowHeight; // -> -0.2
     let maxTop = 0.9 * windowHeight;// -> -Math.PI/2.0
     let t = top + transitionElementHeight / 2 - minTop;
