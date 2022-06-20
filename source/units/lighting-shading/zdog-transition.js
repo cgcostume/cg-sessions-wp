@@ -16,7 +16,7 @@ let shadow = new Zdog.Shape({
     closed:true,
     translate:{z:-500}
 });
-document.getElementById("transition-svg").setAttribute("width",Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0))
+document.getElementById("transition-svg").setAttribute("width",Math.max(document.documentElement.clientWidth, window.innerWidth, 0));
 let shapeGroup = new Zdog.Group({
     addTo:illoTransition
 });
@@ -119,19 +119,30 @@ function mix(a, b, t) {
     return a*(1-t) + b*t;
 
 }
+
+function smoothstep (x) {
+    let edge0 = 0;
+    let edge1 = 1;
+    let t = clamp((x-edge0) / (edge1 - edge0), 0, 1);
+    return t * t * (3.0 - 2.0 * t);
+};
+
 function updateAngleFromScroll() {
     let box = document.getElementById("transitionContainer").getBoundingClientRect();
     let top = box.top;
-    let minTop = -200; // -> -0.2
-    let maxTop = 700;// -> -Math.PI/2.0
-    let t = top - minTop;
+    let windowHeight = Math.max(document.documentElement.clientHeight, window.innerHeight, 0);
+    let transitionElementHeight = 1000;
+    let minTop = 0.1 * windowHeight; // -> -0.2
+    let maxTop = 0.9 * windowHeight;// -> -Math.PI/2.0
+    let t = top + transitionElementHeight / 2 - minTop;
     t /= maxTop - minTop;
-    viewRotation.x = mix(-0.2, -Math.PI/2.0, t);
+    viewRotation.x = mix(-0.2, -Math.PI/2.0, smoothstep(t));
     
 
 
 }
 function animate2() {
+    document.getElementById("transition-svg").setAttribute("width",Math.max(window.innerWidth, 0));
     shapeGroup.rotate.set(viewRotation);
     updateStuff();
     updateAngleFromScroll();
