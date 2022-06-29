@@ -2,14 +2,14 @@
 
 ### Motivation und Problemstellung
 
-Ziel dieser Einheit soll es sein, zu verstehen, welche Rolle Beleuchtung in der Computergrafik spielt und wie simple lokale Beleuchtungsverfahren funktionieren.
+Ziel dieser Einheit soll es sein, zu verstehen, welche Rolle Beleuchtung in der Computergrafik spielt und wie grundlegende Beleuchtungsverfahren funktionieren.
 Bevor wir uns jedoch genauer mit der Umsetzung beschäftigen, müssen wir uns zunächst erarbeiten, welche Eigenschaften virtuelle Beleuchtung auszeichnen.
 
 Wir wollen uns dafür ein paar Aufnahmen aus verschiedenen Spielen ansehen. Welche Eigenschaften, die ein Beleuchtungsmodell charakterisieren, kannst du daraus ableiten? 
 
-| ![camera-model](./fire-life-is-strange.jpg?as=webp) |
-| :--------------: |
-| :jigsaw: Beispielscreenshots |
+
+![goose](goose.png?as=webp){.w-50}{.pe-1}{.mb-2}![alyx](alyx.png?as=webp){.w-50}{.ps-1}{.mb-2}
+![cyber](cyber.png?as=webp){.w-50}{.pe-1}![witness](witness.png?as=webp){.w-50}{.ps-1}
 
 <textarea class = 'notes' rows = '8' placeholder = 'Mach Dir ein paar Notizen wenn du magst.'></textarea>
 
@@ -44,5 +44,5 @@ Zusammenfassung:
 * Beleuchtung ist wichtig
 * Beleuchtung vermittelt Informationen über die Szene -> insbesondere Position, Ausrichtung und Material von Oberflächen
 * es gibt diffuse und spekulare Beleuchtung
-* direkte Beleuchtung ist leichter als indirekte
+* direkte Beleuchtung ist schneller als indirekte
 * Schattierung ist leichter als Schattenwurf
