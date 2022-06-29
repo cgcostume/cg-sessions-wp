@@ -17,6 +17,9 @@ let shadow = new Zdog.Shape({
     translate:{z:-500}
 });
 document.getElementById("transition-svg").setAttribute("width",Math.max(document.documentElement.clientWidth, window.innerWidth, 0));
+let shapeGroupFilled = new Zdog.Group({
+    addTo:illoTransition
+});
 let shapeGroup = new Zdog.Group({
     addTo:illoTransition
 });
@@ -26,38 +29,54 @@ let shape = new Zdog.Shape({
     path: shadow.path,
     visible:false,
     color: magentaString,
-    stroke: 5
+    stroke: 7
+});
+let shapeFilled = new Zdog.Shape({
+    addTo:shapeGroupFilled,
+    path: shadow.path,
+    visible:false,
+    color: "#aaa",
+    fill:true,
+    stroke: 0
 });
 shapes.push(shape);
 let square = [[-100,-100],[-100,100],[100,100],[100,-100]];
-let pX = (x) => {
+let pX = (x, scale = 1.0) => {
     let resultPath = [];
     square.forEach(square => {
-        resultPath.push({x:x, y: square[0], z: square[1]});
+        resultPath.push({x:x*scale, y: square[0]*scale, z: square[1]*scale});
     });
     return resultPath;
 };
-let pY = (y) => {
+let pY = (y, scale = 1.0) => {
     let resultPath = [];
     square.forEach(square => {
-        resultPath.push({x: square[0], y:y, z: square[1]});
+        resultPath.push({x: square[0]*scale, y:y*scale, z: square[1]*scale});
     });
     return resultPath;
 };
-let pZ = (z) => {
+let pZ = (z, scale = 1.0) => {
     let resultPath = [];
     square.forEach(square => {
-        resultPath.push({x: square[0], y: square[1], z:z});
+        resultPath.push({x: square[0]*scale, y: square[1]*scale, z:z*scale});
     });
     return resultPath;
 };
 let functions = [pX, pY, pZ];
+let colors = ["#bbb","#eee","#999"];
 for(let i = 0; i <3; i++) {
-    for(let j = 0; j < 2; j++) {
-            shapes.push(shape.copy({
-                path:functions[i](-100 + 200 * j),
-                visible:true
-            }));
+    for(let j = 1; j < 2; j++) {
+        if(i==1) j = 0;
+        shapes.push(shape.copy({
+            path:functions[i](-100 + 200 * j),
+            visible:true
+        }));
+        shapes.push(shapeFilled.copy({
+            path:functions[i](-100 + 200 * j, 0.98),
+            visible:true,
+            color: colors[i]
+        }));
+        if(i==1) break;
     }
 }
 let viewRotation = new Zdog.Vector();
@@ -145,6 +164,8 @@ function updateAngleFromScroll() {
 function animate2() {
     document.getElementById("transition-svg").setAttribute("width",Math.max(window.innerWidth, 0));
     shapeGroup.rotate.set(viewRotation);
+    shapeGroupFilled.rotate.set(viewRotation);
+    shapeFilled.translate.set({z:-1});
     updateStuff();
     updateAngleFromScroll();
     illoTransition.updateRenderGraph();
