@@ -239,7 +239,13 @@ new Zdog.Dragger({
   }
 });
 illo.zoom = 0.5;
+
 function animate() {
+  let left = getCoords(document.getElementById("zdog-canvas")).left;
+  let actualWidth = Math.max(Math.min(window.innerWidth - left, 760), 0);
+  document.getElementById("zdog-canvas").style["width"] = actualWidth + "px";
+  let actualHeight = actualWidth / 760 * 340;
+  document.getElementById("zdog-canvas").style["height"] = actualHeight + "px";
   illo.updateRenderGraph();
   requestAnimationFrame( animate );
 }

@@ -79,7 +79,36 @@ let center = 0.5 * (leftBorder + rightBorder);
 let origin = {x:center, y: startY};
 
 let groundHeight = 50;
+function updateZoom() {
+  /*l = 430 * zoom;
+  l2 = 550 * zoom;
+  leftBorder = -520 * zoom;
+  rightBorder = 520 * zoom;
 
+  startY = 200 * zoom;
+  center = 0.5 * (leftBorder + rightBorder);
+
+  origin = {x:center, y: startY};
+
+  groundHeight = 100 * zoom;
+  ground.path =[
+    { x: leftBorder, y: startY + groundHeight, z:1}, // start at 1st point
+    { x: leftBorder, y: startY, z:1}, // start at 1st point
+    { x:  rightBorder, y: startY, z:1 }, // line to 2nd point
+    { x:  rightBorder, y: startY + groundHeight, z:1 }, // line to 2nd point
+  ];
+  ground.stroke = 10 * zoom;
+  ground2.stroke = 10 * zoom;
+  ground.updatePath();
+  ground2.path = ground.path;
+  ground2.updatePath();
+  normal.path = getPath(origin, 0, 220);
+  normal.stroke = 10 * zoom;
+  normal.updatePath();
+  normalTip.path = getTrianglePoints(vAdd(normal.path[1], getPathDirection(0, 10)), 0);
+  normalTip.stroke = 5 * zoom;
+  normalTip.updatePath();*/
+}
 // constant shapes (aside from color)
 let ground  = new Zdog.Shape({
   addTo: illo2,
@@ -97,15 +126,16 @@ let ground  = new Zdog.Shape({
 
 let canvasCoordinates = function(x,y, name = "zdog-canvas-half-vector") {
   let canvasRect = document.getElementsByClassName(name)[0].getBoundingClientRect();
+  console.log(canvasRect.width);
   let height = canvasRect.height;
   let width = canvasRect.width;
-  return{x: (x-canvasRect.x - width/2.0), y:-( y-canvasRect.y-height/2.0) + startY};
+  return {x: (x-canvasRect.x - width/2.0), y:-( y-canvasRect.y-height/2.0) + startY};
 };
 let htmlCoordinates = function(x,y, name = "zdog-canvas-half-vector") {
   let canvasRect = document.getElementsByClassName(name)[0].getBoundingClientRect();
   let height = canvasRect.height;
   let width = canvasRect.width;
-  return{x: (x + width/2.0), y:-y + startY+ height/2.0 };
+  return {x: x* width / 760 + width/2.0, y:(-y + startY) * width / 760 + height/2.0 };
 };
 
 let ground2 = ground.copy({
@@ -280,8 +310,8 @@ function getArcFromStuffWithMiddlePoint(alpha1, alpha2, origin, radius, mirrored
   let radius = 240;
 let updateBezierControlPoints = function() {
 
-  arc.path = getArcFromStuffWithMiddlePoint(0, alpha, p(center, startY), radius * zoom);
-  arc2.path = getArcFromStuffWithMiddlePoint(0, -alpha, p(center, startY), radius * zoom);
+  arc.path = getArcFromStuffWithMiddlePoint(0, alpha, p(center, startY), radius * 0.5);
+  arc2.path = getArcFromStuffWithMiddlePoint(0, -alpha, p(center, startY), radius * 0.5);
   arcView.path =  getArcFromStuffWithMiddlePoint(alpha2, -alpha,p(center, startY), radiusView, false);
   arcH.path = arc.path;
   //arc2H.path = arc2.path;
@@ -299,8 +329,8 @@ let leftSide = false;
 let angleDifference;
 let movedRay = 0;
 
-let applyLabelCoordinates = function(label, position) {
-  let coords = htmlCoordinates(position.x, -position.y + startY);
+let applyLabelCoordinates = function(label, position, name = "zdog-canvas-half-vector") {
+  let coords = htmlCoordinates(position.x, -position.y, name);
   label.style.left = (coords.x -label.offsetWidth/2.0)+ "px";
   label.style.top = (coords.y -label.offsetHeight/2.0) + "px";
 
@@ -331,21 +361,17 @@ let alphaValueContainerH = document.getElementById("alphaLabel2");
 let halfLabelH = document.getElementById("halfVector");
 
 
-applyLabelCoordinates(normalLabel, p(0, startY - 250));
-applyLabelCoordinates(normalLabel2, p(0, startY - 250));
-applyLabelCoordinates(alphaValueContainer, p(rightBorder / 2.0, startY + groundHeight / 2.0));
-applyLabelCoordinates(alphaValueContainerH, p(rightBorder / 2.0, startY + groundHeight / 2.0));
-
 let updateLabels = function() {
-  let path = getPath(origin, alpha / 2.0, radius * zoom / 1.5);
-  let path2 = getPath(origin, -alpha / 2.0, radius * zoom / 1.5);
+  let origin = p(0,0);
+  let path = getPath(origin, alpha / 2.0, radius * 0.5 / 1.5);
+  let path2 = getPath(origin, -alpha / 2.0, radius * 0.5 / 1.5);
   let path3 = getPath(origin, (alpha2 - alpha) / 2.0, radiusView / 1.5);
   let pathL = getPath(origin, alpha, l + 30);
   let pathR = getPath(origin, -alpha, l + 30);
   let pathV = getPath(origin, alpha2, l2 + 30);
 
   let pathHalfAlpha = getPath(origin,(alpha + alpha2) / 4.0, (l + radiusView) / 2.0);
-  let pathHalfAlpha2 = getPath(origin,(alpha + alpha2) / 2.0, l + 30);
+  let pathHalfAlpha2 = getPath(origin,(alpha + alpha2) / 2.0, l + 15 / zoom);
 
   applyLabelCoordinates(thetaLabel, path[1]);
   applyLabelCoordinates(thetaLabel2, path2[1]);
@@ -363,6 +389,12 @@ let updateLabels = function() {
   applyLabelCoordinates(viewLabel2, pathV[1]);
   applyLabelCoordinates(halfLabelH, pathHalfAlpha2[1]);
 
+  applyLabelCoordinates(normalLabel, p(0, -250));
+  applyLabelCoordinates(normalLabel2, p(0, -250), name = "zdog-canvas-half-vector2");
+
+  applyLabelCoordinates(alphaValueContainer, p(rightBorder / 2.0, groundHeight/2.0));
+  applyLabelCoordinates(alphaValueContainerH, p(rightBorder / 2.0, groundHeight/2.0, name = "zdog-canvas-half-vector2"));
+  
   let shownAlphaValue = (alpha + alpha2) * 180 / Math.PI;
   shownAlphaValue = Math.abs(Math.round(shownAlphaValue));
   alphaValueLabel.innerHTML = shownAlphaValue;
@@ -497,9 +529,42 @@ let dragger2 =  new Zdog.Dragger({
   }
 });
 
+// https://stackoverflow.com/questions/5598743/finding-elements-position-relative-to-the-document
+function getCoords(elem) { // crossbrowser version
+  var box = elem.getBoundingClientRect();
+
+  var body = document.body;
+  var docEl = document.documentElement;
+
+  var scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
+  var scrollLeft = window.pageXOffset || docEl.scrollLeft || body.scrollLeft;
+
+  var clientTop = docEl.clientTop || body.clientTop || 0;
+  var clientLeft = docEl.clientLeft || body.clientLeft || 0;
+
+  var top  = box.top +  scrollTop - clientTop;
+  var left = box.left + scrollLeft - clientLeft;
+
+  return { top: Math.round(top), left: Math.round(left) };
+}
+
 function animate() {
   illo2.updateRenderGraph();
   illo3.updateRenderGraph();
+  let left = getCoords(document.getElementById("zdog-canvas-half-vector")).left;
+  let actualWidth = Math.max(Math.min(window.innerWidth - left, 760), 0);
+  document.getElementById("zdog-canvas-half-vector").style["width"] = actualWidth + "px";
+  document.getElementById("zdog-canvas-half-vector2").style["width"] = actualWidth + "px";
+  zoom = 0.5 * actualWidth / 760;
+  let actualHeight = actualWidth / 760 * 340;
+  document.getElementById("zdog-canvas-half-vector").style["height"] = actualHeight + "px";
+  document.getElementById("zdog-canvas-half-vector2").style["height"] = actualHeight + "px";
+  updateZoom();
+
+  updateLines();
+  updateBezierControlPoints();
+  updateLabels();
+  updateLighting();
   requestAnimationFrame( animate );
 }
 
