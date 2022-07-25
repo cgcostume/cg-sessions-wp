@@ -32,9 +32,6 @@ jobs:
         working-directory: src
       - name: Set up broken dependencies (temporary)
         run: npm install mini-css-extract-plugin@2.4.5
-      - name: Set up other broken dependencies (temporary)
-        run: npm install sass-loader@10.3.0
-        working-directory: src
       - name: Build website
         run: npm run build -- --output-path=../deploy
         working-directory: src
