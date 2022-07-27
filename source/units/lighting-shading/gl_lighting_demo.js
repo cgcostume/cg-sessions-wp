@@ -50,9 +50,10 @@ class LightingExample extends gloperate.Renderer {
             ]);
 
         this._lights = new Float32Array([ // x, y, z, r, g, b
-            +1.0, -1.5, -0.5,  0.0, 1.0, 1.0,//1
-            +1.0, -1.0, +1.0,  1.0, 0.0, 1.0,
-            +1.0, +0.0, -1.0,  1.0, 1.0, 1.0,
+            +1.0, -1.0, -0.5,  0.0, 1.0, 1.0,//1
+            +0.5, -1.0, +1.0,  1.0, 0.0, 1.0,
+            +1.0, +0.5, -1.0,  1.0, 1.0, 1.0,
+            //-1.0, +1.0, -1.0,  0.0, 1.0, 0.0,
             ]);
 
         // would be better to use gloperate.Buffer (VBOs) but requires more knowledge ...
@@ -78,7 +79,7 @@ class LightingExample extends gloperate.Renderer {
             {
                 v_color = vec4(a_color, 1.0);
 
-                gl_Position = u_viewProjection * vec4(a_vertex * 0.75, 1.0);
+                gl_Position = u_viewProjection * vec4(a_vertex * 0.9, 1.0);
                 v_position = vec4(a_vertex, 1.0);
             }
             `);
@@ -125,7 +126,7 @@ class LightingExample extends gloperate.Renderer {
 
                 float intensity = 0.0;
                 float specular = 0.4;
-                float shininess = 32.0;
+                float shininess = 25.0;
 
                 vec3 N = normalize(normal); 
                 vec3 L = normalize(lightPosition - position); // surface position to light
@@ -142,8 +143,8 @@ class LightingExample extends gloperate.Renderer {
                 //vec3 R = normalize(2.0*N*NdotL - L);
 
                 float diffuse = NdotL;
-                float specularBlinnPhong = max(0.0, pow(NdotH, shininess)); // blinn-phong
-                float specularPhong = pow(max(0.0, dot(R,E)),4.0)*step(0.0, dot(N, L)); // phong
+                float specularBlinnPhong = max(0.0, pow(NdotH, shininess))*smoothstep(0.0,0.1,NdotL); // blinn-phong *step(0.0, dot(N, L))
+                float specularPhong = pow(max(0.0, dot(R,E)),7.0)*smoothstep(0.0,0.1,NdotL); // phongstep(0.0, dot(N, L))
                     specular = mix(specularPhong,specularBlinnPhong,u_useHalfVector);
                 vec3 result = (specular + diffuse*0.5) * lightColor.rgb * lightColor.w;
                 
