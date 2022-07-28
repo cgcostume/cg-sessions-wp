@@ -68,7 +68,7 @@ Spekulare Reflexion ist stärker auf sehr glatten (z.B. polierten) Oberflächen.
 | :--------------: |
 | Spekulare Reflexion |
 
-
+**Hier auf Phong Modell einschränken**
 Sei $\alpha$ der Winkel zwischen Blick-und Reflexionsrichtung. Dann ist die Intensität der Spekularen Reflexion proportional zu $cos^n \alpha$, wobei $n$ materialspezifisch ist.
 
 | ![camera-model](./specular_formula2.png?as=webp) |
