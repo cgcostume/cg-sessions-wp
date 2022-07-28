@@ -43,7 +43,6 @@ $primary: #d62ea7 !default;
 $secondary: #0ceedb !default;
 // $primary: #6cbb23 !default;
 // $primary: #4e8aad !default;
-$utilities-border-colors: #0ceedb !default;
 
 
 $enable-flex: true;
@@ -80,6 +79,7 @@ $aspect-ratios: (
 @import "bootstrap/scss/functions";
 @import "bootstrap/scss/variables";
 @import "bootstrap/scss/mixins";
+@import "~bootstrap/scss/maps";
 @import "bootstrap/scss/utilities";
 
 // Layout & components
