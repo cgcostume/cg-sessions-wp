@@ -22,7 +22,7 @@ Dabei sind verschiedene Beleuchtungseffekte zu beobachten: Zum einen sind Fläch
 In der Computergrafik I möchten wir zunächst darauf eingehen, wie diese beiden Effekte umgesetzt werden können, um grundlegend plausible Beleuchtung zu erzeugen, die von Oberflächenausrichtung und -material abhängig ist. Natürlich gehört für eine realistische Beleuchtung aber noch einiges mehr dazu. Weiterführende Effekte, die in den Screenshots zu erkennen sind, sind z.B. **indirekte Beleuchtung** und **Schattenwurf**.
 
 **Direkte vs. Indirekte Beleuchtung** <br>
-Direkte Beleuchtung bezeichnet alle Beleuchtungseffekte, die nur Licht berücksichtigen, das auf direktem Wege auf die Oberfläche trifft. U.a. werden Reflexion oder Refraktion von Licht durch andere Objekte zwischen der Oberfläche und der Lichtquelle nicht berücksichtigt. Wird beispielsweise eine weiße Wand angestrahlt, würde mit einer physikalisch korrekten Darstellung ein Teil des reflektierten Lichts andere Objekte der Szene erleuchten. Dieser Effekt kann durch Beleuchtungsmodelle mit rein direkter Beleuchtung nicht abgebildet werden.
+Direkte Beleuchtung bezeichnet alle Beleuchtungseffekte, die nur Licht berücksichtigen, das auf direktem Wege auf die Oberfläche trifft. Unter anderem werden Reflexion oder Refraktion von Licht durch andere Objekte zwischen der Oberfläche und der Lichtquelle nicht berücksichtigt. Wird beispielsweise eine weiße Wand angestrahlt, würde mit einer physikalisch korrekten Darstellung ein Teil des reflektierten Lichts andere Objekte der Szene erleuchten. Dieser Effekt kann durch Beleuchtungsmodelle mit rein direkter Beleuchtung nicht abgebildet werden.
 
 | ![camera-model](./cornell.jpg?as=webp) |
 | :--------------: |
@@ -41,8 +41,7 @@ Für indirekte Beleuchtung und Schattenwurf hingegen wird Information über _all
 Es gibt natürlich viele clevere Ansätze, um auch mit weniger Rechenkapazität einige Aspekte komplexerer Beleuchtung umzusetzen. Einige davon, insbesondere Techniken zum Annähern von Schatten, werden in Computergrafik II thematisiert.
 
 Zusammenfassung:
-* Beleuchtung ist wichtig
-* Beleuchtung vermittelt Informationen über die Szene -> insbesondere Position, Ausrichtung und Material von Oberflächen
-* es gibt diffuse und spekulare Beleuchtung
-* direkte Beleuchtung ist schneller als indirekte
-* Schattierung ist leichter als Schattenwurf
+* Beleuchtung ist ein wichtiger Bestandteil der räumlichen Wahrnehmung einer Szene.
+* Dabei vermittelt sie Informationen wie die Ausrichtung und Material von Oberflächen sowie die Position von Lichtquellen.
+* Es gibt diffuse und spekulare Beleuchtung.
+* Die Berechnung von direkter Beleuchtung und Schattierung lässt sich leichter in Echtzeit realisieren als indirekte Beleuchtung und Schattenwurf.

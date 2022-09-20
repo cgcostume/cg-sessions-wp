@@ -13,6 +13,10 @@ lectures:
         title:
           de: Virtuelle Kameras in der Echtzeit-Computergrafik
           en: Virtual Cameras in Real-time Computer Graphics
+      - key: lighting-shading
+        title:
+          de: Grundlegende Beleuchtung und Schattierung für Echtzeit-Computergrafik
+          en: Basic Lighting and Shading for Real-time Computer Graphics
 
   - key: cg-unknown
     title:

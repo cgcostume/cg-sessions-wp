@@ -1,6 +1,6 @@
 ### Physikalische Grundlagen
 
-*Für eine detailliertere Einführung in die physikalischen Grundlagen des Lichts empfehlen wir die Seite von Bartosz Ciechanowski **\<insert link\>**. Für diese Einheit werden wir jedoch ein einfaches **Strahlenmodell** annehmen.*
+*Für eine detailliertere Einführung in die physikalischen Grundlagen des Lichts empfehlen wir die Seite von [Bartosz Ciechanowski](https://ciechanow.ski/lights-and-shadows/). Für diese Einheit werden wir jedoch ein einfaches **Strahlenmodell** annehmen.*
 
 Wir nehmen die Welt um uns darüber wahr, wie Licht mit ihr interagiert. Wir können Objekte nur sehen, wenn sie mit Licht in Kontakt kommen und dieses entweder in Richtung Betrachter*in zurückwerfen (**Reflexion**), durchlassen (**Transmission**) oder verschlucken (**Absorption**). Diese Erscheinungen nehmen Einfluss darauf wie hell oder dunkel ein Objekt wahrgenommen wird und bewirken dadurch Schattierung und Schattenwurf. Damit bilden sie auch die Grundlage für unser Beleuchtungsmodell.
 
