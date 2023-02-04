@@ -68,13 +68,7 @@ Die folgende Demo zeigt den Unterschied zwischen Phong-Beleuchtung und Blinn-Pho
     <svg class="zdog-slider" id="zdog-slider" width="760" height="100"></svg>
 </div>
 
-#### Gouraud Shading etc.
--> einfacher phong shader
--> auf artefakte bei 90° hinweisen
-->
-* half vector -> gegenüberstellung
+#### Ausblick
+Mit diesen Überlegungen haben wir die Grundlagen des Phong-Beleuchtungsmodells hergeleitet. Dieses ist verhältnismäßig eingeschränkt und in den Ergebnissen kaum realistisch, weshalb es heutzutage auch im Real-Time-Rendering größtenteils von anderen Modellen abgelöst wurde. Viele davon basieren auf der Idee von **Physically Based Rendering** (PBR). Dieses hat zum Ziel, Beleuchtung basierend auf realweltlichen Oberflächeneigenschaften (z.B. *metalness* oder *roughness*) möglichst realistisch zu modellieren.
 
-* implementierungsaspekte
--> pro objekt, primitiv, vertex, fragment
-* invertiertes L -> was anderes? S?
-* bei phong demo max(0,dot) in die Helligkeitsvorschau einbauen
+Die Ideen des Phong-Beleuchtungsmodells sind aber auch in den moderneren Ansätzen wiederzufinden -- damit bietet es einen guten Einstieg, um grundlegende Konzepte von Echtzeit-Beleuchtungsmodellen zu verstehen.

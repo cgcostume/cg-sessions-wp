@@ -11,28 +11,29 @@ Wir wollen uns dafür ein paar Aufnahmen aus verschiedenen Spielen ansehen. Welc
 ![goose](goose.png?as=webp){.w-50}{.pe-1}{.mb-2}![alyx](alyx.png?as=webp){.w-50}{.ps-1}{.mb-2}
 ![cyber](cyber.png?as=webp){.w-50}{.pe-1}![witness](witness.png?as=webp){.w-50}{.ps-1}
 
-<textarea class = 'notes' rows = '8' placeholder = 'Mach Dir ein paar Notizen wenn du magst.'></textarea>
 
 Wie auch auf den Screenshots zu erkennen, ist Beleuchtung ein zentrales Ausdrucksmittel und für 3D-Wahrnehmung wichtig. Sie vermittelt Betrachter*innen Informationen über Oberflächenbeschaffenheit und Form von Objekten und trägt dadurch signifikant dazu bei, einen räumlichen Eindruck zu erzeugen.
 
-Um diese Informationen zu vermitteln, muss die Belechtung der Szene also in irgendeiner Form von der Oberfläche abhängen, also insbesondere ihrer **Ausrichtung** sowie ihrem **Material und Struktur**. So würde z.B. ein Ball aus Gummi bei gleicher Beleuchtung anders aussehen als eine Kugel aus Metall.
+Um diese Informationen zu vermitteln, muss die Belechtung der Szene also in irgendeiner Form von der Oberfläche abhängen, also insbesondere ihrer **Ausrichtung** sowie ihrem **Material** und ihrer **Struktur**. So würde z.B. ein Ball aus Gummi bei gleicher Beleuchtung anders aussehen als eine Kugel aus Metall.
 
 Dabei sind verschiedene Beleuchtungseffekte zu beobachten: Zum einen sind Flächen stärker erleuchtet, je mehr sie dem Licht zugewandt sind, unabhängig von der Kameraposition. Dieser Bestandteil der Beleuchtung nennt sich **diffuse** Beleuchtung. Zum anderen sind auch Glanzpunkte zu erkennen, deren Position sich in Abhängigkeit von der Blickrichtung verändert. Diese _highlights_ sind der **spekulare** Anteil der Beleuchtung.
+
+Wie sich die Stärke der Beleuchtung in Abhängigkeit von z.B. Lichteinfallswinkel und Betrachtungswinkel verhält, kann allgemmein durch **Bidirectional Reflectance Distribution Functions** (BRDFs) beschrieben werden. In dieser Einheit soll es um eine bestimmte BRDF gehen, welche die Effekte der diffusen und spekularen Beleuchtung einbezieht.
 
 In der Computergrafik I möchten wir zunächst darauf eingehen, wie diese beiden Effekte umgesetzt werden können, um grundlegend plausible Beleuchtung zu erzeugen, die von Oberflächenausrichtung und -material abhängig ist. Natürlich gehört für eine realistische Beleuchtung aber noch einiges mehr dazu. Weiterführende Effekte, die in den Screenshots zu erkennen sind, sind z.B. **indirekte Beleuchtung** und **Schattenwurf**.
 
 **Direkte vs. Indirekte Beleuchtung** <br>
 Direkte Beleuchtung bezeichnet alle Beleuchtungseffekte, die nur Licht berücksichtigen, das auf direktem Wege auf die Oberfläche trifft. Unter anderem werden Reflexion oder Refraktion von Licht durch andere Objekte zwischen der Oberfläche und der Lichtquelle nicht berücksichtigt. Wird beispielsweise eine weiße Wand angestrahlt, würde mit einer physikalisch korrekten Darstellung ein Teil des reflektierten Lichts andere Objekte der Szene erleuchten. Dieser Effekt kann durch Beleuchtungsmodelle mit rein direkter Beleuchtung nicht abgebildet werden.
 
-| ![camera-model](./cornell.jpg?as=webp) |
+| ![camera-model](./cornell_box.png?as=webp){.w-50} |
 | :--------------: |
-| :jigsaw: Cornell-Box direct vs indirect: Platzhalter |
+| Der Einfluss indirekter Beleuchtung ist z.B. an der linken Seite des Quaders zu erkennen. |
 
 **Schattierung vs. Schattenwurf** <br>
 Während es bei der Schattierung darum geht, die Oberflächenfarbe gemäß Material und Ausrichtung gegenüber Lichtquelle und Kamera anzupassen, meint Schattenwurf das Entstehen von Schatten durch Hindernisse zwischen Oberfläche und Lichtquelle.  
 | ![camera-model](./shadowing.png?as=webp) |
 | :--------------: |
-| :jigsaw: Shading/Shadowing |
+| Shading/Shadowing |
 
 Aber was macht diese Effekte so viel schwieriger umzusetzen als direkte Beleuchtung ohne Schattenwurf? Das liegt daran, welche Informationen jeweils benötigt werden, um das Ergebnis zu berechnen.
 Für direkte Beleuchtung ohne Schatten reicht es aus, die Oberflächennormale und die Positionen von Lichtquellen, Kamera und dem aktuellen Punkt auf der Oberfläche zu kennen.

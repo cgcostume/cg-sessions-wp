@@ -415,7 +415,7 @@ let lightingIndicatorH = lightingIndicator.copy({addTo: illo3});
 let updateLightingFor = function(angle = alpha2 + alpha, indicator = lightingIndicator, g = ground) {
   let specularExponent = 16;
   let diffuse = Math.cos(alpha);
-  let specular = Math.pow(Math.cos(angle), specularExponent);
+  let specular = Math.pow(clamp(Math.cos(angle),0.0,1.0), specularExponent);
   shade = diffuse*0.1 + specular;
   shade /= 1.1;
   g.color = hslaToString(gColor[0], gColor[1], gColor[2] * shade, 1.0);

@@ -2,16 +2,18 @@
 
 *Für eine detailliertere Einführung in die physikalischen Grundlagen des Lichts empfehlen wir die Seite von [Bartosz Ciechanowski](https://ciechanow.ski/lights-and-shadows/). Für diese Einheit werden wir jedoch ein einfaches **Strahlenmodell** annehmen.*
 
-Wir nehmen die Welt um uns darüber wahr, wie Licht mit ihr interagiert. Wir können Objekte nur sehen, wenn sie mit Licht in Kontakt kommen und dieses entweder in Richtung Betrachter*in zurückwerfen (**Reflexion**), durchlassen (**Transmission**) oder verschlucken (**Absorption**). Diese Erscheinungen nehmen Einfluss darauf wie hell oder dunkel ein Objekt wahrgenommen wird und bewirken dadurch Schattierung und Schattenwurf. Damit bilden sie auch die Grundlage für unser Beleuchtungsmodell.
+Wir nehmen die Welt um uns darüber wahr, wie Licht mit ihr interagiert. Wir können Objekte nur sehen, wenn sie mit Licht in Kontakt kommen und dieses entweder in Richtung Betrachter*in zurückwerfen (**Reflexion**), durchlassen (**Transmission**) oder verschlucken (**Absorption**). Diese Erscheinungen nehmen Einfluss darauf, wie hell oder dunkel ein Objekt wahrgenommen wird, und bewirken dadurch Schattierung und Schattenwurf. Damit bilden sie auch die Grundlage für unser Beleuchtungsmodell.
 
 Alle Bestandteile dieses Modells sind im folgenden beispielhaft illustriert.
 
 | ![camera-model](./ray_types.png?as=webp) |
 | :--------------: |
-| Strahlentypen |
+<!-- | Strahlentypen | -->
 
 
-Weitere Phänomene, die bei der Interaktion von Licht mit Objekten einer Szene auftreten können, sind z.B. Lichtbeugung und -brechung sowie Interferenzerscheinungen, diese spielen jedoch in den Lichtausbreitungsmodellen der Computergrafik in der Regel eine untergeordnete Rolle. Den Hauptfaktor bildet die **Reflexion**.
+Weitere Phänomene, die bei der Interaktion von Licht mit Objekten einer Szene auftreten können, sind z.B. Lichtbeugung und -brechung sowie Interferenzerscheinungen -- diese spielen jedoch in den Lichtausbreitungsmodellen der Computergrafik in der Regel eine untergeordnete Rolle. Den Hauptfaktor bildet die **Reflexion**.
+
+Im Folgenden werden wir die Intuition hinter den Hauptbestandteilen des **Phong-Beleuchtungsmodells**  erarbeiten.
 
 ### Reflexion
 
@@ -28,7 +30,7 @@ Es steht die Modellannahme dahinter, dass das auf die Oberfläche auftreffende L
 | :--------------: |
 | Diffuse Reflexion - modelliertes Verhalten |
 
-Physikalisch lässt sich dieses Phänomen damit begründen, dass raue Flächen viele kleine Unebenheiten beinhalten. Wir können uns die Wirkung einer Lichtquelle als viele dicht nebeneinanderliegende Lichtstrahlen vorstellen (**modellieren?**).- Treffen diese auf die Fläche, werden sie in praktisch zufällige Richtungen reflektiert. Durch dieses Verhalten der einzelnen Lichtstrahlen wird das Licht insgesamt annähernd gleichmäßig in alle verschiedenen Richtungen reflektiert (isotrop).
+Physikalisch lässt sich dieses Phänomen damit begründen, dass raue Flächen viele kleine Unebenheiten beinhalten. Wir können uns die Wirkung einer Lichtquelle als viele dicht nebeneinanderliegende Lichtstrahlen vorstellen. Treffen diese auf die Fläche, werden sie in praktisch zufällige Richtungen reflektiert. Durch dieses Verhalten der einzelnen Lichtstrahlen wird das Licht insgesamt annähernd gleichmäßig (isotrop) in alle verschiedenen Richtungen reflektiert.
 
 | ![camera-model](./diffuse_zoom.png?as=webp) |
 | :--------------: |
@@ -51,12 +53,33 @@ Dieser Zusammenhang lässt sich auch aus folgender Überlegung über das Strahle
 </div>
 <br/>
 
+Mit dieser Intuition können wir nun auch die Abhängigkeit vom Skalarprodukt zwischen Lichtrichtung und Normale erklären:
+| ![camera-model](./lambert_explanation.png?as=webp)|
+| :--------------: |
+
+Je größer der Abstand $d$ der auftreffenden Lichtstrahlen auf der Oberfläche ist, umso schwächer ist die reflektierte Lichtintensität. Dadurch gilt $$
+I\sim \frac{1}{d}.
+$$
+Diesen Abstand $d$ wiederum können wir in Abhängigkeit des Winkels zwischen Oberflächennormale und Lichtrichtung beschreiben. Dafür können wir wie in der obigen Skizze eingezeichnet die Zusammenhänge am rechtwinkligen Dreieck nutzen und erhalten
+$$
+\cos(\alpha) = \frac{k}{d}.
+$$
+Dabei bezeichnet $k$ den konstanten kürzesten Abstand der Lichtstrahlen zueinander. Aus dieser Gleichung können wir
+$$
+d = \frac{k}{\cos(\alpha)}
+$$
+ableiten, wodurch wir den Zusammenhang $d\sim \frac{1}{\cos(\alpha)}$ und damit $I\sim \cos(\alpha)$ erhalten. Dieser Kosinus lässt sich mithilfe des Skalarprodukts beschreiben, womit wir den gesuchten Zusammenhang
+$$
+I\sim\langle N, L\rangle
+$$
+erhalten.
+
 Damit können wir also die Abhängigkeit der diffusen Reflexion von sowohl der Oberflächenbeschaffenheit als auch von der Lichtrichtung begründen.
 
 #### Spekulare Reflexion
 | ![camera-model](./specular.png?as=webp) |
 | :--------------: |
-| Spekulare Reflexion |
+| Überlagerung von spekularer und diffuser Reflexion |
 
 Im Gegensatz zur Diffusen Reflexion ist die Spekulare Reflexion (auch *spiegelnde Reflexion* oder *Spiegellicht*) nicht nur von der Oberflächenbeschaffenheit und Lichtrichtung, sondern auch der Blickrichtung abhängig.
 
@@ -68,8 +91,7 @@ Spekulare Reflexion ist stärker auf sehr glatten (z.B. polierten) Oberflächen.
 | :--------------: |
 | Spekulare Reflexion |
 
-**Hier auf Phong Modell einschränken**
-Sei $\alpha$ der Winkel zwischen Blick-und Reflexionsrichtung. Dann ist die Intensität der Spekularen Reflexion proportional zu $cos^n \alpha$, wobei $n$ materialspezifisch ist.
+Sei $\alpha$ der Winkel zwischen Blick-und Reflexionsrichtung. Dann ist in dem hier betrachteten Modell die Intensität der Spekularen Reflexion proportional zu $cos^n \alpha$, wobei $n$ materialspezifisch ist.
 
 | ![camera-model](./specular_formula2.png?as=webp) |
 | :--------------: |
@@ -86,5 +108,3 @@ Der Vektor $P$ lässt sich wiederum durch Projektion von $L$ auf $N$ bestimmen.
 Den Kosinus von Theta können wir dabei mit dem Skalarprodukt aus $N$ und $L$ bestimmen.
 $$P = N\cdot \cos \theta = N \cdot \langle N, L\rangle$$
 Wir erhalten also als Formel für die Reflexionsrichtung $$R = 2\cdot(N\cdot\langle N, L\rangle) - L$$
-
-
