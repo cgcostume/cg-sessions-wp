@@ -37,7 +37,8 @@ Physikalisch lässt sich dieses Phänomen damit begründen, dass raue Flächen v
 | Reflexion an Unebenheiten in der Oberfläche |
 
 Wie viel Licht genau in Abhängigkeit vom Lichteinfallswinkel reflektiert wird, lässt sich mithilfe des **Lambertschen Gesetzes** berechnen.
-Dieses besagt, dass die reflektierte Lichtmenge, also die Lichtintensität $I$, proportional zum Kosinus des Winkels zwischen der Einfallsrichtung des Lichtes und der Flächennormale ist. Es ist zur besseren Berechenbarkeit so modelliert, dass die Richtung $L$ der invertierten Lichtrichtung entspricht.
+Dieses besagt, dass die reflektierte Lichtmenge, also die Lichtintensität $I$, proportional zum Kosinus des Winkels zwischen der Einfallsrichtung des Lichtes und der Flächennormale ist. Dafür verwenden wir die **technische Lichtrichtung $\tilde{L}$**, die von der Oberfläche zur Lichtquelle verläuft (statt von der Lichtquelle zur Oberfläche), um korrekt mithilfe des Skalarprodukts den eingeschlossenen Winkel berechnen zu können.
+<!-- Es ist zur besseren Berechenbarkeit so modelliert, dass die Richtung $L$ der invertierten Lichtrichtung entspricht. -->
 
 | ![camera-model](./lambert.png?as=webp)|
 | :--------------: |
@@ -60,7 +61,7 @@ Mit dieser Intuition können wir nun auch die Abhängigkeit vom Skalarprodukt zw
 Je größer der Abstand $d$ der auftreffenden Lichtstrahlen auf der Oberfläche ist, umso schwächer ist die reflektierte Lichtintensität. Dadurch gilt $$
 I\sim \frac{1}{d}.
 $$
-Diesen Abstand $d$ wiederum können wir in Abhängigkeit des Winkels zwischen Oberflächennormale und Lichtrichtung beschreiben. Dafür können wir wie in der obigen Skizze eingezeichnet die Zusammenhänge am rechtwinkligen Dreieck nutzen und erhalten
+Diesen Abstand $d$ wiederum können wir in Abhängigkeit des Winkels zwischen Oberflächennormale und (technischer) Lichtrichtung beschreiben. Dafür können wir wie in der obigen Skizze eingezeichnet die Zusammenhänge am rechtwinkligen Dreieck nutzen und erhalten
 $$
 \cos(\alpha) = \frac{k}{d}.
 $$
@@ -70,7 +71,7 @@ d = \frac{k}{\cos(\alpha)}
 $$
 ableiten, wodurch wir den Zusammenhang $d\sim \frac{1}{\cos(\alpha)}$ und damit $I\sim \cos(\alpha)$ erhalten. Dieser Kosinus lässt sich mithilfe des Skalarprodukts beschreiben, womit wir den gesuchten Zusammenhang
 $$
-I\sim\langle N, L\rangle
+I\sim\langle N, \tilde{L}\rangle
 $$
 erhalten.
 
@@ -79,11 +80,11 @@ Damit können wir also die Abhängigkeit der diffusen Reflexion von sowohl der O
 #### Spekulare Reflexion
 | ![camera-model](./specular.png?as=webp) |
 | :--------------: |
-| Überlagerung von spekularer und diffuser Reflexion |
+| Spekulare Reflexion -- modelliertes Verhalten |
 
 Im Gegensatz zur Diffusen Reflexion ist die Spekulare Reflexion (auch *spiegelnde Reflexion* oder *Spiegellicht*) nicht nur von der Oberflächenbeschaffenheit und Lichtrichtung, sondern auch der Blickrichtung abhängig.
 
-Hier ist die Modellannahme, dass sich das Licht (im Gegensatz zur gleichmäßigen diffusen Reflexion) ungleichmäßig und besonders konzentriert in eine Richtung spiegelt. Daraus ergibt sich auch die Abhängigkeit von der Blickrichtung: Der Punkt erscheint umso heller, je ähnlicher Blick- und Spiegelrichtung sind.
+Hier ist die Modellannahme, dass sich das Licht (im Gegensatz zur gleichmäßigen diffusen Reflexion) ungleichmäßig und besonders konzentriert in eine Richtung $R$ spiegelt. Daraus ergibt sich auch die Abhängigkeit von der Blickrichtung: Der Punkt erscheint umso heller, je ähnlicher Blick- und Spiegelrichtung sind.
 
 Spekulare Reflexion ist stärker auf sehr glatten (z.B. polierten) Oberflächen. Die Oberflächenbeschaffenheit bestimmt dabei sowohl, wie stark die spekulare Reflexion ist, als auch wie schnell die Helligkeit mit zunehmender Abweichung zwischen Blick- und Spiegelrichtung abnimmt.
 
@@ -97,14 +98,14 @@ Sei $\alpha$ der Winkel zwischen Blick-und Reflexionsrichtung. Dann ist in dem h
 | :--------------: |
 | Berechnung der Spiegelrichtung|
 
-Die Spiegelrichtung $R$ liegt in einer Ebene mit $L$ und $N$ und der Winkel zwischen $L$ und $N$ ist identisch zu dem Winkel zwischen $N$ und $R$. Mit diesen Informationen können wir eine Berechnungformel für die Spiegelrichtung herleiten:
+Die Spiegelrichtung $R$ liegt in einer Ebene mit $\tilde{L}$ und $N$. Außerdem ist der Winkel zwischen $\tilde{L}$ und $N$ identisch zu dem Winkel zwischen $N$ und $R$. Mit diesen Informationen können wir eine Berechnungformel für die Spiegelrichtung herleiten:
 
-Sei $P$ die auf die Normale $N$ projizierte Lichtrichtung $L$. Dann entspricht der Vektor $S$ aus der folgenden Darstellung der Differenz aus $P$ und $L$. $$S = -L + P = P - L$$
+Sei $P$ die auf die Normale $N$ projizierte Lichtrichtung $\tilde{L}$. Dann entspricht der Vektor $S$ aus der folgenden Darstellung der Differenz aus $P$ und $\tilde{L}$. $$S = -\tilde{L} + P = P - \tilde{L} $$
 
-Wie auch in der Abbildung gut erkennbar ist, entspricht der Reflexionsvektor $R$ der Summe aus der Lichtrichtung $L$ und zwei Mal $S$.
-$$R = L + 2\cdot S$$
-Damit gilt $$R = L + 2\cdot (P-L) = 2\cdot P - L.$$
-Der Vektor $P$ lässt sich wiederum durch Projektion von $L$ auf $N$ bestimmen.
-Den Kosinus von Theta können wir dabei mit dem Skalarprodukt aus $N$ und $L$ bestimmen.
-$$P = N\cdot \cos \theta = N \cdot \langle N, L\rangle$$
-Wir erhalten also als Formel für die Reflexionsrichtung $$R = 2\cdot(N\cdot\langle N, L\rangle) - L$$
+Wie auch in der Abbildung gut erkennbar ist, entspricht der Reflexionsvektor $R$ der Summe aus der technischen Lichtrichtung $\tilde{L}$ und zwei Mal $S$.
+$$R = \tilde{L} + 2\cdot S$$
+Damit gilt $$R = \tilde{L} + 2\cdot (P-\tilde{L}) = 2\cdot P - \tilde{L}.$$
+Der Vektor $P$ lässt sich wiederum durch Projektion von $\tilde{L}$ auf $N$ bestimmen.
+Den Kosinus von Theta können wir dabei mit dem Skalarprodukt aus $N$ und $\tilde{L}$ bestimmen.
+$$P = N\cdot \cos \theta = N \cdot \langle N, \tilde{L}\rangle$$
+Wir erhalten also als Formel für die Reflexionsrichtung $$R = 2\cdot(N\cdot\langle N, \tilde{L}\rangle) - \tilde{L} $$

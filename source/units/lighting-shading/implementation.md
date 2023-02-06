@@ -18,7 +18,7 @@ Zum anderen weichen die Ergebnisse teils noch von realitätsgetreuen Bildern ab.
 Eine Technik, die diese Probleme adressiert, ist **Blinn-Phong-Beleuchtung**.
 Hier wird die spekulare Beleuchtung anders berechet:
 Statt jedes Mal den Reflexionsvektor zu bestimmen, um anschließend den Winkel zur Blickrichtung zu berechnen, wird stattdessen ein sogenannter Half-Vector $H$ verwendet.
-Dieser liegt bei der Hälfte zwischen Lichtrichtung $L$ und Blickrichtung $V$ und kann dementsprechend mit $$H = \dfrac{L+V}{2}$$ bestimmt werden. Statt für $\alpha$ in der Spekularitätsberechnung den Winkel zwischen dem Reflexionsvektor und der Blickrichtung zu verwenden, wird für Blinn-Phong-Beleuchtung der Winkel zwischen Half-Vector und der Oberflächennormale genutzt.
+Dieser liegt bei der Hälfte zwischen technischer Lichtrichtung $\tilde{L}$ und Blickrichtung $V$ und kann dementsprechend mit $$H = \dfrac{\tilde{L}+V}{2}$$ bestimmt werden. Statt für $\alpha$ in der Spekularitätsberechnung den Winkel zwischen dem Reflexionsvektor und der Blickrichtung zu verwenden, wird für Blinn-Phong-Beleuchtung der Winkel zwischen Half-Vector und der Oberflächennormale genutzt.
 
 
 In der folgenden Demo wird visualisiert, wie für verschiedene Licht- und Blickrichtungen in beiden Varianten der entsprechende Winkel und die daraus resultierende Helligkeit aussehen.
@@ -28,7 +28,7 @@ In der folgenden Demo wird visualisiert, wie für verschiedene Licht- und Blickr
     <div id = "theta" style = "position:absolute; top: 0"><img src = "theta.png" width = 35></div>
     <div id = "alpha" style = "position:absolute; top: 0"><img src = "alpha.png" width = 30></div>
     <div id = "normal" style = "position:absolute; top: 0; font-weight: 900"><b>N</b></div>
-    <div id = "light" style = "position:absolute; top: 0; font-weight: 900; color:#d62ea7"><b>L</b></div>
+    <div id = "light" style = "position:absolute; top: 0; font-weight: 900; color:#d62ea7"><b>L̃</b></div>
     <div id = "reflection" style = "position:absolute; top: 0; font-weight: 900; color:#d62ea7"><b>R</b></div>
     <div id = "view" style = "position:absolute; top: 0; font-weight: 900; color:#0ceedb"><b>V</b></div>
     <div id = "alphaLabel" style = "position:absolute; top: 0; font-weight: 700; color:#0ceedb"><img src = "alpha.png" width = 25> = <div id = "alphaValue" style = "display: inline; color:#ffffff">123</div>°</div>
@@ -40,7 +40,7 @@ In der folgenden Demo wird visualisiert, wie für verschiedene Licht- und Blickr
     <div id = "theta2" style = "position:absolute; top: 0"><img src = "theta.png" width = 35></div>
     <div id = "alpha2" style = "position:absolute; top: 0"><img src = "alpha.png" width = 30></div>
     <div id = "normal2" style = "position:absolute; top: 0; font-weight: 900"><b>N</b></div>
-    <div id = "light2" style = "position:absolute; top: 0; font-weight: 900; color:#d62ea7"><b>L</b></div>
+    <div id = "light2" style = "position:absolute; top: 0; font-weight: 900; color:#d62ea7"><b>L̃</b></div>
     <!--<div id = "reflection2" style = "position:absolute; top: 0; font-weight: 900; color:#d62ea7"><b>R</b></div>-->
     <div id = "view2" style = "position:absolute; top: 0; font-weight: 900; color:#0ceedb"><b>V</b></div>
     <div id = "halfVector" style = "position:absolute; top: 0; font-weight: 900; color:#06776b"><b>H</b></div>
