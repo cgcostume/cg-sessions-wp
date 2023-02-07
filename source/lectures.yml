@@ -2,23 +2,27 @@
 lectures:
 
   - key: cg-fundamentals
+    published: true
     title:
       de: Grundlagen der Echtzeit-Computergrafik
       en: Real-time Computer Graphics Fundamentals
     lead:
-      de: Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
-      en: Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
+      de: Inhalte dieser Sammlung passen zu den Inhalten der Vorlesung "3D-Computergrafik I" im Bachelorstudiengang "IT-Systems Engineering".
+      en: Contents of this collection fit to the contents of "3D Computer Graphics I" lecture in the bachelor's program "IT-Systems Engineering".
     units:
       - key: virtual-camera
+        published: false
         title:
           de: Virtuelle Kameras in der Echtzeit-Computergrafik
           en: Virtual Cameras in Real-time Computer Graphics
       - key: lighting-shading
+        published: true
         title:
           de: Grundlegende Beleuchtung und Schattierung für Echtzeit-Computergrafik
           en: Basic Lighting and Shading for Real-time Computer Graphics
 
   - key: cg-unknown
+    published: false
     title:
       de: Unbekannte Vorlesung
       en: Unknown Lecture
@@ -27,10 +31,12 @@ lectures:
       en: Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
     units:
       - key: undefined
+        published: false
         title:
           de: Markdown Test
           en: Markdown Test
       - key: beta
+        published: false
         title:
           de: Test Einheit BETA
           en: Test Unit BETA

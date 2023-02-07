@@ -16,15 +16,16 @@ html(lang = 'en')
             h1.text-white.my-4.ps-4 &emsp;#[strong Vorlesungen &amp; Units]
 
       each lecture in lectures
-        .row(id =`${lecture.key}`)
-          .offset-1.col-10
-            h2 #{lecture.title.de}
-            p #{lecture.lead.de} 
+        if lecture.published
+          .row(id =`${lecture.key}`)
+            .offset-1.col-10
+              h2 #{lecture.title.de}
+              p #{lecture.lead.de}
 
-            ul.list-group.list-group-flush
-              each unit, index in lecture.units
-                li.list-group-item &ensp;&mdash;&ensp;#[a(href = `units/${unit.key}.html`) #{unit.title.de}]
-
+              ul.list-group.list-group-flush
+                each unit, index in lecture.units
+                  if unit.published
+                    li.list-group-item &ensp;&mdash;&ensp;#[a(href = `units/${unit.key}.html`) #{unit.title.de}]
 
     section#footer.container
       include partials/footer
