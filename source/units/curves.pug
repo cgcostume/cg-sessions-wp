@@ -1,0 +1,49 @@
+
+extends ../partials/lecture.pug
+
+block vars
+  - title = 'Parametrische <strong>Kurven</strong> und <strong>Flächen</strong>';
+  - lead = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.';
+  - teaser = require('./curves/witness.jpg?as=webp');
+    
+block content
+
+  script(src = `${path}paper-full.min.js`)
+
+  .container
+    .row
+      .offset-1.col-10
+
+        .alert.alert-secondary
+          p In dieser Einheit werden die Grundlagen parametrischer Kurven und Flächen erklärt.
+          hr
+          h4 Nach dieser Lehreinheit solltest du&hellip;
+          ul.list-unstyled
+            li &hellip;wissen, wie sich Kurven mathematisch darstellen lassen,
+            li &hellip;verschiedene Kontinuitätseigenschaften kennen und zuordnen können,
+            li &hellip;Darstellungsweisen, Eigenschaften und Anwendungen von Bézier-Kurven kennen.
+
+    .row
+      .offset-1.col-10
+
+        .alert.alert-primary
+          h4 Vorwissen
+          ul.list-unstyled
+            li &hellip;Verständnis für Grundlagen der <b>Vektorrechnung</b>
+          h4 Einführung in Splines
+          ul.list-unstyled
+            li &hellip;<a href="https://www.youtube.com/watch?v=jvPPXbo87ds">The Continuity of Splines </a> von Freya Holmér
+
+  section.container
+    .row
+      .offset-1.col-10
+        !=require("./curves/sec-motivation.md")
+  section.container
+    .row
+      .offset-1.col-10
+        !=require("./curves/sec-curve-representation.md")
+
+  script
+    include ./curves/paper-demo.js
+
+

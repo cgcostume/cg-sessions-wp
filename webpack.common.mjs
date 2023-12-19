@@ -59,6 +59,7 @@ export default function (env, __dirname) {
             'styles': ['./styles/main.scss'],
             'bootstrap': ['./scripts/bootstrap.mjs'],
             'scripts': ['./scripts/scripts.mjs'],
+            'paper': ['./scripts/paper.mjs'],
         },
 
         plugins: [
@@ -68,6 +69,7 @@ export default function (env, __dirname) {
                     //{ from: 'webp-generated/**/*.webp', to: '[path]/[name][ext]', force: false },
                     /* third party scripts */
                     { from: '../node_modules/jquery/dist/jquery.min.js', to: '[name][ext]' },
+                    { from: '../node_modules/paper/dist/paper-full.min.js', to: '[name][ext]' },
                 ]
             }),
             new webpack.DefinePlugin({
