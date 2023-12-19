@@ -58,9 +58,11 @@ window.onload = function() {
     path.remove();
 
     path2 = path1.splitAt(path.length*t);
-    if(path2) path2.strokeColor = 'lightGrey';
+    if(path2)  {
+      path2.strokeColor = 'lightGrey';
+      path2.strokeWidth =3;
+    }
     path1.strokeWidth =5;
-    path2.strokeWidth =3;
 
     if(!path1.lastSegment) return;
     var splitPoint = path1.lastSegment.point;
