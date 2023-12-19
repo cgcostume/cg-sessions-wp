@@ -58,9 +58,11 @@ window.onload = function() {
     path.remove();
 
     path2 = path1.splitAt(path.length*t);
-    if(path2) path2.strokeColor = 'lightGrey';
+    if(path2)  {
+      path2.strokeColor = 'lightGrey';
+      path2.strokeWidth =3;
+    }
     path1.strokeWidth =5;
-    path2.strokeWidth =3;
 
     if(!path1.lastSegment) return;
     var splitPoint = path1.lastSegment.point;
@@ -172,4 +174,4 @@ window.onload = function() {
     if(pathDone) updatePathProgress(path, progressT);
   }
 }</script><footer class="container"><div class="row text-center"><div class="col-12"><p class="mt-5 mb-1">&copy; 2021&ndash;2023
-Universität Potsdam &ndash; Digital Engineering Fakultät &ndash; Hasso-Plattner-Institut für Digital Engineering gGmbH</p><small class="mt-0 mb-5"><a class="text-muted" href="https://docs.github.com/en/github/site-policy/github-privacy-statement">Datenschutzerklärung</a></small></div></div><data hidden value="37a22f72ca7d1da21400cc7bde64b1a346f0568e">revision</data></footer></body><script src="../jquery.min.js"></script><script src="../bootstrap.js"></script><script src="../scripts.js"></script><script src="../paper.js"></script></html>
+Universität Potsdam &ndash; Digital Engineering Fakultät &ndash; Hasso-Plattner-Institut für Digital Engineering gGmbH</p><small class="mt-0 mb-5"><a class="text-muted" href="https://docs.github.com/en/github/site-policy/github-privacy-statement">Datenschutzerklärung</a></small></div></div><data hidden value="65b354892baf15f3f0c1d2892e160eea36bfc61a">revision</data></footer></body><script src="../jquery.min.js"></script><script src="../bootstrap.js"></script><script src="../scripts.js"></script><script src="../paper.js"></script></html>
