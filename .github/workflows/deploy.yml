@@ -30,8 +30,6 @@ jobs:
       - name: Set up dependencies
         run: npm install
         working-directory: src
-      - name: Set up broken dependencies (temporary)
-        run: npm install mini-css-extract-plugin@2.4.5
       - name: Build website
         run: npm run build -- --output-path=../deploy
         working-directory: src
