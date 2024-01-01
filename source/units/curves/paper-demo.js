@@ -1,4 +1,4 @@
-
+//TODO: add default curve
 window.onload = function() {
   // Get a reference to the canvas object
   var canvas = document.getElementById('demo1');
@@ -118,10 +118,20 @@ window.onload = function() {
     pbText?.remove();
   }
 
+  //load path from teaser image
+  path = new paper.Path("M789.685,250.634C789.685,250.634 765.646,255.323 747.727,296.903C729.807,338.484 719.318,356.84 719.755,368.204C720.192,379.567 721.066,386.123 710.576,390.057C705.356,392.015 678.056,402.303 598.425,403.13C541.708,403.72 482.371,407.638 476.748,408.414C464.073,410.162 456.206,420.651 447.028,426.333C437.849,432.015 428.234,435.074 415.559,440.756C402.884,446.438 378.846,455.179 370.105,439.008C361.363,422.837 360.489,398.798 362.237,379.567C363.986,360.337 362.237,349.847 333.828,355.966C305.419,362.085 273.514,344.602 267.395,338.921C261.276,333.239 268.706,327.557 263.024,324.498C257.342,321.438 240.297,313.134 240.297,313.134");
+  path.scale(0.9);
+  path.strokeCap = 'round';
+  path.reverse();
+  path.translate(new paper.Point(-50,-100));
+  path.strokeColor = "#05FDD9";
+  createFrontProgressBar(t);
+  updatePathProgress(path,t);
+
   var progressSelected = false;
-  var pathDone = false;
+  var pathDone = true;
   tool.onMouseDown = function(event){
-    if(event.point.y < progressBarBack.bounds.bottom) {
+    if(event.point.y < progressBarBack.bounds.bottom + 5) {
       progressSelected = true;
       return;
     }
