@@ -1,16 +1,122 @@
-<!DOCTYPE html><html lang="en"><meta http-equiv="x-ua-compatible" content="ie=edge"><meta charset="utf-8"><meta name="viewport" content="width=device-widthinitial-scale=1"><title>CG-Session</title><meta name="description" content="ToDo"><meta name="robots" content="index, follow"><link rel="stylesheet" href="../styles.css"><noscript><style class="js-only">{ display: none; }</style></noscript><body id="page-top" data-spy="scroll"><section class="container" id="lecture"><div class="row text-center"><div class="col-12"><div class="title"><img class="img-fluid" src="../webp-generated/witness_bec0.webp"><h2>Parametrische <strong>Kurven</strong> und <strong>Flächen</strong></h2></div><a href="../index.html">Zurück zu <strong>Vorlesungsübersicht</strong></a></div></div></section><script src="../paper-full.min.js"></script><div class="container"><div class="row"><div class="offset-1 col-10"><div class="alert alert-secondary"><p>In dieser Einheit werden die Grundlagen parametrischer Kurven und Flächen erklärt.</p><hr><h4>Nach dieser Lehreinheit solltest du&hellip;</h4><ul class="list-unstyled"><li>&hellip;wissen, wie sich Kurven mathematisch darstellen lassen,</li><li>&hellip;verschiedene Kontinuitätseigenschaften kennen und zuordnen können,</li><li>&hellip;Darstellungsweisen, Eigenschaften und Anwendungen von Bézier-Kurven kennen.</li></ul></div></div></div><div class="row"><div class="offset-1 col-10"><div class="alert alert-primary"><h4>Vorwissen</h4><ul class="list-unstyled"><li>&hellip;Verständnis für Grundlagen der <b>Vektorrechnung</b></li></ul><h4>Einführung in Splines</h4><ul class="list-unstyled"><li>&hellip;<a href="https://www.youtube.com/watch?v=jvPPXbo87ds">The Continuity of Splines </a> von Freya Holmér</li></ul></div></div></div></div><section class="container"><div class="row"><div class="offset-1 col-10"><h3>Motivation und Problemstellung</h3> <p>Kurven sind überall wir wollen sie beschreiben, bauen und analysieren yeah yeah</p> <p>beispiele für kurven</p> <table> <thead> <tr> <th style="text-align:center"><img src="../webp-generated/affinity_curves_652e.webp" alt="affinity" class="w-50"></th> </tr> </thead> <tbody> <tr> <td style="text-align:center">Beispiel für den Einsatz von Kurven</td> </tr> </tbody> </table> <p><canvas id="demo1" resize></canvas> <img hidden="true" id="curve_hint" src="../webp-generated/curve_hint_cbc4.png"></p> </div></div></section><section class="container"><div class="row"><div class="offset-1 col-10"><h3>Motivation und Problemstellung</h3> <p>Kurven sind überall wir wollen sie beschreiben, bauen und analysieren yeah yeah</p> <p>beispiele für kurven</p> </div></div></section><script>//TODO: add default curve
-window.onload = function() {
+<!DOCTYPE html><html lang="en"><meta http-equiv="x-ua-compatible" content="ie=edge"><meta charset="utf-8"><meta name="viewport" content="width=device-widthinitial-scale=1"><title>CG-Session</title><meta name="description" content="ToDo"><meta name="robots" content="index, follow"><link rel="stylesheet" href="../styles.css"><noscript><style class="js-only">{ display: none; }</style></noscript><body id="page-top" data-spy="scroll"><section class="container" id="lecture"><div class="row text-center"><div class="col-12"><div class="title"><img class="img-fluid" src="../webp-generated/witness_bec0.webp"><h2>Parametrische <strong>Kurven</strong> und <strong>Flächen</strong></h2></div><a href="../index.html">Zurück zu <strong>Vorlesungsübersicht</strong></a></div></div></section><script src="../paper-full.min.js"></script><div class="container"><div class="row"><div class="offset-1 col-10"><div class="alert alert-secondary"><p>In dieser Einheit werden die Grundlagen parametrischer Kurven und Flächen erklärt.</p><hr><h4>Nach dieser Lehreinheit solltest du&hellip;</h4><ul class="list-unstyled"><li>&hellip;wissen, wie sich Kurven mathematisch darstellen lassen,</li><li>&hellip;verschiedene Kontinuitätseigenschaften kennen und zuordnen können,</li><li>&hellip;Darstellungsweisen, Eigenschaften und Anwendungen von Bézier-Kurven kennen.</li></ul></div></div></div><div class="row"><div class="offset-1 col-10"><div class="alert alert-primary"><h4>Vorwissen</h4><ul class="list-unstyled"><li>&hellip;Verständnis für Grundlagen der <b>Vektorrechnung</b></li></ul><h4>Einführung in Splines</h4><ul class="list-unstyled"><li>&hellip;<a href="https://www.youtube.com/watch?v=jvPPXbo87ds">The Continuity of Splines </a> von Freya Holmér</li></ul></div></div></div></div><section class="container"><div class="row"><div class="offset-1 col-10"><h3>Motivation und Problemstellung</h3> <p>Bisher haben wir polygone, dreiecke,.. benutzt um objekte zu modellieren und darzustellen -- ist alles supi, aber was wenn wir smoothe, kontinuierliche!, gekrümmte linien/oberflächen haben wollen, die sich am besten auch noch einfach bearbeiten lassen? beispiele für kurven (TODO: mehr stuff)</p> <table> <thead> <tr> <th style="text-align:center"><img src="../webp-generated/affinity_curves_652e.webp" alt="affinity" class="w-50"></th> </tr> </thead> <tbody> <tr> <td style="text-align:center">Beispiel für den Einsatz von Kurven</td> </tr> <tr> <td style="text-align:center">z.B.: (swirly) Schrift, Rollercoaster, Trinkflasche, Rutsche!!!!, Gitarre, schlange</td> </tr> </tbody> </table> <p>wir brauchen ein neues tool: parametrische kurven + flächen. Sie helfen uns beim Design von Objekten mit gekrümmten bestandteilen, bei animationen und kamerafahrten und können für verschiedenste anwendungen als werkzeug verwendet werden.</p> <h3>Kurven -- what's that?</h3> <p>Unter einer Kurve stellst du dir vermutlich perfekte, smoothe krümmungen vor, wie auch in den obigen Beispielen. Aus mathematischer/computergrafischer Sicht ist eine Kurve aber allgemeiner definiert als irgendeine Linie, ein eindimensionales Objekt also, das in den zwei-, drei- (oder höher-) dimensionalen Raum eingebettet ist.</p> <p>Wir können solche Kurven auf verschiedene Weisen mathematisch darstellen: als <strong>explizite</strong>, <strong>implizite</strong> oder <strong>parametrische</strong> Darstellung.</p> <h4>Explizite und Implizite Darstellung</h4> <p>In der expliziten Darstellung werden die Koordinaten der Kurve <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi></mrow><annotation encoding="application/x-tex">C</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.07153em">C</span></span></span></span></eq> in Abhängigkeit der ersten Koordinate beschrieben. Für eine Kurve im dreidimensionalen Raum (Raumkurve) sieht die allgemeine explizite Darstellung also so aus: <section><eqn><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>C</mi><mo>=</mo><mo stretchy="false">{</mo><mrow><mo fence="true">(</mo><mtable rowspacing="0.16em" columnalign="center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>x</mi></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>y</mi></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>z</mi></mstyle></mtd></mtr></mtable><mo fence="true">)</mo></mrow><mo>∈</mo><msup><mi mathvariant="double-struck">R</mi><mn>3</mn></msup><mtext> </mtext><mi mathvariant="normal">∣</mi><mtext> </mtext><mi>x</mi><mo>∈</mo><mo stretchy="false">[</mo><mi>a</mi><mo separator="true">,</mo><mi>b</mi><mo stretchy="false">]</mo><mo separator="true">,</mo><mi>y</mi><mo>=</mo><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><mi>z</mi><mo>=</mo><mi>g</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">C=\{\left( \begin{array}{c}x\\ y\\ z\end{array}\right) \in \mathbb{R}^3\,|\, x\in[a,b], y=f(x), z=g(x)\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.07153em">C</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:3.6em;vertical-align:-1.55em"></span><span class="mopen">{</span><span class="minner"><span class="mopen"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.05em"><span style="top:-4.05em"><span class="pstrut" style="height:5.6em"></span><span style="width:.875em;height:3.6em"><svg xmlns="http://www.w3.org/2000/svg" width="0.875em" height="3.600em" viewBox="0 0 875 3600"><path d="M863,9c0,-2,-2,-5,-6,-9c0,0,-17,0,-17,0c-12.7,0,-19.3,0.3,-20,1
+c-5.3,5.3,-10.3,11,-15,17c-242.7,294.7,-395.3,682,-458,1162c-21.3,163.3,-33.3,349,
+-36,557 l0,84c0.2,6,0,26,0,60c2,159.3,10,310.7,24,454c53.3,528,210,
+949.7,470,1265c4.7,6,9.7,11.7,15,17c0.7,0.7,7,1,19,1c0,0,18,0,18,0c4,-4,6,-7,6,-9
+c0,-2.7,-3.3,-8.7,-10,-18c-135.3,-192.7,-235.5,-414.3,-300.5,-665c-65,-250.7,-102.5,
+-544.7,-112.5,-882c-2,-104,-3,-167,-3,-189
+l0,-92c0,-162.7,5.7,-314,17,-454c20.7,-272,63.7,-513,129,-723c65.3,
+-210,155.3,-396.3,270,-559c6.7,-9.3,10,-15.3,10,-18z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.55em"><span></span></span></span></span></span></span><span class="mord"><span class="mtable"><span class="arraycolsep" style="width:.5em"></span><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.05em"><span style="top:-4.21em"><span class="pstrut" style="height:3em"></span><span class="mord"><span class="mord mathnormal">x</span></span></span><span style="top:-3.01em"><span class="pstrut" style="height:3em"></span><span class="mord"><span class="mord mathnormal" style="margin-right:.03588em">y</span></span></span><span style="top:-1.81em"><span class="pstrut" style="height:3em"></span><span class="mord"><span class="mord mathnormal" style="margin-right:.04398em">z</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.55em"><span></span></span></span></span></span><span class="arraycolsep" style="width:.5em"></span></span></span><span class="mclose"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.05em"><span style="top:-4.05em"><span class="pstrut" style="height:5.6em"></span><span style="width:.875em;height:3.6em"><svg xmlns="http://www.w3.org/2000/svg" width="0.875em" height="3.600em" viewBox="0 0 875 3600"><path d="M76,0c-16.7,0,-25,3,-25,9c0,2,2,6.3,6,13c21.3,28.7,42.3,60.3,
+63,95c96.7,156.7,172.8,332.5,228.5,527.5c55.7,195,92.8,416.5,111.5,664.5
+c11.3,139.3,17,290.7,17,454c0,28,1.7,43,3.3,45l0,9
+c-3,4,-3.3,16.7,-3.3,38c0,162,-5.7,313.7,-17,455c-18.7,248,-55.8,469.3,-111.5,664
+c-55.7,194.7,-131.8,370.3,-228.5,527c-20.7,34.7,-41.7,66.3,-63,95c-2,3.3,-4,7,-6,11
+c0,7.3,5.7,11,17,11c0,0,11,0,11,0c9.3,0,14.3,-0.3,15,-1c5.3,-5.3,10.3,-11,15,-17
+c242.7,-294.7,395.3,-681.7,458,-1161c21.3,-164.7,33.3,-350.7,36,-558
+l0,-144c-2,-159.3,-10,-310.7,-24,-454c-53.3,-528,-210,-949.7,
+-470,-1265c-4.7,-6,-9.7,-11.7,-15,-17c-0.7,-0.7,-6.7,-1,-18,-1z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.55em"><span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:1.1141em;vertical-align:-.25em"></span><span class="mord"><span class="mord mathbb">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:.8641em"><span style="top:-3.113em;margin-right:.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:.1667em"></span><span class="mord">∣</span><span class="mspace" style="margin-right:.1667em"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-.25em"></span><span class="mopen">[</span><span class="mord mathnormal">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:.1667em"></span><span class="mord mathnormal">b</span><span class="mclose">]</span><span class="mpunct">,</span><span class="mspace" style="margin-right:.1667em"></span><span class="mord mathnormal" style="margin-right:.03588em">y</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-.25em"></span><span class="mord mathnormal" style="margin-right:.10764em">f</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:.1667em"></span><span class="mord mathnormal" style="margin-right:.04398em">z</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-.25em"></span><span class="mord mathnormal" style="margin-right:.03588em">g</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)}</span></span></span></span></span></eqn></section></p> <p>In der impliziten Darstellung wird die Kurve stattdessen als Lösungsmenge einer Funktion <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi></mrow><annotation encoding="application/x-tex">F</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.13889em">F</span></span></span></span></eq> beschrieben: <section><eqn><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>C</mi><mo>=</mo><mo stretchy="false">{</mo><mrow><mo fence="true">(</mo><mtable rowspacing="0.16em" columnalign="center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>x</mi></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>y</mi></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>z</mi></mstyle></mtd></mtr></mtable><mo fence="true">)</mo></mrow><mo>∈</mo><msup><mi mathvariant="double-struck">R</mi><mn>3</mn></msup><mtext> </mtext><mi mathvariant="normal">∣</mi><mtext> </mtext><mi>F</mi><mo stretchy="false">(</mo><mi>x</mi><mo separator="true">,</mo><mi>y</mi><mo separator="true">,</mo><mi>z</mi><mo stretchy="false">)</mo><mo>=</mo><mn>0</mn><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">C=\{\left( \begin{array}{c}x\\ y\\ z\end{array}\right)\in \mathbb{R}^3\,|\, F(x,y,z) = 0\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.07153em">C</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:3.6em;vertical-align:-1.55em"></span><span class="mopen">{</span><span class="minner"><span class="mopen"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.05em"><span style="top:-4.05em"><span class="pstrut" style="height:5.6em"></span><span style="width:.875em;height:3.6em"><svg xmlns="http://www.w3.org/2000/svg" width="0.875em" height="3.600em" viewBox="0 0 875 3600"><path d="M863,9c0,-2,-2,-5,-6,-9c0,0,-17,0,-17,0c-12.7,0,-19.3,0.3,-20,1
+c-5.3,5.3,-10.3,11,-15,17c-242.7,294.7,-395.3,682,-458,1162c-21.3,163.3,-33.3,349,
+-36,557 l0,84c0.2,6,0,26,0,60c2,159.3,10,310.7,24,454c53.3,528,210,
+949.7,470,1265c4.7,6,9.7,11.7,15,17c0.7,0.7,7,1,19,1c0,0,18,0,18,0c4,-4,6,-7,6,-9
+c0,-2.7,-3.3,-8.7,-10,-18c-135.3,-192.7,-235.5,-414.3,-300.5,-665c-65,-250.7,-102.5,
+-544.7,-112.5,-882c-2,-104,-3,-167,-3,-189
+l0,-92c0,-162.7,5.7,-314,17,-454c20.7,-272,63.7,-513,129,-723c65.3,
+-210,155.3,-396.3,270,-559c6.7,-9.3,10,-15.3,10,-18z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.55em"><span></span></span></span></span></span></span><span class="mord"><span class="mtable"><span class="arraycolsep" style="width:.5em"></span><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.05em"><span style="top:-4.21em"><span class="pstrut" style="height:3em"></span><span class="mord"><span class="mord mathnormal">x</span></span></span><span style="top:-3.01em"><span class="pstrut" style="height:3em"></span><span class="mord"><span class="mord mathnormal" style="margin-right:.03588em">y</span></span></span><span style="top:-1.81em"><span class="pstrut" style="height:3em"></span><span class="mord"><span class="mord mathnormal" style="margin-right:.04398em">z</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.55em"><span></span></span></span></span></span><span class="arraycolsep" style="width:.5em"></span></span></span><span class="mclose"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.05em"><span style="top:-4.05em"><span class="pstrut" style="height:5.6em"></span><span style="width:.875em;height:3.6em"><svg xmlns="http://www.w3.org/2000/svg" width="0.875em" height="3.600em" viewBox="0 0 875 3600"><path d="M76,0c-16.7,0,-25,3,-25,9c0,2,2,6.3,6,13c21.3,28.7,42.3,60.3,
+63,95c96.7,156.7,172.8,332.5,228.5,527.5c55.7,195,92.8,416.5,111.5,664.5
+c11.3,139.3,17,290.7,17,454c0,28,1.7,43,3.3,45l0,9
+c-3,4,-3.3,16.7,-3.3,38c0,162,-5.7,313.7,-17,455c-18.7,248,-55.8,469.3,-111.5,664
+c-55.7,194.7,-131.8,370.3,-228.5,527c-20.7,34.7,-41.7,66.3,-63,95c-2,3.3,-4,7,-6,11
+c0,7.3,5.7,11,17,11c0,0,11,0,11,0c9.3,0,14.3,-0.3,15,-1c5.3,-5.3,10.3,-11,15,-17
+c242.7,-294.7,395.3,-681.7,458,-1161c21.3,-164.7,33.3,-350.7,36,-558
+l0,-144c-2,-159.3,-10,-310.7,-24,-454c-53.3,-528,-210,-949.7,
+-470,-1265c-4.7,-6,-9.7,-11.7,-15,-17c-0.7,-0.7,-6.7,-1,-18,-1z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.55em"><span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:1.1141em;vertical-align:-.25em"></span><span class="mord"><span class="mord mathbb">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:.8641em"><span style="top:-3.113em;margin-right:.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:.1667em"></span><span class="mord">∣</span><span class="mspace" style="margin-right:.1667em"></span><span class="mord mathnormal" style="margin-right:.13889em">F</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:.1667em"></span><span class="mord mathnormal" style="margin-right:.03588em">y</span><span class="mpunct">,</span><span class="mspace" style="margin-right:.1667em"></span><span class="mord mathnormal" style="margin-right:.04398em">z</span><span class="mclose">)</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-.25em"></span><span class="mord">0</span><span class="mclose">}</span></span></span></span></span></eqn></section></p> <p>Wir können uns zum Beispiel mit <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mi>s</mi><mi>i</mi><mi>n</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(x) = sin(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-.25em"></span><span class="mord mathnormal" style="margin-right:.10764em">f</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-.25em"></span><span class="mord mathnormal">s</span><span class="mord mathnormal">in</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span></span></span></span></eq> und <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>g</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mi>s</mi><mi>i</mi><mi>n</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">g(x)=sin(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-.25em"></span><span class="mord mathnormal" style="margin-right:.03588em">g</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-.25em"></span><span class="mord mathnormal">s</span><span class="mord mathnormal">in</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span></span></span></span></eq> eine Kurve explizit definieren und die gleiche Kurve implizit darstellen, indem wir <section><eqn><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>F</mi><mo stretchy="false">(</mo><mi>x</mi><mo separator="true">,</mo><mi>y</mi><mo separator="true">,</mo><mi>z</mi><mo stretchy="false">)</mo><mo>=</mo><mrow><mo fence="true">(</mo><mtable rowspacing="0.16em" columnalign="center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>x</mi></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>y</mi></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>z</mi></mstyle></mtd></mtr></mtable><mo fence="true">)</mo></mrow><mo>−</mo><mrow><mo fence="true">(</mo><mtable rowspacing="0.16em" columnalign="center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>x</mi></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>s</mi><mi>i</mi><mi>n</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>s</mi><mi>i</mi><mi>n</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></mstyle></mtd></mtr></mtable><mo fence="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">F(x,y,z) = \left(\begin{array}{c}x\\ y \\ z\end{array}\right)-\left(\begin{array}{c}x\\ sin(x) \\ sin(x)\end{array}\right)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-.25em"></span><span class="mord mathnormal" style="margin-right:.13889em">F</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:.1667em"></span><span class="mord mathnormal" style="margin-right:.03588em">y</span><span class="mpunct">,</span><span class="mspace" style="margin-right:.1667em"></span><span class="mord mathnormal" style="margin-right:.04398em">z</span><span class="mclose">)</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:3.6em;vertical-align:-1.55em"></span><span class="minner"><span class="mopen"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.05em"><span style="top:-4.05em"><span class="pstrut" style="height:5.6em"></span><span style="width:.875em;height:3.6em"><svg xmlns="http://www.w3.org/2000/svg" width="0.875em" height="3.600em" viewBox="0 0 875 3600"><path d="M863,9c0,-2,-2,-5,-6,-9c0,0,-17,0,-17,0c-12.7,0,-19.3,0.3,-20,1
+c-5.3,5.3,-10.3,11,-15,17c-242.7,294.7,-395.3,682,-458,1162c-21.3,163.3,-33.3,349,
+-36,557 l0,84c0.2,6,0,26,0,60c2,159.3,10,310.7,24,454c53.3,528,210,
+949.7,470,1265c4.7,6,9.7,11.7,15,17c0.7,0.7,7,1,19,1c0,0,18,0,18,0c4,-4,6,-7,6,-9
+c0,-2.7,-3.3,-8.7,-10,-18c-135.3,-192.7,-235.5,-414.3,-300.5,-665c-65,-250.7,-102.5,
+-544.7,-112.5,-882c-2,-104,-3,-167,-3,-189
+l0,-92c0,-162.7,5.7,-314,17,-454c20.7,-272,63.7,-513,129,-723c65.3,
+-210,155.3,-396.3,270,-559c6.7,-9.3,10,-15.3,10,-18z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.55em"><span></span></span></span></span></span></span><span class="mord"><span class="mtable"><span class="arraycolsep" style="width:.5em"></span><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.05em"><span style="top:-4.21em"><span class="pstrut" style="height:3em"></span><span class="mord"><span class="mord mathnormal">x</span></span></span><span style="top:-3.01em"><span class="pstrut" style="height:3em"></span><span class="mord"><span class="mord mathnormal" style="margin-right:.03588em">y</span></span></span><span style="top:-1.81em"><span class="pstrut" style="height:3em"></span><span class="mord"><span class="mord mathnormal" style="margin-right:.04398em">z</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.55em"><span></span></span></span></span></span><span class="arraycolsep" style="width:.5em"></span></span></span><span class="mclose"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.05em"><span style="top:-4.05em"><span class="pstrut" style="height:5.6em"></span><span style="width:.875em;height:3.6em"><svg xmlns="http://www.w3.org/2000/svg" width="0.875em" height="3.600em" viewBox="0 0 875 3600"><path d="M76,0c-16.7,0,-25,3,-25,9c0,2,2,6.3,6,13c21.3,28.7,42.3,60.3,
+63,95c96.7,156.7,172.8,332.5,228.5,527.5c55.7,195,92.8,416.5,111.5,664.5
+c11.3,139.3,17,290.7,17,454c0,28,1.7,43,3.3,45l0,9
+c-3,4,-3.3,16.7,-3.3,38c0,162,-5.7,313.7,-17,455c-18.7,248,-55.8,469.3,-111.5,664
+c-55.7,194.7,-131.8,370.3,-228.5,527c-20.7,34.7,-41.7,66.3,-63,95c-2,3.3,-4,7,-6,11
+c0,7.3,5.7,11,17,11c0,0,11,0,11,0c9.3,0,14.3,-0.3,15,-1c5.3,-5.3,10.3,-11,15,-17
+c242.7,-294.7,395.3,-681.7,458,-1161c21.3,-164.7,33.3,-350.7,36,-558
+l0,-144c-2,-159.3,-10,-310.7,-24,-454c-53.3,-528,-210,-949.7,
+-470,-1265c-4.7,-6,-9.7,-11.7,-15,-17c-0.7,-0.7,-6.7,-1,-18,-1z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.55em"><span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:.2222em"></span><span class="mbin">−</span><span class="mspace" style="margin-right:.2222em"></span></span><span class="base"><span class="strut" style="height:3.6em;vertical-align:-1.55em"></span><span class="minner"><span class="mopen"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.05em"><span style="top:-4.05em"><span class="pstrut" style="height:5.6em"></span><span style="width:.875em;height:3.6em"><svg xmlns="http://www.w3.org/2000/svg" width="0.875em" height="3.600em" viewBox="0 0 875 3600"><path d="M863,9c0,-2,-2,-5,-6,-9c0,0,-17,0,-17,0c-12.7,0,-19.3,0.3,-20,1
+c-5.3,5.3,-10.3,11,-15,17c-242.7,294.7,-395.3,682,-458,1162c-21.3,163.3,-33.3,349,
+-36,557 l0,84c0.2,6,0,26,0,60c2,159.3,10,310.7,24,454c53.3,528,210,
+949.7,470,1265c4.7,6,9.7,11.7,15,17c0.7,0.7,7,1,19,1c0,0,18,0,18,0c4,-4,6,-7,6,-9
+c0,-2.7,-3.3,-8.7,-10,-18c-135.3,-192.7,-235.5,-414.3,-300.5,-665c-65,-250.7,-102.5,
+-544.7,-112.5,-882c-2,-104,-3,-167,-3,-189
+l0,-92c0,-162.7,5.7,-314,17,-454c20.7,-272,63.7,-513,129,-723c65.3,
+-210,155.3,-396.3,270,-559c6.7,-9.3,10,-15.3,10,-18z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.55em"><span></span></span></span></span></span></span><span class="mord"><span class="mtable"><span class="arraycolsep" style="width:.5em"></span><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.05em"><span style="top:-4.21em"><span class="pstrut" style="height:3em"></span><span class="mord"><span class="mord mathnormal">x</span></span></span><span style="top:-3.01em"><span class="pstrut" style="height:3em"></span><span class="mord"><span class="mord mathnormal">s</span><span class="mord mathnormal">in</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span></span></span><span style="top:-1.81em"><span class="pstrut" style="height:3em"></span><span class="mord"><span class="mord mathnormal">s</span><span class="mord mathnormal">in</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.55em"><span></span></span></span></span></span><span class="arraycolsep" style="width:.5em"></span></span></span><span class="mclose"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.05em"><span style="top:-4.05em"><span class="pstrut" style="height:5.6em"></span><span style="width:.875em;height:3.6em"><svg xmlns="http://www.w3.org/2000/svg" width="0.875em" height="3.600em" viewBox="0 0 875 3600"><path d="M76,0c-16.7,0,-25,3,-25,9c0,2,2,6.3,6,13c21.3,28.7,42.3,60.3,
+63,95c96.7,156.7,172.8,332.5,228.5,527.5c55.7,195,92.8,416.5,111.5,664.5
+c11.3,139.3,17,290.7,17,454c0,28,1.7,43,3.3,45l0,9
+c-3,4,-3.3,16.7,-3.3,38c0,162,-5.7,313.7,-17,455c-18.7,248,-55.8,469.3,-111.5,664
+c-55.7,194.7,-131.8,370.3,-228.5,527c-20.7,34.7,-41.7,66.3,-63,95c-2,3.3,-4,7,-6,11
+c0,7.3,5.7,11,17,11c0,0,11,0,11,0c9.3,0,14.3,-0.3,15,-1c5.3,-5.3,10.3,-11,15,-17
+c242.7,-294.7,395.3,-681.7,458,-1161c21.3,-164.7,33.3,-350.7,36,-558
+l0,-144c-2,-159.3,-10,-310.7,-24,-454c-53.3,-528,-210,-949.7,
+-470,-1265c-4.7,-6,-9.7,-11.7,-15,-17c-0.7,-0.7,-6.7,-1,-18,-1z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.55em"><span></span></span></span></span></span></span></span></span></span></span></span></eqn></section> definieren und in die allgemeine Formel der impliziten Darstellung einsetzen. Die resultierende Kurve sieht in beiden Fällen so aus:</p> <table> <thead> <tr> <th style="text-align:center"><img src="../webp-generated/3dSinus_e3b7.webp" alt="affinity" class="w-50"></th> </tr> </thead> <tbody> <tr> <td style="text-align:center">Grafische Darstellung der definierten Kurve</td> </tr> </tbody> </table> <p>Beide Darstellungsformen haben ihre Nachteile: Zum Beispiel lassen sich in der expliziten Darstellung nicht alle Kurven beschreiben (z.B ein Kreis in der x-y-Ebene), während die implizite Darstellung teils schwer auszuwerten ist und keine definierte Richtung hat. Aus diesen Gründen wird in der Praxis üblicherweise die <strong>parametrische Darstellung</strong> genutzt.</p> <h4>Parametrische Darstellung von Kurven</h4> <p>Die parametrische Darstellung führt einen zusätzlichen Parameter <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6151em"></span><span class="mord mathnormal">t</span></span></span></span></eq> in die Kurvendefinition ein. Dieses <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6151em"></span><span class="mord mathnormal">t</span></span></span></span></eq> beschreibt den Verlauf der Kurve und liegt üblicherweise zwischen <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6444em"></span><span class="mord">0</span></span></span></span></eq> und <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6444em"></span><span class="mord">1</span></span></span></span></eq>. Die Kurve wird dann über eine Funktion pro Koordinate beschrieben, die den Verlauf der jeweiligen Koordinate in Abhängigkeit von <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6151em"></span><span class="mord mathnormal">t</span></span></span></span></eq> beschreibt.</p> <section><eqn><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>C</mi><mo>=</mo><mo stretchy="false">{</mo><mrow><mo fence="true">(</mo><mtable rowspacing="0.16em" columnalign="center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>x</mi></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>y</mi></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>z</mi></mstyle></mtd></mtr></mtable><mo fence="true">)</mo></mrow><mo>∈</mo><msup><mi mathvariant="double-struck">R</mi><mn>3</mn></msup><mtext> </mtext><mi mathvariant="normal">∣</mi><mtext> </mtext><mi mathvariant="normal">∃</mi><mi>t</mi><mo>∈</mo><mo stretchy="false">[</mo><mi>a</mi><mo separator="true">,</mo><mi>b</mi><mo stretchy="false">]</mo><mo>⊂</mo><mi mathvariant="double-struck">R</mi><mo>:</mo><mtable rowspacing="0.16em" columnalign="center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>x</mi><mo>=</mo><msub><mi>c</mi><mi>x</mi></msub><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mo separator="true">,</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>y</mi><mo>=</mo><msub><mi>c</mi><mi>y</mi></msub><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mo separator="true">,</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>z</mi><mo>=</mo><msub><mi>c</mi><mi>z</mi></msub><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mtext> </mtext><mtext> </mtext></mrow></mstyle></mtd></mtr></mtable><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">C=\{\left( \begin{array}{c}x\\ y\\ z\end{array}\right)\in \mathbb{R}^3\,|\, \exists t \in [a,b]\subset \mathbb{R}: \begin{array}{c} x = c_x(t),\\ y = c_y(t),\\ z = c_z(t)\,\, \end{array}\} </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.07153em">C</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:3.6em;vertical-align:-1.55em"></span><span class="mopen">{</span><span class="minner"><span class="mopen"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.05em"><span style="top:-4.05em"><span class="pstrut" style="height:5.6em"></span><span style="width:.875em;height:3.6em"><svg xmlns="http://www.w3.org/2000/svg" width="0.875em" height="3.600em" viewBox="0 0 875 3600"><path d="M863,9c0,-2,-2,-5,-6,-9c0,0,-17,0,-17,0c-12.7,0,-19.3,0.3,-20,1
+c-5.3,5.3,-10.3,11,-15,17c-242.7,294.7,-395.3,682,-458,1162c-21.3,163.3,-33.3,349,
+-36,557 l0,84c0.2,6,0,26,0,60c2,159.3,10,310.7,24,454c53.3,528,210,
+949.7,470,1265c4.7,6,9.7,11.7,15,17c0.7,0.7,7,1,19,1c0,0,18,0,18,0c4,-4,6,-7,6,-9
+c0,-2.7,-3.3,-8.7,-10,-18c-135.3,-192.7,-235.5,-414.3,-300.5,-665c-65,-250.7,-102.5,
+-544.7,-112.5,-882c-2,-104,-3,-167,-3,-189
+l0,-92c0,-162.7,5.7,-314,17,-454c20.7,-272,63.7,-513,129,-723c65.3,
+-210,155.3,-396.3,270,-559c6.7,-9.3,10,-15.3,10,-18z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.55em"><span></span></span></span></span></span></span><span class="mord"><span class="mtable"><span class="arraycolsep" style="width:.5em"></span><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.05em"><span style="top:-4.21em"><span class="pstrut" style="height:3em"></span><span class="mord"><span class="mord mathnormal">x</span></span></span><span style="top:-3.01em"><span class="pstrut" style="height:3em"></span><span class="mord"><span class="mord mathnormal" style="margin-right:.03588em">y</span></span></span><span style="top:-1.81em"><span class="pstrut" style="height:3em"></span><span class="mord"><span class="mord mathnormal" style="margin-right:.04398em">z</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.55em"><span></span></span></span></span></span><span class="arraycolsep" style="width:.5em"></span></span></span><span class="mclose"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.05em"><span style="top:-4.05em"><span class="pstrut" style="height:5.6em"></span><span style="width:.875em;height:3.6em"><svg xmlns="http://www.w3.org/2000/svg" width="0.875em" height="3.600em" viewBox="0 0 875 3600"><path d="M76,0c-16.7,0,-25,3,-25,9c0,2,2,6.3,6,13c21.3,28.7,42.3,60.3,
+63,95c96.7,156.7,172.8,332.5,228.5,527.5c55.7,195,92.8,416.5,111.5,664.5
+c11.3,139.3,17,290.7,17,454c0,28,1.7,43,3.3,45l0,9
+c-3,4,-3.3,16.7,-3.3,38c0,162,-5.7,313.7,-17,455c-18.7,248,-55.8,469.3,-111.5,664
+c-55.7,194.7,-131.8,370.3,-228.5,527c-20.7,34.7,-41.7,66.3,-63,95c-2,3.3,-4,7,-6,11
+c0,7.3,5.7,11,17,11c0,0,11,0,11,0c9.3,0,14.3,-0.3,15,-1c5.3,-5.3,10.3,-11,15,-17
+c242.7,-294.7,395.3,-681.7,458,-1161c21.3,-164.7,33.3,-350.7,36,-558
+l0,-144c-2,-159.3,-10,-310.7,-24,-454c-53.3,-528,-210,-949.7,
+-470,-1265c-4.7,-6,-9.7,-11.7,-15,-17c-0.7,-0.7,-6.7,-1,-18,-1z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.55em"><span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:1.1141em;vertical-align:-.25em"></span><span class="mord"><span class="mord mathbb">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:.8641em"><span style="top:-3.113em;margin-right:.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:.1667em"></span><span class="mord">∣</span><span class="mspace" style="margin-right:.1667em"></span><span class="mord">∃</span><span class="mord mathnormal">t</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-.25em"></span><span class="mopen">[</span><span class="mord mathnormal">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:.1667em"></span><span class="mord mathnormal">b</span><span class="mclose">]</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">⊂</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:.6889em"></span><span class="mord mathbb">R</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">:</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:3.6em;vertical-align:-1.55em"></span><span class="mord"><span class="mtable"><span class="arraycolsep" style="width:.5em"></span><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.05em"><span style="top:-4.21em"><span class="pstrut" style="height:3em"></span><span class="mord"><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:.2778em"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:.1514em"><span style="top:-2.55em;margin-left:0;margin-right:.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">x</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:.15em"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span><span class="mpunct">,</span></span></span><span style="top:-3.01em"><span class="pstrut" style="height:3em"></span><span class="mord"><span class="mord mathnormal" style="margin-right:.03588em">y</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:.2778em"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:.1514em"><span style="top:-2.55em;margin-left:0;margin-right:.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:.03588em">y</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:.2861em"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span><span class="mpunct">,</span></span></span><span style="top:-1.81em"><span class="pstrut" style="height:3em"></span><span class="mord"><span class="mord mathnormal" style="margin-right:.04398em">z</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:.2778em"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:.1514em"><span style="top:-2.55em;margin-left:0;margin-right:.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:.04398em">z</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:.15em"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span><span class="mspace" style="margin-right:.1667em"></span><span class="mspace" style="margin-right:.1667em"></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.55em"><span></span></span></span></span></span><span class="arraycolsep" style="width:.5em"></span></span></span><span class="mclose">}</span></span></span></span></span></eqn></section><p>Die Funktionen <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">c_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.5806em;vertical-align:-.15em"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:.3117em"><span style="top:-2.55em;margin-left:0;margin-right:.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:.15em"><span></span></span></span></span></span></span></span></span></span></eq> lassen sich zu einer einzelnen Funktion <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mo>=</mo><mrow><mo fence="true">(</mo><mtable rowspacing="0.16em" columnalign="center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><msub><mi>c</mi><mi>x</mi></msub><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><msub><mi>c</mi><mi>y</mi></msub><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><msub><mi>c</mi><mi>z</mi></msub><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo></mrow></mstyle></mtd></mtr></mtable><mo fence="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">c(t) = \left(\begin{array}{c}c_x(t)\\ c_y(t) \\ c_z(t)\end{array}\right)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-.25em"></span><span class="mord mathnormal">c</span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:3.6em;vertical-align:-1.55em"></span><span class="minner"><span class="mopen"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.05em"><span style="top:-4.05em"><span class="pstrut" style="height:5.6em"></span><span style="width:.875em;height:3.6em"><svg xmlns="http://www.w3.org/2000/svg" width="0.875em" height="3.600em" viewBox="0 0 875 3600"><path d="M863,9c0,-2,-2,-5,-6,-9c0,0,-17,0,-17,0c-12.7,0,-19.3,0.3,-20,1
+c-5.3,5.3,-10.3,11,-15,17c-242.7,294.7,-395.3,682,-458,1162c-21.3,163.3,-33.3,349,
+-36,557 l0,84c0.2,6,0,26,0,60c2,159.3,10,310.7,24,454c53.3,528,210,
+949.7,470,1265c4.7,6,9.7,11.7,15,17c0.7,0.7,7,1,19,1c0,0,18,0,18,0c4,-4,6,-7,6,-9
+c0,-2.7,-3.3,-8.7,-10,-18c-135.3,-192.7,-235.5,-414.3,-300.5,-665c-65,-250.7,-102.5,
+-544.7,-112.5,-882c-2,-104,-3,-167,-3,-189
+l0,-92c0,-162.7,5.7,-314,17,-454c20.7,-272,63.7,-513,129,-723c65.3,
+-210,155.3,-396.3,270,-559c6.7,-9.3,10,-15.3,10,-18z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.55em"><span></span></span></span></span></span></span><span class="mord"><span class="mtable"><span class="arraycolsep" style="width:.5em"></span><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.05em"><span style="top:-4.21em"><span class="pstrut" style="height:3em"></span><span class="mord"><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:.1514em"><span style="top:-2.55em;margin-left:0;margin-right:.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">x</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:.15em"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span></span></span><span style="top:-3.01em"><span class="pstrut" style="height:3em"></span><span class="mord"><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:.1514em"><span style="top:-2.55em;margin-left:0;margin-right:.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:.03588em">y</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:.2861em"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span></span></span><span style="top:-1.81em"><span class="pstrut" style="height:3em"></span><span class="mord"><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:.1514em"><span style="top:-2.55em;margin-left:0;margin-right:.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:.04398em">z</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:.15em"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.55em"><span></span></span></span></span></span><span class="arraycolsep" style="width:.5em"></span></span></span><span class="mclose"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.05em"><span style="top:-4.05em"><span class="pstrut" style="height:5.6em"></span><span style="width:.875em;height:3.6em"><svg xmlns="http://www.w3.org/2000/svg" width="0.875em" height="3.600em" viewBox="0 0 875 3600"><path d="M76,0c-16.7,0,-25,3,-25,9c0,2,2,6.3,6,13c21.3,28.7,42.3,60.3,
+63,95c96.7,156.7,172.8,332.5,228.5,527.5c55.7,195,92.8,416.5,111.5,664.5
+c11.3,139.3,17,290.7,17,454c0,28,1.7,43,3.3,45l0,9
+c-3,4,-3.3,16.7,-3.3,38c0,162,-5.7,313.7,-17,455c-18.7,248,-55.8,469.3,-111.5,664
+c-55.7,194.7,-131.8,370.3,-228.5,527c-20.7,34.7,-41.7,66.3,-63,95c-2,3.3,-4,7,-6,11
+c0,7.3,5.7,11,17,11c0,0,11,0,11,0c9.3,0,14.3,-0.3,15,-1c5.3,-5.3,10.3,-11,15,-17
+c242.7,-294.7,395.3,-681.7,458,-1161c21.3,-164.7,33.3,-350.7,36,-558
+l0,-144c-2,-159.3,-10,-310.7,-24,-454c-53.3,-528,-210,-949.7,
+-470,-1265c-4.7,-6,-9.7,-11.7,-15,-17c-0.7,-0.7,-6.7,-1,-18,-1z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.55em"><span></span></span></span></span></span></span></span></span></span></span></eq> kombinieren und die Kurve damit als <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mo>=</mo><mo stretchy="false">{</mo><mi>c</mi><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mo>∈</mo><msup><mi mathvariant="double-struck">R</mi><mn>3</mn></msup><mtext> </mtext><mi mathvariant="normal">∣</mi><mtext> </mtext><mi>t</mi><mo>∈</mo><mo stretchy="false">[</mo><mi>a</mi><mo separator="true">,</mo><mi>b</mi><mo stretchy="false">]</mo><mo>⊂</mo><mi mathvariant="double-struck">R</mi><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">C=\{c(t)\in \mathbb{R}^3\,|\, t \in [a,b]\subset \mathbb{R}\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.07153em">C</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-.25em"></span><span class="mopen">{</span><span class="mord mathnormal">c</span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-.25em"></span><span class="mord"><span class="mord mathbb">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:.8141em"><span style="top:-3.063em;margin-right:.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:.1667em"></span><span class="mord">∣</span><span class="mspace" style="margin-right:.1667em"></span><span class="mord mathnormal">t</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-.25em"></span><span class="mopen">[</span><span class="mord mathnormal">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:.1667em"></span><span class="mord mathnormal">b</span><span class="mclose">]</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">⊂</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-.25em"></span><span class="mord mathbb">R</span><span class="mclose">}</span></span></span></span></eq> beschreiben. Oft wird die Kurve <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi></mrow><annotation encoding="application/x-tex">C</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6833em"></span><span class="mord mathnormal" style="margin-right:.07153em">C</span></span></span></span></eq> auch direkt mit der Funktion <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi></mrow><annotation encoding="application/x-tex">c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.4306em"></span><span class="mord mathnormal">c</span></span></span></span></eq> gleichgesetzt.</p> <p>Durch den Parameter <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6151em"></span><span class="mord mathnormal">t</span></span></span></span></eq> lässt sich jetzt eindeutig ein Start und Ende der Kurve (bei <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">t=0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6151em"></span><span class="mord mathnormal">t</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:.6444em"></span><span class="mord">0</span></span></span></span></eq> bzw. <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">t=1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6151em"></span><span class="mord mathnormal">t</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:.6444em"></span><span class="mord">1</span></span></span></span></eq>) sowie ihre Richtung definieren. Das ermöglicht (effiziente) Analysen von Biegungs- und Stetigkeitseigenschaften.</p> <p>Wir können nun auch einfach die Ableitung einer Kurve definieren, nämlich als Ableitung der Funktion <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi></mrow><annotation encoding="application/x-tex">c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.4306em"></span><span class="mord mathnormal">c</span></span></span></span></eq> nach <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6151em"></span><span class="mord mathnormal">t</span></span></span></span></eq>, die sich zusammensetzt aus den Ableitungen der einzelnen Komponenten: <section><eqn><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msup><mi>c</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mo>=</mo><mrow><mo fence="true">(</mo><mtable rowspacing="0.16em" columnalign="center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><msubsup><mi>c</mi><mi>x</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msubsup><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><msubsup><mi>c</mi><mi>y</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msubsup><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><msubsup><mi>c</mi><mi>z</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msubsup><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mtext> </mtext><mtext> </mtext></mrow></mstyle></mtd></mtr></mtable><mo fence="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">c&#x27;(t) = \left( \begin{array}{c} c_x&#x27;(t)\\ c_y&#x27;(t)\\ c_z&#x27;(t)\,\, \end{array}\right) </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0519em;vertical-align:-.25em"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:.8019em"><span style="top:-3.113em;margin-right:.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:3.6231em;vertical-align:-1.5616em"></span><span class="minner"><span class="mopen"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.05em"><span style="top:-4.05em"><span class="pstrut" style="height:5.6em"></span><span style="width:.875em;height:3.6em"><svg xmlns="http://www.w3.org/2000/svg" width="0.875em" height="3.600em" viewBox="0 0 875 3600"><path d="M863,9c0,-2,-2,-5,-6,-9c0,0,-17,0,-17,0c-12.7,0,-19.3,0.3,-20,1
+c-5.3,5.3,-10.3,11,-15,17c-242.7,294.7,-395.3,682,-458,1162c-21.3,163.3,-33.3,349,
+-36,557 l0,84c0.2,6,0,26,0,60c2,159.3,10,310.7,24,454c53.3,528,210,
+949.7,470,1265c4.7,6,9.7,11.7,15,17c0.7,0.7,7,1,19,1c0,0,18,0,18,0c4,-4,6,-7,6,-9
+c0,-2.7,-3.3,-8.7,-10,-18c-135.3,-192.7,-235.5,-414.3,-300.5,-665c-65,-250.7,-102.5,
+-544.7,-112.5,-882c-2,-104,-3,-167,-3,-189
+l0,-92c0,-162.7,5.7,-314,17,-454c20.7,-272,63.7,-513,129,-723c65.3,
+-210,155.3,-396.3,270,-559c6.7,-9.3,10,-15.3,10,-18z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.55em"><span></span></span></span></span></span></span><span class="mord"><span class="mtable"><span class="arraycolsep" style="width:.5em"></span><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.0616em"><span style="top:-4.2216em"><span class="pstrut" style="height:3em"></span><span class="mord"><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:.7519em"><span style="top:-2.453em;margin-left:0;margin-right:.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">x</span></span></span><span style="top:-3.063em;margin-right:.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:.247em"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span></span></span><span style="top:-3.0216em"><span class="pstrut" style="height:3em"></span><span class="mord"><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:.7519em"><span style="top:-2.453em;margin-left:0;margin-right:.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:.03588em">y</span></span></span><span style="top:-3.063em;margin-right:.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:.3831em"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span></span></span><span style="top:-1.7984em"><span class="pstrut" style="height:3em"></span><span class="mord"><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:.7519em"><span style="top:-2.453em;margin-left:0;margin-right:.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:.04398em">z</span></span></span><span style="top:-3.063em;margin-right:.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:.247em"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span><span class="mspace" style="margin-right:.1667em"></span><span class="mspace" style="margin-right:.1667em"></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.5616em"><span></span></span></span></span></span><span class="arraycolsep" style="width:.5em"></span></span></span><span class="mclose"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.05em"><span style="top:-4.05em"><span class="pstrut" style="height:5.6em"></span><span style="width:.875em;height:3.6em"><svg xmlns="http://www.w3.org/2000/svg" width="0.875em" height="3.600em" viewBox="0 0 875 3600"><path d="M76,0c-16.7,0,-25,3,-25,9c0,2,2,6.3,6,13c21.3,28.7,42.3,60.3,
+63,95c96.7,156.7,172.8,332.5,228.5,527.5c55.7,195,92.8,416.5,111.5,664.5
+c11.3,139.3,17,290.7,17,454c0,28,1.7,43,3.3,45l0,9
+c-3,4,-3.3,16.7,-3.3,38c0,162,-5.7,313.7,-17,455c-18.7,248,-55.8,469.3,-111.5,664
+c-55.7,194.7,-131.8,370.3,-228.5,527c-20.7,34.7,-41.7,66.3,-63,95c-2,3.3,-4,7,-6,11
+c0,7.3,5.7,11,17,11c0,0,11,0,11,0c9.3,0,14.3,-0.3,15,-1c5.3,-5.3,10.3,-11,15,-17
+c242.7,-294.7,395.3,-681.7,458,-1161c21.3,-164.7,33.3,-350.7,36,-558
+l0,-144c-2,-159.3,-10,-310.7,-24,-454c-53.3,-528,-210,-949.7,
+-470,-1265c-4.7,-6,-9.7,-11.7,-15,-17c-0.7,-0.7,-6.7,-1,-18,-1z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.55em"><span></span></span></span></span></span></span></span></span></span></span></span></eqn></section></p> <p>Die parametrische Darstellung lässt sich folgendermaßen anschaulich vorstellen: Wenn man die Kurve von Anfang bis Ende zeichnen würde, beschreibt die Funktion <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi></mrow><annotation encoding="application/x-tex">c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.4306em"></span><span class="mord mathnormal">c</span></span></span></span></eq> an welchem Punkt der Stift zum Zeitpunkt <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6151em"></span><span class="mord mathnormal">t</span></span></span></span></eq> aufgesetzt ist. Für zweidimensionale Kurven kannst du das hier einmal ausprobieren:</p> <p>(A/D, um <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6151em"></span><span class="mord mathnormal">t</span></span></span></span></eq> zu vergrößern/verkleinern, oder in der progress bar ziehen)</p> <p><canvas id="demo1" resize></canvas>TODO: make size-independent <img hidden="true" id="curve_hint" src="../webp-generated/curve_hint_cbc4.png"></p> <p>Um weitere Analysen durchführen zu können, ohne zahlreiche Spezialfälle betrachten zu müssen, wird oft gefordert, dass eine Kurve <strong>regulär</strong> ist. Das bedeutet, dass die Ableitung der Kurve für alle <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6151em"></span><span class="mord mathnormal">t</span></span></span></span></eq> definiert und nicht <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6444em"></span><span class="mord">0</span></span></span></span></eq> ist -- die Kurve stoppt also nie oder dreht abrupt um.</p> <h4>Längenbestimmung von Kurven</h4> <p>TODO: was ist mit unendlichen Kurven? sind die kein thing? zumindest theoretisch? TODO: stetig differenzierbar = def auf den folien? <canvas id="demo2" resize></canvas></p> </div></div></section><script>//TODO: add default curve
+function demo () {
   // Get a reference to the canvas object
   var canvas = document.getElementById('demo1');
   // Create an empty project and a view for the canvas:
-  paper.setup(canvas);
+  var pScope = new paper.PaperScope();
+  pScope.setup(canvas);
 
-  var tool = new paper.Tool();
+  var tool = new pScope.Tool();
   //tool.minDistance = 10;
   //tool.maxDistance = 10;
   var t = 0.8;
 
-  paper.view.draw();
+  pScope.view.draw();
   var path;
   var path1;
   var path2;
@@ -18,16 +124,16 @@ window.onload = function() {
   var text;
   var pbText;
 
-  var hint = new paper.Raster('curve_hint');
-  hint.position = paper.view.center;
+  var hint = new pScope.Raster('curve_hint');
+  hint.position = pScope.view.center;
   hint.scale(0.15);
 
-  var pbSize = new paper.Size(400,14);
+  var pbSize = new pScope.Size(400,14);
   var pbYOffset = -150;
-  var pbOffset = new paper.Point(-pbSize.width / 2,pbYOffset -pbSize.height / 2);
+  var pbOffset = new pScope.Point(-pbSize.width / 2,pbYOffset -pbSize.height / 2);
   var pbRadius = pbSize.height / 2;
-  var pbPoint = paper.view.center.add(pbOffset);
-  var progressBarBack = new paper.Path.Rectangle(new paper.Rectangle(pbPoint, pbSize), pbRadius);
+  var pbPoint = pScope.view.center.add(pbOffset);
+  var progressBarBack = new pScope.Path.Rectangle(new pScope.Rectangle(pbPoint, pbSize), pbRadius);
   progressBarBack.fillColor = 'lightGrey';
 
   var progressBarFront;
@@ -37,7 +143,7 @@ window.onload = function() {
     }
     var pbFrontSize = pbSize.clone();
     pbFrontSize.width *= t;
-    progressBarFront = new paper.Path.Rectangle(new paper.Rectangle(pbPoint, pbFrontSize), pbRadius);
+    progressBarFront = new pScope.Path.Rectangle(new pScope.Rectangle(pbPoint, pbFrontSize), pbRadius);
     progressBarFront.fillColor = 'magenta';
   }
 
@@ -46,7 +152,7 @@ window.onload = function() {
   //progressBarFront.scale(t, 1, pbPoint);
 
   function inverseRemove(thing) {
-    paper.project.activeLayer.addChild(thing);
+    pScope.project.activeLayer.addChild(thing);
   }
 
   function updatePathProgress(path, t) {
@@ -66,10 +172,10 @@ window.onload = function() {
 
     if(!path1.lastSegment) return;
     var splitPoint = path1.lastSegment.point;
-    var curveCoordinates = splitPoint.subtract(paper.view.center).divide(40.0);
+    var curveCoordinates = splitPoint.subtract(pScope.view.center).divide(40.0);
 
     if(!circle || !circle.parent) {
-      circle = new paper.Path.Circle({
+      circle = new pScope.Path.Circle({
         radius:8,
         fillColor: 'white',
         strokeColor: path1.strokeColor,
@@ -79,7 +185,7 @@ window.onload = function() {
     else circle.bringToFront();
 
     if(!text || !text.parent) {
-      text = new paper.PointText({
+      text = new pScope.PointText({
         fontSize: 16,
         fillColor: path1.strokeColor,
         fontWeight: 'bold'
@@ -93,19 +199,19 @@ window.onload = function() {
     
     circle.position = (splitPoint);
     
-    text.content = curveCoordinates.x.toFixed(1)+"|"+curveCoordinates.y.toFixed(1);
-    var offset = new paper.Point(20,-20);
+    text.content = "c(t) = "+curveCoordinates.x.toFixed(1)+" | "+curveCoordinates.y.toFixed(1);
+    var offset = new pScope.Point(20,-20);
     text.position = (splitPoint.add(offset));
 
     createFrontProgressBar(t);
     progressBarFront.fillColor = path1.strokeColor;
     
-    pbText.content = t.toFixed(2);
+    pbText.content = "t = "+t.toFixed(2);
     var pbBounds = progressBarFront.bounds;
-    offset = new paper.Point(0,-15);
+    offset = new pScope.Point(0,-15);
     pbText.position = pbBounds.topRight.add(offset);
 
-    paper.view.draw();
+    pScope.view.draw();
   }
 
   function removeAllOldStuff(){
@@ -119,11 +225,11 @@ window.onload = function() {
   }
 
   //load path from teaser image
-  path = new paper.Path("M789.685,250.634C789.685,250.634 765.646,255.323 747.727,296.903C729.807,338.484 719.318,356.84 719.755,368.204C720.192,379.567 721.066,386.123 710.576,390.057C705.356,392.015 678.056,402.303 598.425,403.13C541.708,403.72 482.371,407.638 476.748,408.414C464.073,410.162 456.206,420.651 447.028,426.333C437.849,432.015 428.234,435.074 415.559,440.756C402.884,446.438 378.846,455.179 370.105,439.008C361.363,422.837 360.489,398.798 362.237,379.567C363.986,360.337 362.237,349.847 333.828,355.966C305.419,362.085 273.514,344.602 267.395,338.921C261.276,333.239 268.706,327.557 263.024,324.498C257.342,321.438 240.297,313.134 240.297,313.134");
+  path = new pScope.Path("M789.685,250.634C789.685,250.634 765.646,255.323 747.727,296.903C729.807,338.484 719.318,356.84 719.755,368.204C720.192,379.567 721.066,386.123 710.576,390.057C705.356,392.015 678.056,402.303 598.425,403.13C541.708,403.72 482.371,407.638 476.748,408.414C464.073,410.162 456.206,420.651 447.028,426.333C437.849,432.015 428.234,435.074 415.559,440.756C402.884,446.438 378.846,455.179 370.105,439.008C361.363,422.837 360.489,398.798 362.237,379.567C363.986,360.337 362.237,349.847 333.828,355.966C305.419,362.085 273.514,344.602 267.395,338.921C261.276,333.239 268.706,327.557 263.024,324.498C257.342,321.438 240.297,313.134 240.297,313.134");
   path.scale(0.9);
   path.strokeCap = 'round';
   path.reverse();
-  path.translate(new paper.Point(-50,-100));
+  path.translate(new pScope.Point(-50,-100));
   path.strokeColor = "#05FDD9";
   createFrontProgressBar(t);
   updatePathProgress(path,t);
@@ -142,8 +248,8 @@ window.onload = function() {
 
     removeAllOldStuff();
 
-    path = new paper.Path();
-    path.strokeColor = paper.Color.random();
+    path = new pScope.Path();
+    path.strokeColor = pScope.Color.random();
     path.strokeCap = 'round';
   }
 
@@ -155,7 +261,7 @@ window.onload = function() {
     }
     path.add(event.point);
     
-    paper.view.draw();
+    pScope.view.draw();
   }
 
   tool.onMouseUp = function(event){
@@ -177,11 +283,201 @@ window.onload = function() {
   }
 
   var progressT = t;
-  paper.project.activeLayer.onFrame = function (event) {
+  pScope.project.activeLayer.onFrame = function (event) {
     var delta = t - progressT;
     progressT += delta /20;
     if(Math.abs(progressT - t)<0.0001) progressT = t;
     if(pathDone) updatePathProgress(path, progressT);
   }
+}</script><script>//TODO: add default curve
+function demo2 () {
+  // Get a reference to the canvas object
+  var canvas = document.getElementById('demo2');
+  // Create an empty project and a view for the canvas:
+  var pScope = new paper.PaperScope();
+  pScope.setup(canvas);
+
+  var tool = new pScope.Tool();
+  //tool.minDistance = 10;
+  //tool.maxDistance = 10;
+  var t = 0.8;
+
+  pScope.view.draw();
+  var path;
+  var path1;
+  var path2;
+  var circle;
+  var text;
+  var pbText;
+
+  var hint = new pScope.Raster('curve_hint');
+  hint.position = pScope.view.center;
+  hint.scale(0.15);
+
+  var pbSize = new pScope.Size(400,14);
+  var pbYOffset = -150;
+  var pbOffset = new pScope.Point(-pbSize.width / 2,pbYOffset -pbSize.height / 2);
+  var pbRadius = pbSize.height / 2;
+  var pbPoint = pScope.view.center.add(pbOffset);
+  var progressBarBack = new pScope.Path.Rectangle(new pScope.Rectangle(pbPoint, pbSize), pbRadius);
+  progressBarBack.fillColor = 'lightGrey';
+
+  var progressBarFront;
+  function createFrontProgressBar(t){
+    if(progressBarFront && progressBarFront.parent) {
+      progressBarFront.remove();
+    }
+    var pbFrontSize = pbSize.clone();
+    pbFrontSize.width *= t;
+    progressBarFront = new pScope.Path.Rectangle(new pScope.Rectangle(pbPoint, pbFrontSize), pbRadius);
+    progressBarFront.fillColor = 'magenta';
+  }
+
+  //var progressBarFront = progressBarBack.clone();
+  //progressBarFront.fillColor = 'magenta';
+  //progressBarFront.scale(t, 1, pbPoint);
+
+  function inverseRemove(thing) {
+    pScope.project.activeLayer.addChild(thing);
+  }
+
+  function updatePathProgress(path, t) {
+    path1?.remove();
+    path2?.remove();
+    inverseRemove(path);
+
+    path1 = path.clone();
+    path.remove();
+
+    path2 = path1.splitAt(path.length*t);
+    if(path2)  {
+      path2.strokeColor = 'lightGrey';
+      path2.strokeWidth =3;
+    }
+    path1.strokeWidth =5;
+
+    if(!path1.lastSegment) return;
+    var splitPoint = path1.lastSegment.point;
+    var curveCoordinates = splitPoint.subtract(pScope.view.center).divide(40.0);
+
+    if(!circle || !circle.parent) {
+      circle = new pScope.Path.Circle({
+        radius:8,
+        fillColor: 'white',
+        strokeColor: path1.strokeColor,
+        strokeWidth:5
+      });
+    }
+    else circle.bringToFront();
+
+    if(!text || !text.parent) {
+      text = new pScope.PointText({
+        fontSize: 16,
+        fillColor: path1.strokeColor,
+        fontWeight: 'bold'
+      });
+    }
+    else text.bringToFront();
+    
+    if(!pbText || !pbText.parent) {
+      pbText = text.clone();
+    }
+    
+    circle.position = (splitPoint);
+    
+    text.content = "c(t) = "+curveCoordinates.x.toFixed(1)+" | "+curveCoordinates.y.toFixed(1);
+    var offset = new pScope.Point(20,-20);
+    text.position = (splitPoint.add(offset));
+
+    createFrontProgressBar(t);
+    progressBarFront.fillColor = path1.strokeColor;
+    
+    pbText.content = "t = "+(t/3.0+0.01).toFixed(2);
+    var pbBounds = progressBarFront.bounds;
+    offset = new pScope.Point(0,-15);
+    pbText.position = pbBounds.topRight.add(offset);
+
+    pScope.view.draw();
+  }
+
+  function removeAllOldStuff(){
+    
+    //remove old (split) curve
+    path1?.remove();
+    path2?.remove();
+    circle?.remove();
+    text?.remove();
+    pbText?.remove();
+  }
+
+  //load path from teaser image
+  path = new pScope.Path("M789.685,250.634C789.685,250.634 765.646,255.323 747.727,296.903C729.807,338.484 719.318,356.84 719.755,368.204C720.192,379.567 721.066,386.123 710.576,390.057C705.356,392.015 678.056,402.303 598.425,403.13C541.708,403.72 482.371,407.638 476.748,408.414C464.073,410.162 456.206,420.651 447.028,426.333C437.849,432.015 428.234,435.074 415.559,440.756C402.884,446.438 378.846,455.179 370.105,439.008C361.363,422.837 360.489,398.798 362.237,379.567C363.986,360.337 362.237,349.847 333.828,355.966C305.419,362.085 273.514,344.602 267.395,338.921C261.276,333.239 268.706,327.557 263.024,324.498C257.342,321.438 240.297,313.134 240.297,313.134");
+  path.scale(0.9);
+  path.strokeCap = 'round';
+  path.reverse();
+  path.translate(new pScope.Point(-50,-100));
+  path.strokeColor = "#05FDD9";
+  createFrontProgressBar(t);
+  updatePathProgress(path,t);
+
+  var progressSelected = false;
+  var pathDone = true;
+  tool.onMouseDown = function(event){
+    if(event.point.y < progressBarBack.bounds.bottom + 5) {
+      progressSelected = true;
+      return;
+    }
+    hint.remove();
+
+    pathDone = false;
+    progressSelected = false;
+
+    removeAllOldStuff();
+
+    path = new pScope.Path();
+    path.strokeColor = pScope.Color.random();
+    path.strokeCap = 'round';
+  }
+
+  tool.onMouseDrag = function(event) {
+    if(progressSelected) {
+      t = Math.min(1.0, Math.max(0.0, event.point.x-pbPoint.x)/pbSize.width);
+      //if(path) updatePathProgress(path);
+      return;
+    }
+    path.add(event.point);
+    
+    pScope.view.draw();
+  }
+
+  tool.onMouseUp = function(event){
+    if(progressSelected) {
+      return;
+    }
+    path.simplify(1000.0);
+    pathDone = true;
+
+    //updatePathProgress(path);
+  }
+
+  tool.onKeyDown = function(event) {
+    var delta = 0.01;
+    if(event.key == "a") t = Math.max(t-delta, 0.0);
+    if(event.key == "d") t = Math.min(t+delta, 1.0);
+  
+    //updatePathProgress(path);
+  }
+
+  var progressT = t;
+  pScope.project.activeLayer.onFrame = function (event) {
+    var delta = t - progressT;
+    progressT += delta /20;
+    if(Math.abs(progressT - t)<0.0001) progressT = t;
+    if(pathDone) updatePathProgress(path, progressT);
+  }
+}</script><script>
+window.onload = function() {
+    demo();
+    demo2();
 }</script><footer class="container"><div class="row text-center"><div class="col-12"><p class="mt-5 mb-1">&copy; 2021&ndash;2024
-Universität Potsdam &ndash; Digital Engineering Fakultät &ndash; Hasso-Plattner-Institut für Digital Engineering gGmbH</p><small class="mt-0 mb-5"><a class="text-muted" href="https://docs.github.com/en/github/site-policy/github-privacy-statement">Datenschutzerklärung</a></small></div></div><data hidden value="72ea4ca98f2fc90e5729639d44f28d353fda8331">revision</data></footer></body><script src="../jquery.min.js"></script><script src="../bootstrap.js"></script><script src="../scripts.js"></script><script src="../paper.js"></script></html>
+Universität Potsdam &ndash; Digital Engineering Fakultät &ndash; Hasso-Plattner-Institut für Digital Engineering gGmbH</p><small class="mt-0 mb-5"><a class="text-muted" href="https://docs.github.com/en/github/site-policy/github-privacy-statement">Datenschutzerklärung</a></small></div></div><data hidden value="aa9e882f31c71c35dc331ab2de7ef0d53d8cc0aa">revision</data></footer></body><script src="../jquery.min.js"></script><script src="../bootstrap.js"></script><script src="../scripts.js"></script><script src="../paper.js"></script></html>
