@@ -1,7 +1,7 @@
 //TODO: add default curve
-function demo () {
+function demo2 () {
   // Get a reference to the canvas object
-  var canvas = document.getElementById('demo1');
+  var canvas = document.getElementById('demo2');
   // Create an empty project and a view for the canvas:
   var pScope = new paper.PaperScope();
   pScope.setup(canvas);
@@ -101,7 +101,7 @@ function demo () {
     createFrontProgressBar(t);
     progressBarFront.fillColor = path1.strokeColor;
     
-    pbText.content = "t = "+t.toFixed(2);
+    pbText.content = "t = "+(t/3.0+0.01).toFixed(2);
     var pbBounds = progressBarFront.bounds;
     offset = new pScope.Point(0,-15);
     pbText.position = pbBounds.topRight.add(offset);

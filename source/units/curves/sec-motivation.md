@@ -45,14 +45,30 @@ $$C=\{\left( \begin{array}{c}x\\ y\\ z\end{array}\right)\in \mathbb{R}^3\,|\, \e
     z = c_z(t)\,\,
 \end{array}\}
 $$
-Die Funktionen $c_i$ lassen sich zu einer einzelnen Funktion $c(t) = \left(\begin{array}{c}c_x(t)\\ c_y(t) \\ c_z(t)\end{array}\right)$ kombinieren und die Kurve damit als $C=\{c(t)\in \mathbb{R}^3\,|\, t \in [a,b]\subset \mathbb{R}\}$ beschreiben.
+Die Funktionen $c_i$ lassen sich zu einer einzelnen Funktion $c(t) = \left(\begin{array}{c}c_x(t)\\ c_y(t) \\ c_z(t)\end{array}\right)$ kombinieren und die Kurve damit als $C=\{c(t)\in \mathbb{R}^3\,|\, t \in [a,b]\subset \mathbb{R}\}$ beschreiben. Oft wird die Kurve $C$ auch direkt mit der Funktion $c$ gleichgesetzt.
 
 Durch den Parameter $t$ lässt sich jetzt eindeutig ein Start und Ende der Kurve (bei $t=0$ bzw. $t=1$) sowie ihre Richtung definieren. Das ermöglicht (effiziente) Analysen von Biegungs- und Stetigkeitseigenschaften.
 
-Diese Darstellung kann man sich folgendermaßen vorstellen: Wenn man die Kurve von Anfang bis Ende zeichnen würde, beschreibt die Funktion $c$ an welchem Punkt der Stift zum Zeitpunkt $t$ aufgesetzt ist. Für zweidimensionale Kurven kannst du das hier einmal ausprobieren:
+ Wir können nun auch einfach die Ableitung einer Kurve definieren, nämlich als Ableitung der Funktion $c$ nach $t$, die sich zusammensetzt aus den Ableitungen der einzelnen Komponenten:
+$$c'(t) = \left( 
+\begin{array}{c}
+    c_x'(t)\\
+    c_y'(t)\\
+    c_z'(t)\,\,
+\end{array}\right)
+$$
+
+Die parametrische Darstellung lässt sich folgendermaßen anschaulich vorstellen: Wenn man die Kurve von Anfang bis Ende zeichnen würde, beschreibt die Funktion $c$ an welchem Punkt der Stift zum Zeitpunkt $t$ aufgesetzt ist. Für zweidimensionale Kurven kannst du das hier einmal ausprobieren:
 
 (A/D, um $t$ zu vergrößern/verkleinern, oder in der progress bar ziehen)
 
 <canvas id="demo1" resize></canvas>TODO: make size-independent
 <img hidden="true" id="curve_hint" src="./curve_hint.png">
+
+Um weitere Analysen durchführen zu können, ohne zahlreiche Spezialfälle betrachten zu müssen, wird oft gefordert, dass eine Kurve **regulär** ist. Das bedeutet, dass die Ableitung der Kurve für alle $t$ definiert und nicht $0$ ist -- die Kurve stoppt also nie oder dreht abrupt um.
+
+#### Längenbestimmung von Kurven
+
 TODO: was ist mit unendlichen Kurven? sind die kein thing? zumindest theoretisch?
+TODO: stetig differenzierbar = def auf den folien?
+<canvas id="demo2" resize></canvas>
