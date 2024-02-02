@@ -93,14 +93,14 @@ window.onload = function() {
     
     circle.position = (splitPoint);
     
-    text.content = curveCoordinates.x.toFixed(1)+"|"+curveCoordinates.y.toFixed(1);
+    text.content = "c(t) = "+curveCoordinates.x.toFixed(1)+" | "+curveCoordinates.y.toFixed(1);
     var offset = new paper.Point(20,-20);
     text.position = (splitPoint.add(offset));
 
     createFrontProgressBar(t);
     progressBarFront.fillColor = path1.strokeColor;
     
-    pbText.content = t.toFixed(2);
+    pbText.content = "t = "+t.toFixed(2);
     var pbBounds = progressBarFront.bounds;
     offset = new paper.Point(0,-15);
     pbText.position = pbBounds.topRight.add(offset);
