@@ -42,10 +42,6 @@ function demo () {
     progressBarFront.fillColor = 'magenta';
   }
 
-  //var progressBarFront = progressBarBack.clone();
-  //progressBarFront.fillColor = 'magenta';
-  //progressBarFront.scale(t, 1, pbPoint);
-
   function inverseRemove(thing) {
     pScope.project.activeLayer.addChild(thing);
   }
