@@ -103,7 +103,7 @@ c-55.7,194.7,-131.8,370.3,-228.5,527c-20.7,34.7,-41.7,66.3,-63,95c-2,3.3,-4,7,-6
 c0,7.3,5.7,11,17,11c0,0,11,0,11,0c9.3,0,14.3,-0.3,15,-1c5.3,-5.3,10.3,-11,15,-17
 c242.7,-294.7,395.3,-681.7,458,-1161c21.3,-164.7,33.3,-350.7,36,-558
 l0,-144c-2,-159.3,-10,-310.7,-24,-454c-53.3,-528,-210,-949.7,
--470,-1265c-4.7,-6,-9.7,-11.7,-15,-17c-0.7,-0.7,-6.7,-1,-18,-1z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.55em"><span></span></span></span></span></span></span></span></span></span></span></span></eqn></section></p> <p>Die parametrische Darstellung lässt sich folgendermaßen anschaulich vorstellen: Wenn man die Kurve von Anfang bis Ende zeichnen würde, beschreibt die Funktion <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi></mrow><annotation encoding="application/x-tex">c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.4306em"></span><span class="mord mathnormal">c</span></span></span></span></eq> an welchem Punkt der Stift zum Zeitpunkt <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6151em"></span><span class="mord mathnormal">t</span></span></span></span></eq> aufgesetzt ist. Für zweidimensionale Kurven kannst du das hier einmal ausprobieren:</p> <p>(A/D, um <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6151em"></span><span class="mord mathnormal">t</span></span></span></span></eq> zu vergrößern/verkleinern, oder in der progress bar ziehen)</p> <p><canvas id="demo1" resize></canvas>TODO: make size-independent <img hidden="true" id="curve_hint" src="../webp-generated/curve_hint_cbc4.png"></p> <p>Um weitere Analysen durchführen zu können, ohne zahlreiche Spezialfälle betrachten zu müssen, wird oft gefordert, dass eine Kurve <strong>regulär</strong> ist. Das bedeutet, dass die Ableitung der Kurve für alle <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6151em"></span><span class="mord mathnormal">t</span></span></span></span></eq> definiert und nicht <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6444em"></span><span class="mord">0</span></span></span></span></eq> ist -- die Kurve stoppt also nie oder dreht abrupt um.</p> <h4>Längenbestimmung von Kurven</h4> <p>Für verschiedene Anwendungen ist es relevant, die Länge einer Kurve zu kennen.&lt;citation needed&gt; Im Gegensatz zu z.B. einem Polygon, das aus einer begrenzten Menge an Liniensegmenten besteht, und dessen Umfang leicht durch Aufsummieren bestimmt werden kann, benötigen wir für die kontinuierlich definierten Kurven einen anderen Weg, die Länge zu bestimmen. Wenn wir eine Kurve gegeben haben und deren Länge bestimmen möchten, können wir folgendermaßen vorgehen: Wir wählen zunächst eine <strong>Menge von Samplepunkten</strong> auf der Kurve und verbinden diese durch <strong>gerade Linien</strong>. Die Länge dieser Linien können wir dann messen und aufsummieren, um eine Annäherung der Länge der Kurve zu erhalten. Diese Annäherung ist besser, je mehr die Linien zwischen den Samples der Kurve an dieser Stelle ähneln. In der Regel werden die Ergebnisse deshalb besser, <strong>je mehr Samplepunkte</strong> gewählt werden. In der folgenden Demo könnt ihr erkennen, wie sich die Zahl der Samplepunkte auf die Qualität der Annäherung auswirkt: <canvas id="demo2" resize></canvas></p> <p>Natürlich möchten wir nicht nur bei der Annäherung bleiben, sondern auch exakt die Länge einer Kurve ermitteln können. Dafür überlegen wir uns, was passiert, wenn wir den Abstand zwischen den Samplepunkten unendlich klein werden lassen: Die Länge eines solchen Liniensegments entspricht dann genau dem Betrag der Ableitung unserer Kurvenfunktion <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi></mrow><annotation encoding="application/x-tex">c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.4306em"></span><span class="mord mathnormal">c</span></span></span></span></eq>!. Die Summe aller Ableitungswerte über den Verlauf der Kurve können wir dann mit dem Integral beschreiben. Dadurch ergibt sich für die Länge einer regulären Kurve <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi></mrow><annotation encoding="application/x-tex">c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.4306em"></span><span class="mord mathnormal">c</span></span></span></span></eq>, die für <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>∈</mo><mo stretchy="false">[</mo><mi>a</mi><mo separator="true">,</mo><mi>b</mi><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">t\in[a,b]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6542em;vertical-align:-.0391em"></span><span class="mord mathnormal">t</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-.25em"></span><span class="mopen">[</span><span class="mord mathnormal">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:.1667em"></span><span class="mord mathnormal">b</span><span class="mclose">]</span></span></span></span></eq> definiert ist: <section><eqn><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msubsup><mo>∫</mo><mi>a</mi><mi>b</mi></msubsup><mi mathvariant="normal">∣</mi><msup><mi>c</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mi mathvariant="normal">∣</mi><mi>d</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">\int_a^b|c&#x27;(t)| dt</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.511em;vertical-align:-.9119em"></span><span class="mop"><span class="mop op-symbol large-op" style="margin-right:.44445em;position:relative;top:-.0011em">∫</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.599em"><span style="top:-1.7881em;margin-left:-.4445em;margin-right:.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">a</span></span></span><span style="top:-3.8129em;margin-right:.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">b</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:.9119em"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:.1667em"></span><span class="mord">∣</span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:.8019em"><span style="top:-3.113em;margin-right:.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span><span class="mord">∣</span><span class="mord mathnormal">d</span><span class="mord mathnormal">t</span></span></span></span></span></eqn></section></p> <p>TODO: was ist mit unendlichen Kurven? sind die kein thing? zumindest theoretisch? TODO: stetig differenzierbar = def auf den folien?</p> </div></div></section><script>//TODO: add default curve
+-470,-1265c-4.7,-6,-9.7,-11.7,-15,-17c-0.7,-0.7,-6.7,-1,-18,-1z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.55em"><span></span></span></span></span></span></span></span></span></span></span></span></eqn></section></p> <p>Die parametrische Darstellung lässt sich folgendermaßen anschaulich vorstellen: Wenn man die Kurve von Anfang bis Ende zeichnen würde, beschreibt die Funktion <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi></mrow><annotation encoding="application/x-tex">c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.4306em"></span><span class="mord mathnormal">c</span></span></span></span></eq> an welchem Punkt der Stift zum Zeitpunkt <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6151em"></span><span class="mord mathnormal">t</span></span></span></span></eq> aufgesetzt ist. Für zweidimensionale Kurven kannst du das hier einmal ausprobieren:</p> <p>(A/D, um <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6151em"></span><span class="mord mathnormal">t</span></span></span></span></eq> zu vergrößern/verkleinern, oder in der progress bar ziehen)</p> <p><canvas id="demo1" resize></canvas>TODO: make size-independent <img hidden="true" id="curve_hint" src="../webp-generated/curve_hint_cbc4.png"></p> <p>Um weitere Analysen durchführen zu können, ohne zahlreiche Spezialfälle betrachten zu müssen, wird oft gefordert, dass eine Kurve <strong>regulär</strong> ist. Das bedeutet, dass die Ableitung der Kurve für alle <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6151em"></span><span class="mord mathnormal">t</span></span></span></span></eq> definiert und nicht <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6444em"></span><span class="mord">0</span></span></span></span></eq> ist -- die Kurve stoppt also nie oder dreht abrupt um.</p> <h4>Längenbestimmung von Kurven</h4> <p>Für verschiedene Anwendungen ist es relevant, die Länge einer Kurve zu kennen.&lt;citation needed&gt; Im Gegensatz zu z.B. einem Polygon, das aus einer begrenzten Menge an Liniensegmenten besteht, und dessen Umfang leicht durch Aufsummieren bestimmt werden kann, benötigen wir für die kontinuierlich definierten Kurven einen anderen Weg, die Länge zu bestimmen. Wenn wir eine Kurve gegeben haben und deren Länge bestimmen möchten, können wir folgendermaßen vorgehen: Wir wählen zunächst eine <strong>Menge von Samplepunkten</strong> auf der Kurve und verbinden diese durch <strong>gerade Linien</strong>. Die Länge dieser Linien können wir dann messen und aufsummieren, um eine Annäherung der Länge der Kurve zu erhalten. Diese Annäherung ist besser, je mehr die Linien zwischen den Samples der Kurve an dieser Stelle ähneln. In der Regel werden die Ergebnisse deshalb besser, <strong>je mehr Samplepunkte</strong> gewählt werden. In der folgenden Demo könnt ihr erkennen, wie sich die Zahl der Samplepunkte auf die Qualität der Annäherung auswirkt: <canvas id="demo2" resize></canvas></p> <p>Natürlich möchten wir nicht nur bei der Annäherung bleiben, sondern auch exakt die Länge einer Kurve ermitteln können. Dafür überlegen wir uns, was passiert, wenn wir den Abstand zwischen den Samplepunkten unendlich klein werden lassen: Die Länge eines solchen Liniensegments entspricht dann genau dem Betrag der Ableitung unserer Kurvenfunktion <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi></mrow><annotation encoding="application/x-tex">c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.4306em"></span><span class="mord mathnormal">c</span></span></span></span></eq>!. Die Summe aller Ableitungswerte über den Verlauf der Kurve können wir dann mit dem Integral beschreiben. Dadurch ergibt sich für die Länge einer regulären Kurve <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi></mrow><annotation encoding="application/x-tex">c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.4306em"></span><span class="mord mathnormal">c</span></span></span></span></eq>, die für <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>∈</mo><mo stretchy="false">[</mo><mi>a</mi><mo separator="true">,</mo><mi>b</mi><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">t\in[a,b]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:.6542em;vertical-align:-.0391em"></span><span class="mord mathnormal">t</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-.25em"></span><span class="mopen">[</span><span class="mord mathnormal">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:.1667em"></span><span class="mord mathnormal">b</span><span class="mclose">]</span></span></span></span></eq> definiert ist: <section><eqn><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>L</mi><mo stretchy="false">(</mo><mi>c</mi><mo stretchy="false">)</mo><mo>=</mo><msubsup><mo>∫</mo><mi>a</mi><mi>b</mi></msubsup><mi mathvariant="normal">∣</mi><msup><mi>c</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mi mathvariant="normal">∣</mi><mi>d</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">L(c) = \int_a^b|c&#x27;(t)| dt</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-.25em"></span><span class="mord mathnormal">L</span><span class="mopen">(</span><span class="mord mathnormal">c</span><span class="mclose">)</span><span class="mspace" style="margin-right:.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:.2778em"></span></span><span class="base"><span class="strut" style="height:2.511em;vertical-align:-.9119em"></span><span class="mop"><span class="mop op-symbol large-op" style="margin-right:.44445em;position:relative;top:-.0011em">∫</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.599em"><span style="top:-1.7881em;margin-left:-.4445em;margin-right:.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">a</span></span></span><span style="top:-3.8129em;margin-right:.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">b</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:.9119em"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:.1667em"></span><span class="mord">∣</span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:.8019em"><span style="top:-3.113em;margin-right:.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span><span class="mord">∣</span><span class="mord mathnormal">d</span><span class="mord mathnormal">t</span></span></span></span></span></eqn></section></p> <p><canvas id="demo3" resize></canvas></p> <p>TODO: was ist mit unendlichen Kurven? sind die kein thing? zumindest theoretisch? TODO: stetig differenzierbar = def auf den folien?</p> </div></div></section><script></script><script>//TODO: add default curve
 function demo () {
   // Get a reference to the canvas object
   var canvas = document.getElementById('demo1');
@@ -531,9 +531,266 @@ function demo2 () {
     if(Math.abs(progressT - t)<0.0001) progressT = t;
     updatePathProgress(path, progressT);
   }
+}</script><script>//TODO: add default curve
+function demo3 () {
+  // Get a reference to the canvas object
+  var canvas = document.getElementById('demo3');
+  // Create an empty project and a view for the canvas:
+  var pScope = new paper.PaperScope();
+  pScope.setup(canvas);
+
+  var tool = new pScope.Tool();
+  //tool.minDistance = 10;
+  //tool.maxDistance = 10;
+  var t = 0.8;
+
+  pScope.view.draw();
+  var path;
+  var path1;
+  var path2;
+  var circle;
+  var text;
+  var pbText;
+  var maxT = 16.0;
+  var cosLine;
+  var sinLine;
+  var cosText;
+  var sinText;
+
+  function essentialSpiralPoint(t) {
+    var x = t * Math.cos(t);
+    var y = t * Math.sin(t);
+    return new pScope.Point(x,y);
+  }
+  function spiralPoint(t) {
+    var scale = 8.0;
+    return essentialSpiralPoint(t * maxT).multiply(scale).add(pScope.view.center);
+  }
+  function createSpiral(){
+    var sampleCount = 10000.0;
+
+    var spiralPath = new pScope.Path();
+    for(var i = 0; i < sampleCount; i++) {
+      var t = i / sampleCount;
+
+      spiralPath.add(spiralPoint(t));
+    }
+    return spiralPath;
+  }
+
+  var pbSize = new pScope.Size(400,14);
+  var pbYOffset = -150;
+  var pbOffset = new pScope.Point(-pbSize.width / 2,pbYOffset -pbSize.height / 2);
+  var pbRadius = pbSize.height / 2;
+  var pbPoint = pScope.view.center.add(pbOffset);
+  var progressBarBack = new pScope.Path.Rectangle(new pScope.Rectangle(pbPoint, pbSize), pbRadius);
+  progressBarBack.fillColor = 'lightGrey';
+
+  var progressBarFront;
+  function createFrontProgressBar(t){
+    if(progressBarFront && progressBarFront.parent) {
+      progressBarFront.remove();
+    }
+    var pbFrontSize = pbSize.clone();
+    pbFrontSize.width *= t;
+    progressBarFront = new pScope.Path.Rectangle(new pScope.Rectangle(pbPoint, pbFrontSize), pbRadius);
+    progressBarFront.fillColor = 'magenta';
+  }
+
+  function inverseRemove(thing) {
+    pScope.project.activeLayer.addChild(thing);
+  }
+
+  function updatePathProgress(path, t) {
+    path1?.remove();
+    path2?.remove();
+    inverseRemove(path);
+
+    path1 = path.clone();
+    path.remove();
+
+    var spiralP = spiralPoint(t);
+    var p = path1.getNearestLocation(spiralP);
+    if(p) path2 = path1.splitAt(p);
+    else path2 = path1.splitAt(100);
+    if(path2)  {
+      path2.strokeColor = 'lightGrey';
+      path2.strokeWidth =3;
+    }
+    path1.strokeWidth =5;
+
+    if(!path1.lastSegment) return;
+    var splitPoint = path1.lastSegment.point;
+    var curveCoordinates = splitPoint.subtract(pScope.view.center).divide(40.0);
+
+    if(!circle || !circle.parent) {
+      circle = new pScope.Path.Circle({
+        radius:8,
+        fillColor: 'white',
+        strokeColor: path1.strokeColor,
+        strokeWidth:5
+      });
+    }
+    else circle.bringToFront();
+
+    if(!text || !text.parent) {
+      text = new pScope.PointText({
+        fontSize: 16,
+        fillColor: path1.strokeColor,
+        fontWeight: 'bold',
+        justification: 'center',
+      });
+    }
+    else text.bringToFront();
+    
+    if(!pbText || !pbText.parent) {
+      pbText = text.clone();
+    }
+
+    if(!cosLine) {
+      var c = pScope.view.center;
+      var spiralBounds = path.bounds;
+      var offset = 30.0;
+      var cosStart = c.add(new pScope.Point(0, spiralBounds.height / 2.0 + offset * 1.5));
+      var sinStart = c.add(new pScope.Point(spiralBounds.width / 2.0 + offset, 0));
+
+      cosLine = new pScope.Path(cosStart, cosStart);
+      sinLine = new pScope.Path(sinStart, sinStart);
+
+      cosLine.strokeColor = 'magenta';
+      cosLine.strokeWidth = 3;
+      sinLine.strokeWidth = 3;
+      sinLine.strokeColor = 'black';
+
+      cosText = new pScope.PointText({
+        fontSize: 16,
+        fillColor: cosLine.strokeColor,
+        fontWeight: 'bold',
+        justification: 'center',
+      });
+      sinText = new pScope.PointText({
+        fontSize: 16,
+        fillColor: sinLine.strokeColor,
+        fontWeight: 'bold',
+        justification: 'center',
+      });
+    }
+    var coords = essentialSpiralPoint(t*maxT);
+
+    cosLine.lastSegment.point.x = spiralP.x;
+    sinLine.lastSegment.point.y = spiralP.y;
+
+    cosText.content = "t • cos(t) = " + coords.x.toFixed(2);
+    sinText.content = "t • sin(t) = " + coords.y.toFixed(2);
+    cosText.position = cosLine.bounds.rightCenter.add(new pScope.Point(cosText.bounds.width/2.0 + 10.0,0));
+    sinText.position = sinLine.bounds.topRight.add(new pScope.Point(sinText.bounds.width/2.0 + 10.0,0));
+    
+    circle.position = splitPoint;
+    
+    text.content = coords.x.toFixed(1)+" | "+coords.y.toFixed(1);
+    var offset = new pScope.Point(0,-30);
+    text.position = (splitPoint.add(offset));
+
+    createFrontProgressBar(t);
+    progressBarFront.fillColor = path1.strokeColor;
+    
+    pbText.content = "t = "+(t*maxT).toFixed(2);
+    var pbBounds = progressBarFront.bounds;
+    offset = new pScope.Point(0,-15);
+    pbText.position = pbBounds.topRight.add(offset);
+
+    pScope.view.draw();
+  }
+
+  function removeAllOldStuff(){
+    
+    //remove old (split) curve
+    path1?.remove();
+    path2?.remove();
+    circle?.remove();
+    text?.remove();
+    pbText?.remove();
+  }
+
+  //load path from teaser image
+  path =createSpiral();// new pScope.Path("M789.685,250.634C789.685,250.634 765.646,255.323 747.727,296.903C729.807,338.484 719.318,356.84 719.755,368.204C720.192,379.567 721.066,386.123 710.576,390.057C705.356,392.015 678.056,402.303 598.425,403.13C541.708,403.72 482.371,407.638 476.748,408.414C464.073,410.162 456.206,420.651 447.028,426.333C437.849,432.015 428.234,435.074 415.559,440.756C402.884,446.438 378.846,455.179 370.105,439.008C361.363,422.837 360.489,398.798 362.237,379.567C363.986,360.337 362.237,349.847 333.828,355.966C305.419,362.085 273.514,344.602 267.395,338.921C261.276,333.239 268.706,327.557 263.024,324.498C257.342,321.438 240.297,313.134 240.297,313.134");
+  path.simplify(0.001);
+  console.log(path);
+  //path.scale(0.9);
+  path.strokeCap = 'round';
+  //path.reverse();
+  //path.translate(new pScope.Point(-50,-100));
+  path.strokeColor = "#05FDD9";
+  createFrontProgressBar(t);
+  updatePathProgress(path,t);
+
+  var progressSelected = false;
+  var pathDone = true;
+  tool.onMouseDown = function(event){
+    if(event.point.y < progressBarBack.bounds.bottom + 5) {
+      progressSelected = true;
+      return;
+    }
+
+    progressSelected = false;
+    return;
+    pathDone = false;
+
+    removeAllOldStuff();
+
+    path = new pScope.Path();
+    path.strokeColor = pScope.Color.random();
+    path.strokeCap = 'round';
+  }
+
+  tool.onMouseDrag = function(event) {
+    if(progressSelected) {
+      t = Math.min(1.0, Math.max(0.0, event.point.x-pbPoint.x)/pbSize.width);
+      //if(path) updatePathProgress(path);
+      return;
+    }
+
+    var l = path.getNearestPoint(event.point);
+    l=l.subtract(pScope.view.center).divide(8.0);
+    
+    var tPrime = Math.atan2(l.y,l.x);
+    t = Math.min(1.0, Math.max(0.0, l.x / Math.cos(tPrime))/maxT);
+    return;
+    path.add(event.point);
+    
+    pScope.view.draw();
+  }
+
+  tool.onMouseUp = function(event){
+    if(progressSelected) {
+      return;
+    }
+    return;
+    path.simplify(1000.0);
+    pathDone = true;
+
+    //updatePathProgress(path);
+  }
+
+  tool.onKeyDown = function(event) {
+    var delta = 0.01;
+    if(event.key == "a") t = Math.max(t-delta, 0.0);
+    if(event.key == "d") t = Math.min(t+delta, 1.0);
+  
+    //updatePathProgress(path);
+  }
+
+  var progressT = t;
+  pScope.project.activeLayer.onFrame = function (event) {
+    var delta = t - progressT;
+    progressT += delta /20;
+    if(Math.abs(progressT - t)<0.0001) progressT = t;
+    if(pathDone) updatePathProgress(path, progressT);
+  }
 }</script><script>
 window.onload = function() {
     demo();
     demo2();
+    demo3();
 }</script><footer class="container"><div class="row text-center"><div class="col-12"><p class="mt-5 mb-1">&copy; 2021&ndash;2024
-Universität Potsdam &ndash; Digital Engineering Fakultät &ndash; Hasso-Plattner-Institut für Digital Engineering gGmbH</p><small class="mt-0 mb-5"><a class="text-muted" href="https://docs.github.com/en/github/site-policy/github-privacy-statement">Datenschutzerklärung</a></small></div></div><data hidden value="c7610209dc4544d092bc5935d58e9edceb1ed647">revision</data></footer></body><script src="../jquery.min.js"></script><script src="../bootstrap.js"></script><script src="../scripts.js"></script><script src="../paper.js"></script></html>
+Universität Potsdam &ndash; Digital Engineering Fakultät &ndash; Hasso-Plattner-Institut für Digital Engineering gGmbH</p><small class="mt-0 mb-5"><a class="text-muted" href="https://docs.github.com/en/github/site-policy/github-privacy-statement">Datenschutzerklärung</a></small></div></div><data hidden value="8171db26a17fca236f1e26d584ad60293d50937f">revision</data></footer></body><script src="../jquery.min.js"></script><script src="../bootstrap.js"></script><script src="../scripts.js"></script><script src="../paper.js"></script></html>
