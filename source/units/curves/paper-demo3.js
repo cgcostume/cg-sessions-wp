@@ -21,6 +21,7 @@ function demo3 () {
   var maxT = 16.0;
   var cosLine;
   var sinLine;
+  var tLine;
   var cosText;
   var sinText;
 
@@ -100,19 +101,6 @@ function demo3 () {
     }
     else circle.bringToFront();
 
-    if(!text || !text.parent) {
-      text = new pScope.PointText({
-        fontSize: 16,
-        fillColor: path1.strokeColor,
-        fontWeight: 'bold',
-        justification: 'center',
-      });
-    }
-    else text.bringToFront();
-    
-    if(!pbText || !pbText.parent) {
-      pbText = text.clone();
-    }
 
     if(!cosLine) {
       var c = pScope.view.center;
@@ -123,11 +111,16 @@ function demo3 () {
 
       cosLine = new pScope.Path(cosStart, cosStart);
       sinLine = new pScope.Path(sinStart, sinStart);
+      tLine = new pScope.Path(c, c);
 
       cosLine.strokeColor = 'magenta';
       cosLine.strokeWidth = 3;
       sinLine.strokeWidth = 3;
+      tLine.strokeWidth = 3;
       sinLine.strokeColor = 'black';
+      tLine.strokeColor = "#05FDD9";
+      tLine.dashArray = [10,10];
+      tLine.dashOffset = 10;
 
       cosText = new pScope.PointText({
         fontSize: 16,
@@ -142,21 +135,40 @@ function demo3 () {
         justification: 'center',
       });
     }
+
+    if(!text || !text.parent) {
+      text = new pScope.PointText({
+        fontSize: 16,
+        fillColor: tLine.strokeColor,
+        fontWeight: 'bold',
+        justification: 'center',
+      });
+    }
+    else text.bringToFront();
+    
+    if(!pbText || !pbText.parent) {
+      pbText = text.clone();
+      pbText.fillColor = path.strokeColor;
+    }
     var coords = essentialSpiralPoint(t*maxT);
 
     cosLine.lastSegment.point.x = spiralP.x;
     sinLine.lastSegment.point.y = spiralP.y;
+    tLine.lastSegment.point = splitPoint;
+    tLine.bringToFront();
 
-    cosText.content = "t • cos(t) = " + coords.x.toFixed(2);
-    sinText.content = "t • sin(t) = " + coords.y.toFixed(2);
+    cosText.content = "t • cos(t) = " + coords.x.toFixed(1);
+    sinText.content = "t • sin(t) = " + coords.y.toFixed(1);
     cosText.position = cosLine.bounds.rightCenter.add(new pScope.Point(cosText.bounds.width/2.0 + 10.0,0));
     sinText.position = sinLine.bounds.topRight.add(new pScope.Point(sinText.bounds.width/2.0 + 10.0,0));
     
     circle.position = splitPoint;
     
-    text.content = coords.x.toFixed(1)+" | "+coords.y.toFixed(1);
-    var offset = new pScope.Point(0,-30);
-    text.position = (splitPoint.add(offset));
+    text.content = "t";//coords.x.toFixed(1)+" | "+coords.y.toFixed(1);
+    var offset = new pScope.Point(20,-20);
+    var halfNormal = tLine.getNormalAt(tLine.length / 2.0).multiply(15.0);
+    var halfPoint = tLine.getPointAt(tLine.length / 2.0);
+    text.position = (halfPoint.add(halfNormal));
 
     createFrontProgressBar(t);
     progressBarFront.fillColor = path1.strokeColor;
@@ -188,6 +200,7 @@ function demo3 () {
   //path.reverse();
   //path.translate(new pScope.Point(-50,-100));
   path.strokeColor = "#05FDD9";
+  path.strokeColor = "darkGrey";
   createFrontProgressBar(t);
   updatePathProgress(path,t);
 
