@@ -75,7 +75,9 @@ Wenn wir eine Kurve gegeben haben und deren Länge bestimmen möchten, können w
 
 Natürlich möchten wir nicht nur bei der Annäherung bleiben, sondern auch exakt die Länge einer Kurve ermitteln können. Dafür überlegen wir uns, was passiert, wenn wir den Abstand zwischen den Samplepunkten unendlich klein werden lassen: Die Länge eines solchen Liniensegments entspricht dann genau dem Betrag der Ableitung unserer Kurvenfunktion $c$!. Die Summe aller Ableitungswerte über den Verlauf der Kurve können wir dann mit dem Integral beschreiben.
 Dadurch ergibt sich für die Länge einer regulären Kurve $c$, die für $t\in[a,b]$ definiert ist:
-$$\int_a^b|c'(t)| dt$$
+$$L(c) = \int_a^b|c'(t)| dt$$
+
+<canvas id="demo3" resize></canvas>
 
 TODO: was ist mit unendlichen Kurven? sind die kein thing? zumindest theoretisch?
 TODO: stetig differenzierbar = def auf den folien?
